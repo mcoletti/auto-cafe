@@ -1,0 +1,11 @@
+- name: preparing for java installation
+  shell: /bin/echo debconf shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+
+#- name: installing oracle java
+#  shell: DEBIAN_FRONTEND=noninteractive apt-get -y install oracle-java8-installer oracle-java8-set-default
+
+- name: installing oracle java
+  apt: pkg={{ item }} state=installed update-cache=yes
+  with_items:
+  - oracle-java8-installer
+  - oracle-java8-set-default

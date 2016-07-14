@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
+    }
+}
+apply plugin: 'spring-boot'
+
+jar {
+    archiveName = 'api.jar'
+
+}
+
+//task nameJar (type: Jar) {
+//    baseName = project.n
+//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+//    with jar
+//
+//}
+
+bootRepackage {
+    mainClass = 'com.saat.auto.cafe.api.Application'
+}
+
+dependencies {
+    testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
+}
+
+
+

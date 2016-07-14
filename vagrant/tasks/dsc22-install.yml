@@ -1,0 +1,11 @@
+#- name: installing cassandra
+#  apt: pkg=cassandra=2.2.7 state=installed update-cache=yes
+#
+#- name: installing datastax
+#  apt: pkg=dsc22 state=installed update-cache=yes
+
+- name:
+  shell: sudo apt-get install dsc22 cassandra=2.2.7 -y --force-yes
+
+- name: configuring datastax
+  template: src=templates/cassandra.yaml dest=/etc/cassandra/cassandra.yaml

@@ -1,0 +1,43 @@
+#db:
+#  address: 172.20.92.12
+#  hostname: db-1.autocafe.saat.local
+#  enable: true
+#  autostart: true
+#  provision:
+#    shell:
+#      script: scripts/provision-db.sh
+
+#opsc:
+#  address: 172.20.92.12
+##  forwards:
+##    db:
+##      int: 9042
+##      ext: 9042
+#  hostname: cassandra-opscenter.autocafe.saat.local
+#  enable: true
+#  autostart: true
+#  provision:
+#      shell:
+#        script: scripts/provision-opsc.sh
+
+
+cnode1:
+  address: 172.20.92.13
+  forwards:
+    db:
+      int: 9042
+      ext: 9042
+  hostname: cassandra-node1.autocafe.saat.local
+  enable: true
+  autostart: true
+  provision:
+      shell:
+        script: scripts/provision-cnode1.sh
+#dbpool:
+#  address: 172.20.92.13
+#  hostname: db-pool1.autocafe.saat.local
+#  enable: true
+#  autostart: true
+#  provision:
+#    shell:
+#      script: scripts/provision-dbpool.sh

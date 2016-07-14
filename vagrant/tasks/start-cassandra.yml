@@ -1,0 +1,8 @@
+- name: starting cassandra
+  service: name=cassandra enabled=yes state=started
+
+- name: sleep for 10s then execute cqlsh script
+  shell: sleep 30
+
+- name: create autocafe kepspace
+  shell: "cqlsh {{ config.listen_address }} -u admin -p admin --execute=\"CREATE KEYSPACE IF NOT EXISTS autocafe WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 2};\""

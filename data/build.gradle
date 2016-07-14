@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+//        classpath 'mysql:mysql-connector-java:6.0.2'
+        classpath 'org.flywaydb:flyway-gradle-plugin:4.0.1'
+    }
+}
+apply plugin:'application'
+mainClassName = "com.saat.auto.cafe.data.utils"
+
+//plugins {
+//    id "org.flywaydb.flyway" version "4.0.1"
+//}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-jdbc', version: '4.2.6.RELEASE'
+    compile group: 'org.assertj', name: 'assertj-core', version: '3.4.1'
+}
+
+//flyway {
+//    url = 'jdbc:mysql://172.20.92.12:3306/autocafedb'
+////    url = 'jdbc:postgresql://172.20.92.12:5432/autocafedb'
+////    url = 'jdbc:cassandra://172.20.92.13:9160/excelsior'
+////    driver = 'org.postgresql.Driver'
+////    driver = 'org.apache.cassandra.cql.jdbc.CassandraDriver'
+//    driver = 'com.mysql.jdbc.Driver'
+//}

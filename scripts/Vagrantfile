@@ -1,0 +1,99 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require 'yaml'
+
+VAGRANTFILE_API_VERSION = "2"
+VM_DEFAULT_BOX_NAME = "ubuntu/trusty64"
+VM_PROVIDER_GUI = false
+VM_PROVIDER_MEMORY = 2048
+VM_PROVIDER_CPU = 2
+VM_DIST = false
+BOXES_FILE = "boxes.yaml"
+
+
+def get_boxes_name()
+    basedir = File.expand_path(File.dirname(__FILE__))
+    filename = File.join(basedir, BOXES_FILE)
+    if not File.exist?(filename) then
+        venv = ENV["VIRTUAL_ENV"]
+        begin
+            project_filename = File.join(venv, ".project")
+        rescue TypeError
+            project_filename = nil
+        end
+
+        project_path = ""
+        if project_filename then
+            project_path = File.read(project_filename)
+        end
+        filename = File.join(project_path.gsub("\n", ''), BOXES_FILE)
+    end
+
+    return filename
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.network "forwarded_port", guest: 9042, host: 8080
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+    if Vagrant.has_plugin?("vagrant-hostsupdater")
+        config.hostsupdater.remove_on_suspend = true
+    end
+
+    begin
+        filename = get_boxes_name()
+        vmdata = YAML.load(File.read(filename))
+    rescue
+        abort "No boxes.yaml file found"
+    end
+
+    config.vm.box = VM_DEFAULT_BOX_NAME
+    config.vm.provider :virtualbox do |v|
+        v.gui = VM_PROVIDER_GUI
+        v.memory = VM_PROVIDER_MEMORY
+        v.cpus = VM_PROVIDER_CPU
+    end
+    config.vm.provider :vmware_fusion do |v|
+        v.gui = VM_PROVIDER_GUI
+        v.vmx["memsize"] = VM_PROVIDER_MEMORY
+        v.vmx["numvcpus"] = "1"
+    end
+#    config.ssh.password = "mousefr33k"
+    vmdata.each do |key, vminfo|
+        if vminfo['enable'] then
+            config.vm.define key, autostart: vminfo['autostart'] do |newbox|
+                newbox.vm.hostname = vminfo["hostname"]
+                if Vagrant.has_plugin?("vagrant-hostsupdater")
+                    newbox.vm.host_name = vminfo["hostname"]
+                end
+                if vminfo.has_key?("address") then
+                    newbox.vm.network "private_network", ip: vminfo["address"]
+
+                    if vminfo.has_key?("forwards") then
+                        vminfo["forwards"].each do |fwdkey, fwdinfo|
+                            newbox.vm.network "forwarded_port", guest: fwdinfo["int"], host: fwdinfo["ext"]
+                        end
+                    end
+
+                end
+                if vminfo.has_key?("boxtype") then
+                    newbox.vm.box = vminfo["boxtype"]
+                end
+                if vminfo.has_key?("folders") then
+                    vminfo["folders"].each do |folder, folderinfo|
+                        lpath = folderinfo["local"]
+                        rpath = folderinfo["path"]
+                        newbox.vm.synced_folder lpath, rpath
+                    end
+                end
+                if vminfo.has_key?("provision") then
+                    newbox.vm.provision "shell" do |s|
+                        s.path = vminfo["provision"]["shell"]["script"]
+                    end
+                end
+            end
+        end
+    end
+end
