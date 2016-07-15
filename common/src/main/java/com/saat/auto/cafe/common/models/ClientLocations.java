@@ -1,5 +1,7 @@
 package com.saat.auto.cafe.common.models;
 
+import com.datastax.driver.core.UDTValue;
+
 import org.springframework.data.cassandra.mapping.Column;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
@@ -20,5 +22,19 @@ public class ClientLocations {
     @Column
     private Location location;
 
+    /**
+     * Static Helper Method to convert from a User Defined Type to Location
+     * @param locationUdtV
+     * @return
+     */
+    public static Location fromUdtValue(UDTValue locationUdtV) {
+
+        Location loc = new Location();
+        loc.setName(locationUdtV.getString("name"));
+        UDTValue addressUdtV = locationUdtV.getUDTValue("address");
+        Address address = Address.fromUdtValue(addressUdtV);
+        loc.setAddress(address);
+        return loc;
+    }
 
 }

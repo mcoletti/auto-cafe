@@ -1,5 +1,6 @@
 package com.saat.auto.cafe.data.dao.impl;
 
+import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.saat.auto.cafe.common.db.SchemaConstants;
@@ -9,11 +10,14 @@ import com.saat.auto.cafe.common.interfaces.ClientsDao;
 import com.saat.auto.cafe.common.models.ClientLocations;
 import com.saat.auto.cafe.common.models.ClientVehicles;
 import com.saat.auto.cafe.common.models.Clients;
+import com.saat.auto.cafe.common.models.Location;
 import com.saat.auto.cafe.data.DataBeans;
+import com.saat.auto.cafe.data.dao.mappers.ClientLocationsRowMapper;
 import com.saat.auto.cafe.data.dao.mappers.ClientRowMapper;
 
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,13 +63,22 @@ public class ClientsDaoImpl implements ClientsDao {
     }
 
     @Override
+    public ClientLocations upsertClientLoc(ClientLocations cls) {
+
+        Insert insert = QueryBuilder.insertInto("autocafe","client_locations")
+                .value("client_id",cls.getClientId())
+                .value("location", cls.getLocation().toUdtValue(ci.getCluster()));
+        ci.getCassandraOperations().execute(insert);
+        return cls;
+    }
+
+    @Override
     public List<ClientLocations> getClientLocations(UUID clientId) {
 
         Select s = QueryBuilder.select().from(SchemaConstants.ClientsLocationTable.NAME);
         s.where(QueryBuilder.eq(SchemaConstants.ClientsLocationTable.Columns.ClientId,clientId));
-        Clients client = ci.getCassandraOperations().queryForObject(s,new ClientRowMapper());
-
-        return null;
+        List<ClientLocations> locationsList  = ci.getCassandraOperations().queryForList(s,ClientLocations.class); // .queryForObject(s,new ClientLocationsRowMapper);
+        return locationsList;
     }
 
     @Override

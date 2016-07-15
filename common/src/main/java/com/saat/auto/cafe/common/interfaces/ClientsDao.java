@@ -15,6 +15,7 @@ public interface ClientsDao {
     Clients upsert(Clients clients);
     Clients get(UUID id);
     Clients get(String clientName);
+    ClientLocations upsertClientLoc(ClientLocations clientLocations);
     List<ClientLocations> getClientLocations(UUID clientId);
     List<ClientVehicles> getClientVehicles(UUID clientId);
 }

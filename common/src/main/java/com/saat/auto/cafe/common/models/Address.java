@@ -39,7 +39,7 @@ public class Address {
      */
     public UDTValue toUdtValue(Cluster cluster) {
 
-        UDTValue addressUdt = cluster.getMetadata().getKeyspace("autocafedb").getUserType("address").newValue()
+        UDTValue addressUdt = cluster.getMetadata().getKeyspace("autocafe").getUserType("address").newValue()
                 .setString("street1", street1)
                 .setString("street2", street2)
                 .setString("city", city)

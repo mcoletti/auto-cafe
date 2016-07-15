@@ -30,7 +30,7 @@ public class Location{
      * @return
      */
     public UDTValue toUdtValue(Cluster cluster){
-        UDTValue locationUdt = cluster.getMetadata().getKeyspace("autocafedb").getUserType("location").newValue()
+        UDTValue locationUdt = cluster.getMetadata().getKeyspace("autocafe").getUserType("location").newValue()
                 .setString("name",name)
                 .setUDTValue("address",address.toUdtValue(cluster));
 

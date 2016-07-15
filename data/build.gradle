@@ -7,12 +7,22 @@ buildscript {
         classpath 'org.flywaydb:flyway-gradle-plugin:4.0.1'
     }
 }
-apply plugin:'application'
-mainClassName = "com.saat.auto.cafe.data.utils"
+apply plugin: 'application'
+mainClassName = "com.saat.auto.cafe.data.utils.Migration"
 
 //plugins {
 //    id "org.flywaydb.flyway" version "4.0.1"
 //}
+
+task('migrate', dependsOn: 'classes', type: JavaExec) {
+    main = "com.saat.auto.cafe.data.utils.Migration"
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task('hello') <<
+        {
+            println "hello"
+        }
 
 dependencies {
     compile group: 'org.springframework', name: 'spring-jdbc', version: '4.2.6.RELEASE'
