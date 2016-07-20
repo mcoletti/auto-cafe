@@ -4,6 +4,7 @@ CREATE TYPE IF NOT EXISTS autocafe.address (
   street1 text,
   street2 text,
   city text,
+  state text,
   zip_code int,
   phones set<text>
 );
@@ -19,28 +20,21 @@ CREATE TYPE IF NOT EXISTS autocafe.location (
 CREATE TABLE IF NOT EXISTS autocafe.clients (
     id uuid,
     client_name text,
+    location frozen<location>,
     created_by text,
     created_dtm timestamp,
     modified_by text,
     modified_dtm timestamp,
-    PRIMARY KEY (id, client_name)
-)
-WITH CLUSTERING ORDER BY (client_name ASC);
-
--- Client Locations
-CREATE TABLE IF NOT EXISTS autocafe.client_locations (
-    client_id uuid,
-    location frozen<location>,
-    PRIMARY KEY ((client_id),location)
+    PRIMARY KEY (id)
 );
+
 -- Client Vehicles
 CREATE TABLE IF NOT EXISTS autocafe.client_vehicles (
     client_id uuid,
     vehicle_id uuid,
     key_name text,
-    PRIMARY KEY ((client_id), key_name)
-)
-WITH CLUSTERING ORDER BY (key_name ASC);
+    PRIMARY KEY (client_id)
+);
 
 -- **** Create Vehicle Table ****
 CREATE TABLE IF NOT EXISTS autocafe.vehicle_details (
@@ -54,27 +48,25 @@ CREATE TABLE IF NOT EXISTS autocafe.vehicle_details (
     price decimal,
     mileage text,
     category text,
+    make text,
     model text,
+    vehicle_year int,
     body_style text,
-    year_value text,
     manufacture text,
     location frozen<location>,
-    PRIMARY KEY ((id,client_id), key_name)
+    created_by text,
+    created_dtm timestamp,
+    modified_by text,
+    modified_dtm timestamp,
+    PRIMARY KEY ((client_id,id),created_dtm)
 )
-WITH CLUSTERING ORDER BY (key_name ASC);
+WITH CLUSTERING ORDER BY (created_dtm DESC);
 
 -- Vehicle Categories
 CREATE TABLE IF NOT EXISTS autocafe.vehicle_categories (
     vehicle_id uuid,
     category text,
-    PRIMARY KEY ((vehicle_id,category))
-);
-
--- Vehicle Locations
-CREATE TABLE IF NOT EXISTS autocafe.vehicle_locations (
-    vehicle_id uuid,
-    location frozen<location>,
-    PRIMARY KEY ((vehicle_id,location))
+    PRIMARY KEY ((vehicle_id),category)
 );
 
 -- Vehicle Image Table
@@ -85,9 +77,10 @@ CREATE TABLE IF NOT EXISTS autocafe.vehicle_images (
     img_size int,
     img_suffix text,
     img_type text,
-    PRIMARY KEY ((vehicle_id,img_type),img_name)
+    img_order int,
+    PRIMARY KEY ((vehicle_id),img_type)
 )
-WITH CLUSTERING ORDER BY (img_name ASC);
+WITH CLUSTERING ORDER BY (img_type ASC);
 
 -- ******** Common LookUp table ***********
 -- Categories Table
@@ -127,7 +120,5 @@ CREATE TABLE IF NOT EXISTS autocafe.manufactures(
 
 -- *** Create Indexes
 CREATE INDEX idx_client_name ON autocafe.clients (client_name);
-CREATE INDEX idx_key_name ON autocafe.client_vehicles (key_name);
 CREATE INDEX idx_vhicle_dtls_key_name ON autocafe.vehicle_details (key_name);
 CREATE INDEX idx_category ON autocafe.vehicle_categories (category);
-CREATE INDEX idx_location ON autocafe.vehicle_locations (location);

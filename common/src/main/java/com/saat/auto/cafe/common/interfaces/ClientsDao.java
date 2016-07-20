@@ -1,6 +1,6 @@
 package com.saat.auto.cafe.common.interfaces;
 
-import com.saat.auto.cafe.common.models.ClientLocations;
+import com.saat.auto.cafe.common.exceptions.DaoException;
 import com.saat.auto.cafe.common.models.ClientVehicles;
 import com.saat.auto.cafe.common.models.Clients;
 
@@ -12,10 +12,8 @@ import java.util.UUID;
  */
 public interface ClientsDao {
 
-    Clients upsert(Clients clients);
-    Clients get(UUID id);
-    Clients get(String clientName);
-    ClientLocations upsertClientLoc(ClientLocations clientLocations);
-    List<ClientLocations> getClientLocations(UUID clientId);
+    Clients upsert(Clients clients) throws DaoException;
+    Clients get(UUID id) throws DaoException;
+    Clients get(String clientName) throws DaoException;
     List<ClientVehicles> getClientVehicles(UUID clientId);
 }

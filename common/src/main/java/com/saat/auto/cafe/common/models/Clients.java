@@ -1,42 +1,72 @@
 package com.saat.auto.cafe.common.models;
 
-import com.wordnik.swagger.annotations.ApiModel;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Statement;
+import com.datastax.driver.core.querybuilder.Insert;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.driver.core.querybuilder.Update;
+import com.datastax.driver.mapping.annotations.ClusteringColumn;
+import com.datastax.driver.mapping.annotations.Table;
+import com.saat.auto.cafe.common.AutoCafeConstants;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
+import org.joda.time.DateTime;
 import org.springframework.data.cassandra.mapping.Column;
+import org.springframework.data.cassandra.mapping.Indexed;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
 
-import java.util.Date;
 import java.util.UUID;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
+import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
 
 /**
  * Created by mcoletti on 5/17/16.
  */
-@Table
-@EqualsAndHashCode(callSuper = false)
+@Table(
+        name = "clients",
+        readConsistency = AutoCafeConstants.READ_CONSITENCY,
+        writeConsistency = AutoCafeConstants.WRITE_CONSITENCY
+)
 @Data
-@ApiModel(description = "The Clients Data Entity", parent = BaseModelExtended.class)
 public class Clients {
+
     @PrimaryKey
-    @ApiModelProperty(position = 1, required = true, value = "The Clients Id")
     private UUID id;
+    @Indexed
     @Column(value = "client_name")
-    @ApiModelProperty(position = 2, required = true, value = "The Clients Name")
     private String clientName;
+    @Column
+    private Location location;
     @Column(value = "created_by")
-    @ApiModelProperty(position = 3, required = true, value = "Created By")
     private String createdBy;
     @Column(value = "created_dtm")
-    @ApiModelProperty(position = 4, required = true, value = "Created Date")
-    private Date createdDtm;
+    private DateTime createdDtm;
     @Column(value = "modified_by")
-    @ApiModelProperty(position = 5, required = true, value = "Modified By")
     private String modifiedBy;
     @Column(value = "modified_dtm")
-    @ApiModelProperty(position = 6, required = true, value = "Modified Date")
-    private Date modifiedDtm;
+    private DateTime modifiedDtm;
+
+
+    public Insert getInsertStatement(Cluster cluster) {
+        Insert insert = QueryBuilder.insertInto("clients")
+                .value("id",id).value("client_name",clientName)
+                .value("created_by",createdBy).value("created_dtm",createdDtm.toDate())
+                .value("modified_by",modifiedBy).value("modified_dtm",modifiedDtm.toDate())
+                .value("location",location.toUdtValue(cluster));
+
+        return insert;
+    }
+
+    public Statement getUpdateStatement(){
+
+        Statement update = QueryBuilder.update("clients")
+                .with(set("client_name",clientName)).and(set("modified_by",modifiedBy)).and(set("modified_dtm",modifiedDtm.toDate()))
+                .where(eq("id",id));
+
+        return update;
+    }
+
 }

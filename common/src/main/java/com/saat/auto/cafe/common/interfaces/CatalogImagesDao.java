@@ -1,6 +1,6 @@
 package com.saat.auto.cafe.common.interfaces;
 
-import com.saat.auto.cafe.common.exceptions.VehicleInvException;
+import com.saat.auto.cafe.common.exceptions.VehicleDetailsException;
 import com.saat.auto.cafe.common.models.CatalogImage;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public interface CatalogImagesDao {
      *
      * @param vehicleInventoryId the unique Id in the inventory Table
      */
-    List<CatalogImage> getCatalogImages(int vehicleInventoryId) throws VehicleInvException;
+    List<CatalogImage> getCatalogImages(int vehicleInventoryId) throws VehicleDetailsException;
 
 
 

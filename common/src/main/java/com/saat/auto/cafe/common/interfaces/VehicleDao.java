@@ -1,8 +1,9 @@
 package com.saat.auto.cafe.common.interfaces;
 
-import com.saat.auto.cafe.common.exceptions.VehicleInvException;
-import com.saat.auto.cafe.common.models.CatalogImage;
+import com.saat.auto.cafe.common.exceptions.VehicleDetailsException;
+import com.saat.auto.cafe.common.models.ClientVehicles;
 import com.saat.auto.cafe.common.models.VehicleDetails;
+import com.saat.auto.cafe.common.models.VehicleImages;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,40 +18,42 @@ public interface VehicleDao {
      * Method to Add or Update a Vehicle Inventory record
      * @param vi the Vehicle Inventory record to add or update
      * @return a instance of the Vehicle inventory Record
-     * @throws VehicleInvException if anything goes wrong
+     * @throws VehicleDetailsException if anything goes wrong
      */
-    VehicleDetails upsertVehicleDetails(VehicleDetails vi) throws VehicleInvException;
+    VehicleDetails upsertVehicleDetails(VehicleDetails vi) throws VehicleDetailsException;
 
     /**
      * Method to get a Vehicle Inventory record based off Id
      * @param vehicleId the Id of the Inventory record
      * @return an instance of the VehicleDetails record
-     * @throws VehicleInvException is anything goes wrong
+     * @throws VehicleDetailsException is anything goes wrong
      */
-    VehicleDetails get(UUID vehicleId) throws VehicleInvException;
+    VehicleDetails get(UUID vehicleId,UUID clientId) throws VehicleDetailsException;
 
     /**
      * Method to get a Vehicle Inventory record based off keyName
      * @param keyName the keyName
      * @return an instance of the VehicleDetails record
-     * @throws VehicleInvException is anything goes wrong
+     * @throws VehicleDetailsException is anything goes wrong
      */
-    VehicleDetails get(String keyName) throws VehicleInvException;
+    VehicleDetails get(String keyName) throws VehicleDetailsException;
 
     List<VehicleDetails> getByClientId(UUID clientId);
-    /**
-     * Gets a list of catalog images based of Id
-     *
-     * @param vehicleInventoryId the unique Id in the inventory Table
-     */
-    List<CatalogImage> getCatalogImages(int vehicleInventoryId) throws VehicleInvException;
+
 
     /**
-     * Get a list of catlog images based off the KeyName
-     *
-     * @param vehicleKeyName the Vehicle KeyName ex: 2010 BMW 3-Series
+     * Method that add a New Vehicle image
+     * @param vi the VehicleImages object to add
+     * @return the newly create Vehicle image Object
      */
-    List<CatalogImage> getCatalogImages(String vehicleKeyName) throws VehicleInvException;
+    VehicleImages insertVehicleImage(VehicleImages vi) throws VehicleDetailsException;
+
+    /**
+     * Method to get a list of the Vehicle Images
+     * @param vehicleId the Vehicle Id to get
+     * @return an array of VehicleImages for the given Vehicle Id
+     */
+    List<VehicleImages> getVehicleImageList(UUID vehicleId) throws VehicleDetailsException;
 
 
 

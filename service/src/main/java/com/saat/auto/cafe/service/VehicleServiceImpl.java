@@ -1,6 +1,6 @@
 package com.saat.auto.cafe.service;
 
-import com.saat.auto.cafe.common.exceptions.VehicleInvException;
+import com.saat.auto.cafe.common.exceptions.VehicleDetailsException;
 import com.saat.auto.cafe.common.interfaces.VehicleDao;
 import com.saat.auto.cafe.common.interfaces.VehicleService;
 import com.saat.auto.cafe.common.models.CatalogImage;
@@ -22,22 +22,22 @@ public class VehicleServiceImpl implements VehicleService {
 
 
     @Override
-    public List<CatalogImage> getCatalogImages(int vehicleInventoryId) throws VehicleInvException {
+    public List<CatalogImage> getCatalogImages(int vehicleInventoryId) throws VehicleDetailsException {
         return null;
     }
 
     @Override
-    public List<CatalogImage> getCatalogImages(String vehicleKeyName) throws VehicleInvException {
+    public List<CatalogImage> getCatalogImages(String vehicleKeyName) throws VehicleDetailsException {
         return null;
     }
 
     @Override
-    public VehicleDetails getVehicleInventory(int id) throws VehicleInvException {
+    public VehicleDetails getVehicleInventory(int id) throws VehicleDetailsException {
         return null;
     }
 
     @Override
-    public VehicleDetails getVehicleInventory(String keyName) throws VehicleInvException {
+    public VehicleDetails getVehicleInventory(String keyName) throws VehicleDetailsException {
         return null;
     }
 }

@@ -21,7 +21,7 @@ subprojects {
     dependencies {
         compile group: 'org.testng', name: 'testng', version: '6.9.10'
         compile group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
-        compile "org.projectlombok:lombok:1.16.8"
+        compile group: 'org.projectlombok', name: 'lombok', version: '1.16.10'
         compile group: 'org.assertj', name: 'assertj-core', version: '3.4.1'
         compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.0.1'
         compile group: 'commons-configuration', name: 'commons-configuration', version: '1.10'

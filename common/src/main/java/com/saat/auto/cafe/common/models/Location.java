@@ -14,7 +14,6 @@ import lombok.Data;
 /**
  * Created by mcoletti on 5/17/16.
  */
-// @Table
 @UDT(name = "location",keyspace = "autocafedb")
 @Data
 public class Location{
@@ -46,7 +45,7 @@ public class Location{
     public static Location fromUdtValue(UDTValue udtValue){
 
         Location location = new Location();
-        location.setAddress(Address.fromUdtValue(udtValue));
+        location.setAddress(Address.fromUdtValue(udtValue.getUDTValue("address")));
         location.setName(udtValue.getString("name"));
 
         return location;

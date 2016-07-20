@@ -1,6 +1,6 @@
 package com.saat.auto.cafe.common.interfaces;
 
-import com.saat.auto.cafe.common.exceptions.VehicleInvException;
+import com.saat.auto.cafe.common.exceptions.VehicleDetailsException;
 import com.saat.auto.cafe.common.models.CatalogImage;
 import com.saat.auto.cafe.common.models.VehicleDetails;
 
@@ -17,19 +17,19 @@ public interface VehicleService {
      *
      * @param vehicleInventoryId the unique Id in the inventory Table
      */
-    List<CatalogImage> getCatalogImages(int vehicleInventoryId) throws VehicleInvException;
+    List<CatalogImage> getCatalogImages(int vehicleInventoryId) throws VehicleDetailsException;
 
     /**
      * Get a list of catlog images based off the KeyName
      *
      * @param vehicleKeyName the Vehicle KeyName ex: 2010 BMW 3-Series
      */
-    List<CatalogImage> getCatalogImages(String vehicleKeyName) throws VehicleInvException;
+    List<CatalogImage> getCatalogImages(String vehicleKeyName) throws VehicleDetailsException;
 
     /**
      * Get a Vehicle inventory object based off Id
      */
-    VehicleDetails getVehicleInventory(int id) throws VehicleInvException;
+    VehicleDetails getVehicleInventory(int id) throws VehicleDetailsException;
 
     /**
      * Get a Vehicle inventory object based off keyName ex: 2010 BMW 3-Series
@@ -37,6 +37,6 @@ public interface VehicleService {
      * @param keyName the KeyName ex: 2010 BMW 3-Series
      * @return an Vehicle Inventory Object
      */
-    VehicleDetails getVehicleInventory(String keyName) throws VehicleInvException;
+    VehicleDetails getVehicleInventory(String keyName) throws VehicleDetailsException;
 
 }

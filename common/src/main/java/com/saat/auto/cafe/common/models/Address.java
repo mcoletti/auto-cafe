@@ -16,7 +16,6 @@ import lombok.Data;
 /**
  * Created by mcoletti on 6/17/16.
  */
-
 @UDT(keyspace = "autocafe", name = "address")
 @Data
 public class Address {
@@ -27,6 +26,8 @@ public class Address {
     private String street2;
     @Field
     private String city;
+    @Field
+    private String state;
     @Field
     private int zipCode;
     @Field
@@ -43,6 +44,7 @@ public class Address {
                 .setString("street1", street1)
                 .setString("street2", street2)
                 .setString("city", city)
+                .setString("state",state)
                 .setInt("zip_code", zipCode)
                 .setSet("phones", phones);
         return addressUdt;
@@ -59,6 +61,8 @@ public class Address {
         address.setCity(udtValue.getString("city"));
         address.setStreet1(udtValue.getString("street1"));
         address.setStreet2(udtValue.getString("street2"));
+        address.setCity(udtValue.getString("city"));
+        address.setState(udtValue.getString("state"));
         address.setZipCode(udtValue.getInt("zip_code"));
         address.setPhones(udtValue.getSet("phones",String.class));
         return address;
