@@ -1,6 +1,5 @@
 package com.saat.auto.cafe.data.dao.impl;
 
-import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.saat.auto.cafe.common.db.SchemaConstants;
@@ -8,8 +7,8 @@ import com.saat.auto.cafe.common.db.SchemaConstants.ClientsTable;
 import com.saat.auto.cafe.common.exceptions.DaoException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.interfaces.ClientsDao;
-import com.saat.auto.cafe.common.models.ClientVehicles;
-import com.saat.auto.cafe.common.models.Clients;
+import com.saat.auto.cafe.common.entitys.ClientVehicles;
+import com.saat.auto.cafe.common.entitys.Clients;
 import com.saat.auto.cafe.data.DataBeans;
 import com.saat.auto.cafe.data.dao.mappers.ClientRowMapper;
 

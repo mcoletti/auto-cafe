@@ -3,4 +3,5 @@ include 'data'
 include 'api'
 include 'service'
 include 'web'
+include 'auth-api'
 

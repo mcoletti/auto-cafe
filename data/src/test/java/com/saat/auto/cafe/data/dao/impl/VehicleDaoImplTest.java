@@ -1,12 +1,11 @@
 package com.saat.auto.cafe.data.dao.impl;
 
 import com.saat.auto.cafe.common.interfaces.VehicleDao;
-import com.saat.auto.cafe.common.models.VehicleDetails;
-import com.saat.auto.cafe.common.models.VehicleImages;
+import com.saat.auto.cafe.common.entitys.VehicleDetails;
+import com.saat.auto.cafe.common.entitys.VehicleImages;
 import com.saat.auto.cafe.data.TestBase;
 
 import org.joda.time.DateTime;
-import org.testng.Reporter;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

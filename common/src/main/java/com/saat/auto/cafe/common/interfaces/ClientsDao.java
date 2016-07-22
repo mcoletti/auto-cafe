@@ -1,8 +1,8 @@
 package com.saat.auto.cafe.common.interfaces;
 
 import com.saat.auto.cafe.common.exceptions.DaoException;
-import com.saat.auto.cafe.common.models.ClientVehicles;
-import com.saat.auto.cafe.common.models.Clients;
+import com.saat.auto.cafe.common.entitys.ClientVehicles;
+import com.saat.auto.cafe.common.entitys.Clients;
 
 import java.util.List;
 import java.util.UUID;

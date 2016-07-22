@@ -1,0 +1,42 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+VM_DEFAULT_BOX_NAME = "ubuntu/trusty64"
+VM_PROVIDER_GUI = false
+VM_PROVIDER_MEMORY = 2048
+VM_PROVIDER_CPU = 1
+N = 2
+
+Vagrant.configure("2") do |config|
+
+(1..N).each do |machine_id|
+  config.vm.box = VM_DEFAULT_BOX_NAME
+
+  config.vm.provider :virtualbox do |v|
+      v.gui = VM_PROVIDER_GUI
+      v.memory = VM_PROVIDER_MEMORY
+      v.cpus = VM_PROVIDER_CPU
+  end
+  config.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
+  config.vm.define "node#{machine_id}" do |machine|
+    machine.vm.hostname = "node#{machine_id}"
+    machine.vm.network "private_network", ip: "192.168.56.#{10+machine_id}"
+    if machine_id == N
+      machine.vm.provision :ansible do |ansible|
+        ansible.limit = "all"
+        ansible.playbook = "site.yml"
+       #config.vm.provider "virtualbox" do |vb|
+       #  vb.customize ["modifyvm", :id, "--memory", "2048"]
+       #end
+      end
+    end
+  end
+ end
+ #config.vm.define "apiserver" do |apinode|
+ #   apinode.vm.box = VM_DEFAULT_BOX_NAME
+ #   apinode.vm.synced_folder "api/" , "/opt/autocafe" , create: true
+ #   apinode.vm.network  "private_network", ip: "192.168.56.14"
+ # config.vm.provision "ansible" do |ansible|
+ #  ansible.playbook = "apiserver.yml"
+ # end
+ #end
+end

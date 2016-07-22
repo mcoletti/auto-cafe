@@ -2,7 +2,7 @@ package com.saat.auto.cafe.data.dao.mappers;
 
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.exceptions.DriverException;
-import com.saat.auto.cafe.common.models.VehicleImages;
+import com.saat.auto.cafe.common.entitys.VehicleImages;
 
 import org.springframework.cassandra.core.RowMapper;
 

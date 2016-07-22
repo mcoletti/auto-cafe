@@ -80,3 +80,6 @@ hs_err_pid*
 **build/
 .vagrant
 *.retry
+*.original
+data/vagrant/api/logback.xml
+data/vagrant/api/micah

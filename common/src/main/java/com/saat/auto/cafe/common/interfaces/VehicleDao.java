@@ -1,9 +1,8 @@
 package com.saat.auto.cafe.common.interfaces;
 
 import com.saat.auto.cafe.common.exceptions.VehicleDetailsException;
-import com.saat.auto.cafe.common.models.ClientVehicles;
-import com.saat.auto.cafe.common.models.VehicleDetails;
-import com.saat.auto.cafe.common.models.VehicleImages;
+import com.saat.auto.cafe.common.entitys.VehicleDetails;
+import com.saat.auto.cafe.common.entitys.VehicleImages;
 
 import java.util.List;
 import java.util.UUID;

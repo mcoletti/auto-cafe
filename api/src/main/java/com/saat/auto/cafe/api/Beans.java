@@ -14,18 +14,18 @@ import javax.sql.DataSource;
 public class Beans {
 
 
-    @Bean
-    public DataSource dataSource(){
-
-        MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
-//        MysqlDataSource ds = new MysqlDataSource();
-        ds.setUser("root");
-        ds.setPassword("pa55word!");
-        ds.setDatabaseName("autocafedb");
-        ds.setServerName("172.20.92.12");
-        ds.setPort(3306);
-        return ds;
-    }
+//    @Bean
+//    public DataSource dataSource(){
+//
+//        MysqlConnectionPoolDataSource ds = new MysqlConnectionPoolDataSource();
+////        MysqlDataSource ds = new MysqlDataSource();
+//        ds.setUser("root");
+//        ds.setPassword("pa55word!");
+//        ds.setDatabaseName("autocafedb");
+//        ds.setServerName("172.20.92.12");
+//        ds.setPort(3306);
+//        return ds;
+//    }
 
 
 }

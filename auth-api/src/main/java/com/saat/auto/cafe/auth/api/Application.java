@@ -1,5 +1,4 @@
-package com.saat.auto.cafe.api;
-
+package com.saat.auto.cafe.auth.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -16,7 +15,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * Created by mcoletti on 6/1/16.
+ * Created by micahcoletti on 7/22/16.
  */
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class,CassandraDataAutoConfiguration.class})
@@ -39,10 +38,9 @@ public class Application {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title(ApiConstants.TITLE)
-                .description(ApiConstants.DESCRIPTION)
-                .termsOfServiceUrl("").contact(new Contact(ApiConstants.CONTACT_NAME,"",ApiConstants.CONTACT_EMAIL))
-                .contact("yourteam")
+                .title("")
+                .description("")
+                .termsOfServiceUrl("").contact(new Contact("","",""))
                 .license("")
                 .licenseUrl("")
                 .version("1.0")

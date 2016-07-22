@@ -2,8 +2,8 @@ package com.saat.auto.cafe.data.dao.mappers;
 
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.exceptions.DriverException;
-import com.saat.auto.cafe.common.models.Clients;
-import com.saat.auto.cafe.common.models.Location;
+import com.saat.auto.cafe.common.entitys.Clients;
+import com.saat.auto.cafe.common.entitys.Location;
 
 import org.joda.time.DateTime;
 import org.springframework.cassandra.core.RowMapper;

@@ -5,8 +5,8 @@ package com.saat.auto.cafe.data;
 // import com.datastax.driver.core.Session;
 
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
-import com.saat.auto.cafe.common.models.Address;
-import com.saat.auto.cafe.common.models.Location;
+import com.saat.auto.cafe.common.entitys.Address;
+import com.saat.auto.cafe.common.entitys.Location;
 import com.saat.auto.cafe.data.dao.impl.ClientsDaoImplTest;
 
 import org.springframework.test.context.ContextConfiguration;

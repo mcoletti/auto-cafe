@@ -7,22 +7,12 @@ buildscript {
     }
 }
 apply plugin: 'spring-boot'
+apply plugin: 'java'
 
-jar {
-    archiveName = 'api.jar'
+sourceCompatibility = 1.5
 
-}
-
-//task nameJar (type: Jar) {
-//    baseName = project.n
-//    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-//    with jar
-//
-//}
-
-task copyApi(type: Copy) {
-    from 'build/libs'
-    into 'docker/apilibs/'
+repositories {
+    mavenCentral()
 }
 
 
@@ -34,6 +24,3 @@ bootRepackage {
 dependencies {
     testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
 }
-
-
-

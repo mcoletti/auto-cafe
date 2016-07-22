@@ -1,6 +1,6 @@
 package com.saat.auto.cafe.data;
 
-import com.saat.auto.cafe.common.models.TestModel;
+import com.saat.auto.cafe.common.entitys.TestModel;
 
 /**
  * Created by mcoletti on 6/1/16.

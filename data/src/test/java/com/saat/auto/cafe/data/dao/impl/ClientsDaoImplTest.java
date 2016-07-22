@@ -1,7 +1,7 @@
 package com.saat.auto.cafe.data.dao.impl;
 
 import com.saat.auto.cafe.common.interfaces.ClientsDao;
-import com.saat.auto.cafe.common.models.Clients;
+import com.saat.auto.cafe.common.entitys.Clients;
 import com.saat.auto.cafe.data.TestBase;
 
 import org.joda.time.DateTime;
