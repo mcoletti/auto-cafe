@@ -11,5 +11,5 @@ import lombok.Builder;
         description = "THe Clients Model"
 )
 
-public class Client {
+public class ClientsModel {
 }

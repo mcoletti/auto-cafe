@@ -46,20 +46,20 @@ public class ClientsDaoImpl implements ClientsDao {
         Clients clUpdate = get(clients.getId());
         try {
             if (clUpdate == null) {
-                log.debug("Inserting new Client - Client Name: {} and id: {}", clients.getClientName(), clients.getId());
+                log.debug("Inserting new ClientsModel - ClientsModel Name: {} and id: {}", clients.getClientName(), clients.getId());
 
                 ci.getCassandraOperations().execute(clients.getInsertStatement(ci.getCluster()));
 
 //                ci.getCassandraOperations().insert(clients);
             } else {
-                log.debug("Updating Client - Client Name: {} and id: {}", clients.getClientName(), clients.getId());
+                log.debug("Updating ClientsModel - ClientsModel Name: {} and id: {}", clients.getClientName(), clients.getId());
 
                 ci.getCassandraOperations().execute(clients.getUpdateStatement());
 
 //                ci.getCassandraOperations().update(clients);
             }
         } catch (Exception e) {
-            log.error("Error updating or inserting Client Record - {}", e.getMessage());
+            log.error("Error updating or inserting ClientsModel Record - {}", e.getMessage());
             e.printStackTrace();
             throw new DaoException(e);
         }
@@ -74,13 +74,13 @@ public class ClientsDaoImpl implements ClientsDao {
         List<Clients> clients;
         Clients client;
         try {
-            log.debug("Getting Client Record for id: {}", id);
+            log.debug("Getting ClientsModel Record for id: {}", id);
             Select s = QueryBuilder.select().from("clients");
             s.where(QueryBuilder.eq(SchemaConstants.Common.Columns.Id, id));
             client = ci.getCassandraOperations().queryForObject(s, new ClientRowMapper()); // .queryForObject(s, new ClientRowMapper());
 //            client = clients.size() != 0 ? clients.get(0) : null;
         } catch (Exception e) {
-            log.error("Error updating or inserting Client Record - {}", e.getMessage());
+            log.error("Error updating or inserting ClientsModel Record - {}", e.getMessage());
             if (e.getMessage().contains("0 rows")) {
                 client = null;
             } else {

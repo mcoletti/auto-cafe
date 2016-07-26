@@ -10,7 +10,7 @@ import static org.testng.Assert.*;
 /**
  * Created by mcoletti on 6/1/16.
  */
-public class VehicleDetailsTest {
+public class VehicleDetailsModelTest {
 
 
     @Test

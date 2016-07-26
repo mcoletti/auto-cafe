@@ -24,7 +24,7 @@ public interface VehicleDao {
     /**
      * Method to get a Vehicle Inventory record based off Id
      * @param vehicleId the Id of the Inventory record
-     * @return an instance of the VehicleDetails record
+     * @return an instance of the VehicleDetailsModel record
      * @throws VehicleDetailsException is anything goes wrong
      */
     VehicleDetails get(UUID vehicleId,UUID clientId) throws VehicleDetailsException;
@@ -32,7 +32,7 @@ public interface VehicleDao {
     /**
      * Method to get a Vehicle Inventory record based off keyName
      * @param keyName the keyName
-     * @return an instance of the VehicleDetails record
+     * @return an instance of the VehicleDetailsModel record
      * @throws VehicleDetailsException is anything goes wrong
      */
     VehicleDetails get(String keyName) throws VehicleDetailsException;

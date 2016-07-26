@@ -13,12 +13,11 @@ import org.springframework.context.annotation.Bean;
 public class ServiceBeans {
 
 
-
     @Bean
     public HazelcastInstance getHazelcastInstance(){
 
-        HazelcastInstance instance = Hazelcast.newHazelcastInstance();
-        return instance;
+        return Hazelcast.newHazelcastInstance();
+
 
     }
 

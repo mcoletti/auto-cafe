@@ -26,8 +26,8 @@ public class VehicleDetailsRowMapper implements RowMapper<VehicleDetails> {
                 .make(row.getString("make")).model(row.getString("model"))
                 .price(row.getDecimal("price")).stockNum(row.getInt("stock_num"))
                 .trim(row.getString("trim"))
-                .createdBy(row.getString("created_by")).createdDtm(new DateTime(row.getDate("created_dtm")))
-                .modifiedBy(row.getString("modified_by")).modifiedDtm(new DateTime(row.getDate("modified_dtm")))
+                .createdBy(row.getString("created_by")).createdDtm(new DateTime(row.getDate("created_dtm")).toDate())
+                .modifiedBy(row.getString("modified_by")).modifiedDtm(new DateTime(row.getDate("modified_dtm")).toDate())
                 .build();
         return vd;
     }

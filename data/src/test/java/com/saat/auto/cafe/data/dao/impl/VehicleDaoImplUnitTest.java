@@ -3,7 +3,7 @@
 // import com.saat.auto.cafe.common.exceptions.VehicleDetailsException;
 // import com.saat.auto.cafe.common.interfaces.VehicleDao;
 // import com.saat.auto.cafe.common.models.CatalogImage;
-// import com.saat.auto.cafe.common.models.VehicleDetails;
+// import com.saat.auto.cafe.common.models.VehicleDetailsModel;
 //
 // import org.mockito.Mock;
 // import org.testng.Reporter;
@@ -28,8 +28,8 @@
 //
 //     private List<CatalogImage> ciList;
 //     private List<CatalogImage> ciList2;
-//     private VehicleDetails vi1;
-//     private VehicleDetails vi2;
+//     private VehicleDetailsModel vi1;
+//     private VehicleDetailsModel vi2;
 //     private int vehicleId1;
 //     private int vehicleId2;
 //
@@ -45,7 +45,7 @@
 //
 //         Random random = new Random();
 //         vehicleId1 = random.nextInt();
-//         vi1 = VehicleDetails.builder().build();
+//         vi1 = VehicleDetailsModel.builder().build();
 //         vi1.setId(vehicleId1);
 //         vi1.setKeyName(String.format("testKeyName-%s", vehicleId1));
 //         CatalogImage ci = getCi(vi1.getId());
@@ -55,7 +55,7 @@
 //
 //         ciList2 = new ArrayList<>();
 //         vehicleId2 = random.nextInt();
-//         vi2 = VehicleDetails.builder().build();
+//         vi2 = VehicleDetailsModel.builder().build();
 //         vi2.setId(vehicleId2);
 //         vi2.setKeyName(String.format("testKeyName-%s", vehicleId2));
 //         ci = getCi(vi2.getId());
@@ -119,7 +119,7 @@
 //     @Test
 //     public void testGetVehicleInventoryById() throws Exception {
 //
-//         VehicleDetails result = vehicleDao.get(vehicleId1);
+//         VehicleDetailsModel result = vehicleDao.get(vehicleId1);
 //         assertThat(result).isNotNull();
 //         assertThat(result).isEqualTo(vi1);
 //

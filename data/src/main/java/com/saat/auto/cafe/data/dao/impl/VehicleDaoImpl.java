@@ -58,7 +58,7 @@ public class VehicleDaoImpl implements VehicleDao {
                         .vehicleId(vi.getId())
                         .keyName(vi.getKeyName()).build();
 
-                // Insert Record into the Client Vehicles Table
+                // Insert Record into the ClientsModel Vehicles Table
                 ci.getCassandraOperations().execute(cv.getInsertStatement());
             } else {
                 vi = ci.getCassandraOperations().update(vi);
