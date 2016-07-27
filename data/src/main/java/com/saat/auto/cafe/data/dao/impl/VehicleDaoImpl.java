@@ -30,11 +30,15 @@ public class VehicleDaoImpl implements VehicleDao {
 
     private static Logger log = LoggerFactory.getLogger(ClientsDaoImpl.class);
 
-    @Inject
     private CassandraInstance ci;
 
 
-    protected VehicleDaoImpl(CassandraInstance ci) {
+
+    /**
+     * Constructor used for testing
+     * @param ci
+     */
+    public VehicleDaoImpl(CassandraInstance ci) {
         this.ci = ci;
     }
 

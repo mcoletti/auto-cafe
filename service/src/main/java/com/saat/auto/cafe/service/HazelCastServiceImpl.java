@@ -5,6 +5,7 @@ import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Cluster;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
+import com.hazelcast.monitor.LocalMapStats;
 import com.saat.auto.cafe.common.AutoCafeConstants;
 import com.saat.auto.cafe.common.interfaces.HazelCastService;
 import com.saat.auto.cafe.common.models.HzCluster;
@@ -12,9 +13,8 @@ import com.saat.auto.cafe.common.models.HzMember;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
-
-import javax.inject.Inject;
 
 /**
  * Created by micahcoletti on 7/26/16.
@@ -22,7 +22,6 @@ import javax.inject.Inject;
 public class HazelCastServiceImpl implements HazelCastService {
 
 
-    @Inject
     private HazelcastInstance hazelcastInstance;
 
     public HazelCastServiceImpl(HazelcastInstance instance) {
@@ -63,10 +62,20 @@ public class HazelCastServiceImpl implements HazelCastService {
     }
 
     @Override
+    public LocalMapStats getLocalMapStats(String map) {
+        return hazelcastInstance.getMap(map).getLocalMapStats();
+    }
+
+    @Override
     public ConcurrentMap<String, String> getMap(String map){
 
 
         return hazelcastInstance.getMap(map);
 
+    }
+
+    @Override
+    public Set<Member> getHazelcastMembers() {
+        return hazelcastInstance.getCluster().getMembers();
     }
 }

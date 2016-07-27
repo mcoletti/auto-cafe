@@ -1,38 +1,28 @@
 package com.saat.auto.cafe.service;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
 import com.saat.auto.cafe.common.AutoCafeConstants;
-import com.saat.auto.cafe.common.entitys.VehicleDetails;
 import com.saat.auto.cafe.common.interfaces.CacheService;
 import com.saat.auto.cafe.common.interfaces.HazelCastService;
 import com.saat.auto.cafe.common.models.VehicleDetailsModel;
+import com.saat.auto.cafe.service.cache.HazelCastCacheServiceImpl;
 
-import org.joda.time.DateTime;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.math.BigDecimal;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
-
-import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Created by micahcoletti on 7/26/16.
  */
-@ContextConfiguration(classes = ServiceBeans.class)
-public class HazelCastCacheServiceImplTest extends AbstractTestNGSpringContextTests {
-
-
-
-    @Inject
-    HazelcastInstance hazelcastInstance;
+public class HazelCastCacheServiceImplTest extends TestBase {
 
 
     private CacheService cacheService;
@@ -49,63 +39,51 @@ public class HazelCastCacheServiceImplTest extends AbstractTestNGSpringContextTe
         cacheService = new HazelCastCacheServiceImpl(hazelCastService,AutoCafeConstants.Caches.VEHICLE_CACHE,gson);
     }
 
-
-
     @Test
-    public void testInsertCacheEntry() throws Exception {
+    public void testInsertCacheEntryGeneric() throws Exception {
 
-        vehicleId = UUID.randomUUID().toString();
-        VehicleDetailsModel vdM = getVDM(vehicleId);
+        List<VehicleDetailsModel> vehicles = new ArrayList<>();
 
-        String cacheValue = cacheService.toJson(vdM,VehicleDetails.class);
-        cacheService.insertCacheEntry(vdM.getId(),cacheValue);
+        setROOT_VDM(UUID.randomUUID().toString());
+        vehicles.add(ROOT_VDM);
+
+        Type type = new TypeToken<List<VehicleDetailsModel>>(){}.getType();
+        cacheService.insertCacheEntry(ROOT_VDM.getId(),vehicles,type);
 
     }
 
+    @Test
+    public void testInsertCacheEntryNonGeneric() throws Exception {
+        setROOT_VDM(UUID.randomUUID().toString());
+        cacheService.insertCacheEntry(ROOT_VDM.getId(),ROOT_VDM);
+    }
 
-    @Test(dependsOnMethods = {"testInsertCacheEntry"})
+    @Test(dependsOnMethods = {"testInsertCacheEntryNonGeneric"})
+    public void testIsInCacheAndRemove(){
+        cacheService.insertCacheEntry(ROOT_VDM.getId(),ROOT_VDM.getClientId());
+    }
+
+    @Test(dependsOnMethods = {"testInsertCacheEntryNonGeneric"})
     public void testGetCacheEntry() throws Exception {
 
 
 
-        VehicleDetails vd = cacheService.getCacheEntry(vehicleId.toString(),VehicleDetails.class);
+        VehicleDetailsModel vd = cacheService.getCacheEntry(vehicleId.toString(),VehicleDetailsModel.class);
         assertThat(vd).isNotNull();
-
-
-
+        assertThat(vd.getId()).isEqualTo(vehicleId);
     }
 
     @Test
     public void testToJson() throws Exception {
+        setROOT_VDM(UUID.randomUUID().toString());
 
-        VehicleDetailsModel vdm = getVDM(UUID.randomUUID().toString());
-
-        String preJsonValue = gson.toJson(vdm,VehicleDetailsModel.class);
-        String resultJson = cacheService.toJson(vdm,VehicleDetailsModel.class);
+        String preJsonValue = gson.toJson(ROOT_VDM,VehicleDetailsModel.class);
+        String resultJson = cacheService.toJson(ROOT_VDM,VehicleDetailsModel.class);
         assertThat(preJsonValue).isEqualTo(resultJson);
 
 
     }
 
-    private VehicleDetailsModel getVDM(String vehicleId){
-        VehicleDetailsModel vd = VehicleDetailsModel.builder()
-                .id(vehicleId)
-                .clientId("395b2f0c-8008-410c-8402-fb64a3a7a295")
-                .keyName("micah").stockNum(1234)
-                .extColor("black").intColor("red")
-                .trim("na").price(new BigDecimal(15500.00))
-                .mileage("115,000").category("sedans")
-                .make("Honda").model("Accord")
-                .year(2003)
-                .bodyStyle("sedan")
-                .manufacture("Honda")
-                .location(null)
-                .createdBy("testUser")
-                .createdDtm(DateTime.now().toString())
-                .modifiedBy("testUser")
-                .modifiedDtm(DateTime.now().toString()).build();
 
-        return vd;
-    }
 
 }

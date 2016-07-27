@@ -118,9 +118,9 @@ public class VehicleDaoImplTest extends TestBase {
                 .manufacture("Honda")
                 .location(getLoc())
                 .createdBy("testUser")
-                .createdDtm(DateTime.now())
+                .createdDtm(DateTime.now().toDate())
                 .modifiedBy("testUser")
-                .modifiedDtm(DateTime.now()).build();
+                .modifiedDtm(DateTime.now().toDate()).build();
 
         VD_ROOT = vd;
     }
