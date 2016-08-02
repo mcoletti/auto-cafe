@@ -1,21 +1,18 @@
 package com.saat.auto.cafe.data;
 
-// import com.datastax.driver.core.Cluster;
-// import com.datastax.driver.core.ResultSet;
-// import com.datastax.driver.core.Session;
 
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.entitys.Location;
-import com.saat.auto.cafe.data.dao.impl.ClientsDaoImplTest;
 
+import config.DataBeans;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.inject.Inject;
 
 /**
  * Created by mcoletti on 6/1/16.
@@ -23,11 +20,11 @@ import javax.inject.Inject;
 @ContextConfiguration(classes = DataBeans.class)
 public class TestBase extends AbstractTestNGSpringContextTests {
 
-    @Inject
+    @Autowired
     public CassandraInstance cassandraInstance;
 
     static {
-        System.setProperty("prop.path", ClientsDaoImplTest.class.getClassLoader().getResource("app.properties").getPath());
+//        System.setProperty("prop.path", ClientsDaoImplTest.class.getClassLoader().getResource("app.properties").getPath());
     }
 
     public Location getLoc(){

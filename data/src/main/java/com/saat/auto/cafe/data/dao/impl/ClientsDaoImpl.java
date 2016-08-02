@@ -4,12 +4,11 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.saat.auto.cafe.common.db.SchemaConstants;
 import com.saat.auto.cafe.common.db.SchemaConstants.ClientsTable;
+import com.saat.auto.cafe.common.entitys.ClientVehicles;
+import com.saat.auto.cafe.common.entitys.Clients;
 import com.saat.auto.cafe.common.exceptions.DaoException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.interfaces.ClientsDao;
-import com.saat.auto.cafe.common.entitys.ClientVehicles;
-import com.saat.auto.cafe.common.entitys.Clients;
-import com.saat.auto.cafe.data.DataBeans;
 import com.saat.auto.cafe.data.dao.mappers.ClientRowMapper;
 
 import org.slf4j.Logger;
@@ -20,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import config.DataBeans;
 
 /**
  * Created by mcoletti on 6/16/16.
@@ -29,10 +28,9 @@ import javax.inject.Inject;
 public class ClientsDaoImpl implements ClientsDao {
 
 
-    private static Logger log = LoggerFactory.getLogger(ClientsDaoImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ClientsDaoImpl.class);
 
-    @Inject
-    private CassandraInstance ci;
+    private final CassandraInstance ci;
 
     protected ClientsDaoImpl(CassandraInstance cassandraInstance) {
         this.ci = cassandraInstance;
@@ -48,15 +46,15 @@ public class ClientsDaoImpl implements ClientsDao {
             if (clUpdate == null) {
                 log.debug("Inserting new ClientsModel - ClientsModel Name: {} and id: {}", clients.getClientName(), clients.getId());
 
-                ci.getCassandraOperations().execute(clients.getInsertStatement(ci.getCluster()));
+                ci.getCassandraTemplate().execute(clients.getInsertStatement(ci.getCluster()));
 
-//                ci.getCassandraOperations().insert(clients);
+//                ci.getCassandraTemplate().insert(clients);
             } else {
                 log.debug("Updating ClientsModel - ClientsModel Name: {} and id: {}", clients.getClientName(), clients.getId());
 
-                ci.getCassandraOperations().execute(clients.getUpdateStatement());
+                ci.getCassandraTemplate().execute(clients.getUpdateStatement());
 
-//                ci.getCassandraOperations().update(clients);
+//                ci.getCassandraTemplate().update(clients);
             }
         } catch (Exception e) {
             log.error("Error updating or inserting ClientsModel Record - {}", e.getMessage());
@@ -71,13 +69,12 @@ public class ClientsDaoImpl implements ClientsDao {
     public Clients get(UUID id) throws DaoException {
 
 
-        List<Clients> clients;
         Clients client;
         try {
             log.debug("Getting ClientsModel Record for id: {}", id);
             Select s = QueryBuilder.select().from("clients");
             s.where(QueryBuilder.eq(SchemaConstants.Common.Columns.Id, id));
-            client = ci.getCassandraOperations().queryForObject(s, new ClientRowMapper()); // .queryForObject(s, new ClientRowMapper());
+            client = ci.getCassandraTemplate().queryForObject(s, new ClientRowMapper()); // .queryForObject(s, new ClientRowMapper());
 //            client = clients.size() != 0 ? clients.get(0) : null;
         } catch (Exception e) {
             log.error("Error updating or inserting ClientsModel Record - {}", e.getMessage());
@@ -94,11 +91,11 @@ public class ClientsDaoImpl implements ClientsDao {
     @Override
     public Clients get(String clientName) throws DaoException {
 
-        Clients client = null;
+        Clients client;
         try {
             Select s = QueryBuilder.select().from(ClientsTable.NAME);
             s.where(QueryBuilder.eq(ClientsTable.Columns.ClientName, clientName));
-            client = ci.getCassandraOperations().queryForObject(s, new ClientRowMapper());
+            client = ci.getCassandraTemplate().queryForObject(s, new ClientRowMapper());
         } catch (DataAccessException e) {
             e.printStackTrace();
             throw new DaoException(e);

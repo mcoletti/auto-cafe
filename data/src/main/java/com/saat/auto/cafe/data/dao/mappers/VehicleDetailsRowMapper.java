@@ -17,7 +17,7 @@ public class VehicleDetailsRowMapper implements RowMapper<VehicleDetails> {
     public VehicleDetails mapRow(Row row, int rowNum) throws DriverException {
 
 
-        VehicleDetails vd = VehicleDetails.builder()
+        return VehicleDetails.builder()
                 .id(row.getUUID("id")).clientId(row.getUUID("client_id"))
                 .bodyStyle(row.getString("body_style")).extColor(row.getString("ext_color"))
                 .intColor(row.getString("int_color")).keyName(row.getString("key_name"))
@@ -29,6 +29,5 @@ public class VehicleDetailsRowMapper implements RowMapper<VehicleDetails> {
                 .createdBy(row.getString("created_by")).createdDtm(new DateTime(row.getDate("created_dtm")).toDate())
                 .modifiedBy(row.getString("modified_by")).modifiedDtm(new DateTime(row.getDate("modified_dtm")).toDate())
                 .build();
-        return vd;
     }
 }

@@ -15,12 +15,10 @@ public class VehicleImagesRowMapper implements RowMapper<VehicleImages> {
     @Override
     public VehicleImages mapRow(Row row, int rowNum) throws DriverException {
 
-        VehicleImages vImg = VehicleImages.builder()
+        return VehicleImages.builder()
                 .vehicleId(row.getUUID("vehicle_id"))
                 .imgType(row.getString("img_type")).imgName(row.getString("img_name"))
                 .imgCdnLoc(row.getString("img_cdn_loc")).imgSize(row.getInt("img_size"))
                 .imgSuffix(row.getString("img_suffix")).imgOrder(row.getInt("img_order")).build();
-
-        return vImg;
     }
 }

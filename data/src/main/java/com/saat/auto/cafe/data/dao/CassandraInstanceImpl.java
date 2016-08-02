@@ -3,27 +3,29 @@ package com.saat.auto.cafe.data.dao;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
+import com.saat.auto.cafe.data.CassandraProps;
 
-import org.apache.commons.configuration.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.data.cassandra.core.CassandraTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by micahcoletti on 7/12/16.
  */
+@Component(value = "main")
 public class CassandraInstanceImpl implements CassandraInstance {
 
 
-    private final Configuration config;
     private final Cluster cluster;
     private final Session session;
     private final CassandraOperations operations;
+    private CassandraProps config;
 
-    public CassandraInstanceImpl(Configuration config) {
-        this.config = config;
-
+    @Autowired
+    public CassandraInstanceImpl(CassandraProps config) {
         // Setup the Cluster
-        String[] contactPoints = config.getString("contactPoints").split(",");
+        String[] contactPoints = config.getContactPoints().split(",");
         Cluster.Builder builder = Cluster.builder();
         for (String contactPoint : contactPoints) {
             builder.addContactPoint(contactPoint);
@@ -31,7 +33,7 @@ public class CassandraInstanceImpl implements CassandraInstance {
         cluster = builder.build();
 
         // Setup the Session
-        session = cluster.connect(config.getString("keyspace"));
+        session = cluster.connect(config.getKeySpaceName());
         operations = new CassandraTemplate(session);
 
     }
@@ -50,7 +52,7 @@ public class CassandraInstanceImpl implements CassandraInstance {
     }
 
     @Override
-    public CassandraOperations getCassandraOperations() {
+    public CassandraOperations getCassandraTemplate() {
         return operations;
     }
 }

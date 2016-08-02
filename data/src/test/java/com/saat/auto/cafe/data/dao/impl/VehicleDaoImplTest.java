@@ -6,6 +6,7 @@ import com.saat.auto.cafe.common.entitys.VehicleImages;
 import com.saat.auto.cafe.data.TestBase;
 
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -21,30 +22,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VehicleDaoImplTest extends TestBase {
 
 
-    private VehicleDao vehicleDao;
+//    private VehicleDao vehicleDao;
     private VehicleDetails VD_ROOT;
     private VehicleDetails VD_LOCAL;
+
+    @Autowired
+    VehicleDao vehicleDao;
 
     @BeforeClass
     public void init() {
 
-        vehicleDao = new VehicleDaoImpl(cassandraInstance);
-
-    }
-
-    @Test
-    public void testModolo(){
-
-
-
-        String test = "julie.coletti@gmail.com";
-        String test2 = "julie.coletti@gmail.com";
-        int hash = Math.abs(test.hashCode());
-
-        int hash2 = hash % 4;
-       System.out.println(hash2);
-
-
+//        vehicleDao = new VehicleDaoImpl(cassandraInstance);
 
     }
 
@@ -105,7 +93,7 @@ public class VehicleDaoImplTest extends TestBase {
 
     private void setRootVD(UUID vehicleId) {
 
-        VehicleDetails vd = VehicleDetails.builder()
+        VD_ROOT = VehicleDetails.builder()
                 .id(vehicleId)
                 .clientId(UUID.fromString("395b2f0c-8008-410c-8402-fb64a3a7a295"))
                 .keyName("micah").stockNum(1234)
@@ -121,8 +109,6 @@ public class VehicleDaoImplTest extends TestBase {
                 .createdDtm(DateTime.now().toDate())
                 .modifiedBy("testUser")
                 .modifiedDtm(DateTime.now().toDate()).build();
-
-        VD_ROOT = vd;
     }
 
 }
