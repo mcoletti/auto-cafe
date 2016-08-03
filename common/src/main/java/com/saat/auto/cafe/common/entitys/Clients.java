@@ -8,9 +8,11 @@ import com.datastax.driver.mapping.annotations.Table;
 import com.saat.auto.cafe.common.AutoCafeConstants;
 
 import org.joda.time.DateTime;
+import org.springframework.cassandra.core.PrimaryKeyType;
 import org.springframework.data.cassandra.mapping.Column;
 import org.springframework.data.cassandra.mapping.Indexed;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 import java.util.UUID;
 
@@ -30,9 +32,8 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
 @Data
 public class Clients {
 
-    @PrimaryKey
+    @PrimaryKeyColumn(ordinal = 0,type = PrimaryKeyType.PARTITIONED)
     private UUID id;
-    @Indexed
     @Column(value = "client_name")
     private String clientName;
     @Column

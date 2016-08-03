@@ -11,6 +11,23 @@ repositories {
     mavenCentral()
 }
 
+task copyProps {
+    dependsOn 'copyPropsData'
+    dependsOn 'copyPropsService'
+}
+
+task copyPropsData(type: Sync) {
+
+    from 'common/properties/application.yml'
+    into 'data/src/main/resources/props'
+}
+task copyPropsService(type: Sync) {
+
+    from 'common/properties/application.yml'
+    into 'service/src/main/resources/props'
+}
+
+
 subprojects {
     apply plugin: 'java'
     group = 'com.saat.auto.cafe'
@@ -42,6 +59,7 @@ subprojects {
         compile group: 'com.contrastsecurity', name: 'cassandra-migration', version: '0.6'
         compile group: 'org.springframework.data', name: 'spring-data-cassandra', version: '1.4.2.RELEASE'
         compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: '2.1.7.1'
+        compile group: 'org.apache.cassandra', name: 'cassandra-all', version: '3.7'
 //        compile ('com.datastax.cassandra:cassandra-driver-mapping:3.0.2'){
 //            exclude module: 'com.datastax.cassandra:cassandra-driver-core'
 //        }
@@ -93,6 +111,7 @@ project(':api') {
     dependencies {
         compile project(':common')
         compile project(':data')
+        compile project(':service')
     }
 }
 project(':service') {

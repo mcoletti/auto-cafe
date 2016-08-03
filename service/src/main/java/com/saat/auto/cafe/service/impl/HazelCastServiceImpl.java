@@ -1,15 +1,18 @@
-package com.saat.auto.cafe.service;
+package com.saat.auto.cafe.service.impl;
 
-import com.hazelcast.config.InMemoryFormat;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Cluster;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
 import com.hazelcast.monitor.LocalMapStats;
-import com.saat.auto.cafe.common.AutoCafeConstants;
 import com.saat.auto.cafe.common.interfaces.HazelCastService;
 import com.saat.auto.cafe.common.models.HzCluster;
 import com.saat.auto.cafe.common.models.HzMember;
+import com.saat.auto.cafe.service.HazelCastConfig;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,19 +22,21 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by micahcoletti on 7/26/16.
  */
+@Component
 public class HazelCastServiceImpl implements HazelCastService {
 
 
-    private HazelcastInstance hazelcastInstance;
+    private final HazelcastInstance hazelcastInstance;
 
-    public HazelCastServiceImpl(HazelcastInstance instance) {
+    @Autowired
+    public HazelCastServiceImpl(HazelCastConfig config) {
 
-        hazelcastInstance = instance;
+        this.hazelcastInstance = Hazelcast.newHazelcastInstance();
         MapConfig mapConfig = new MapConfig();
-        mapConfig.setMaxIdleSeconds(14400);
-        mapConfig.setTimeToLiveSeconds(28800);
-        mapConfig.setName(AutoCafeConstants.Caches.VEHICLE_CACHE);
-        mapConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
+        mapConfig.setMaxIdleSeconds(config.getMaxIdleSecs());
+        mapConfig.setTimeToLiveSeconds(config.getTtl());
+        mapConfig.setName(config.getCacheName());
+//        mapConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
         hazelcastInstance.getConfig().addMapConfig(mapConfig);
 
     }

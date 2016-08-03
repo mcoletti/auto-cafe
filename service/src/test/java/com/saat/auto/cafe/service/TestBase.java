@@ -1,12 +1,13 @@
 package com.saat.auto.cafe.service;
 
-import com.hazelcast.core.HazelcastInstance;
 import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.entitys.Location;
+import com.saat.auto.cafe.common.interfaces.CacheService;
+import com.saat.auto.cafe.common.interfaces.HazelCastService;
 import com.saat.auto.cafe.common.models.VehicleDetailsModel;
-import com.saat.auto.cafe.data.DataBeans;
 
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
@@ -14,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.inject.Inject;
+import com.saat.auto.cafe.data.DataBeans;
 
 /**
  * Created by micahcoletti on 7/27/16.
@@ -22,16 +23,15 @@ import javax.inject.Inject;
 @ContextConfiguration(classes = {ServiceBeans.class, DataBeans.class})
 public class TestBase extends AbstractTestNGSpringContextTests {
 
-    @Inject
-    HazelcastInstance hazelcastInstance;
+
+
+    @Autowired
+    HazelCastService hazelCastService;
+
+    @Autowired
+    CacheService cacheService;
 
     public VehicleDetailsModel ROOT_VDM;
-
-    static {
-        System.setProperty("prop.path", TestBase.class.getClassLoader().getResource("app.properties").getPath());
-    }
-
-
     /**
      * Helper Method to get a new vehicle object
      * @param vehicleId

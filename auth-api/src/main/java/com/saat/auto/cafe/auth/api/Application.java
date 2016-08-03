@@ -4,8 +4,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.service.ApiInfo;
@@ -18,7 +21,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Created by micahcoletti on 7/22/16.
  */
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class,CassandraDataAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class, CassandraDataAutoConfiguration.class, HazelcastAutoConfiguration.class})
 @EnableSwagger2
 public class Application {
 
@@ -40,7 +43,7 @@ public class Application {
         return new ApiInfoBuilder()
                 .title("")
                 .description("")
-                .termsOfServiceUrl("").contact(new Contact("","",""))
+                .termsOfServiceUrl("").contact(new Contact("", "", ""))
                 .license("")
                 .licenseUrl("")
                 .version("1.0")

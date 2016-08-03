@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by micahcoletti on 7/12/16.
  */
-@Component(value = "main")
+@Component
 public class CassandraInstanceImpl implements CassandraInstance {
 
 

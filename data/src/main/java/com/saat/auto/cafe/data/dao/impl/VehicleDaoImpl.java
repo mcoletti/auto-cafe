@@ -13,6 +13,7 @@ import com.saat.auto.cafe.data.dao.mappers.ClientVehicleRowMapper;
 import com.saat.auto.cafe.data.dao.mappers.VehicleDetailsRowMapper;
 import com.saat.auto.cafe.data.dao.mappers.VehicleImagesRowMapper;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,10 +65,12 @@ public class VehicleDaoImpl implements VehicleDao {
                 ClientVehicles cv = ClientVehicles.builder()
                         .clientId(vi.getClientId())
                         .vehicleId(vi.getId())
-                        .keyName(vi.getKeyName()).build();
-
+                        .keyName(vi.getKeyName())
+                        .createdDtm(DateTime.now().toDate()).build();
+                insert = cv.getInsertStatement();
                 // Insert Record into the ClientsModel Vehicles Table
-                ci.getCassandraTemplate().execute(cv.getInsertStatement());
+                ci.getCassandraTemplate().execute(insert);
+
             } else {
                 vi = ci.getCassandraTemplate().update(vi);
             }
@@ -124,9 +127,7 @@ public class VehicleDaoImpl implements VehicleDao {
 
         try {
             Select s = QueryBuilder.select().from("client_vehicles");
-
             s.where(eq("client_id",clientId));
-
             cvList = ci.getCassandraTemplate().query(s,new ClientVehicleRowMapper());
         } catch (Exception e) {
             e.printStackTrace();

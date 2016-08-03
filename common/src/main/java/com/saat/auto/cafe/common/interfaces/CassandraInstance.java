@@ -13,7 +13,7 @@ public interface CassandraInstance {
 
     Cluster getCluster();
     Session getSession();
-    CassandraOperations getCassandraOperations();
+    CassandraOperations getCassandraTemplate();
 
 
 }

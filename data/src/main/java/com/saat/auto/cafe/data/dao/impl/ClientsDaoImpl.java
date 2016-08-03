@@ -19,7 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.List;
 import java.util.UUID;
 
-import config.DataBeans;
+import com.saat.auto.cafe.data.DataBeans;
 
 /**
  * Created by mcoletti on 6/16/16.

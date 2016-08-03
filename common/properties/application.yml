@@ -5,6 +5,6 @@ cassandra:
   userName: admin
   password: admin
   consistency-level: quorum
-
-api:
-  vechicleMp: /vehicles
+  maxIdleSecs: 14400
+  ttl: 28800
+  cacheName: autoCafeCache

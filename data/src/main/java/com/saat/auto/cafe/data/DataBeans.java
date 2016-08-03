@@ -1,4 +1,4 @@
-package com.saat.auto.cafe.service;
+package com.saat.auto.cafe.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 
 /**
- * Created by micahcoletti on 8/3/16.
+ * Created by micahcoletti on 8/2/16.
  */
 @Configuration
 @EnableAutoConfiguration(exclude = {
@@ -23,13 +23,16 @@ import org.springframework.context.annotation.PropertySource;
         HazelcastConfigResourceCondition.class,
         HazelcastInstanceFactory.class
 })
-@ComponentScan(value = {"com.saat.auto.cafe.service.*"})
+@ComponentScan(value = {"com.saat.auto.cafe.data.*"})
 @PropertySource("classpath:props/application.yml")
 @Import(
-        HazelCastConfig.class
+       CassandraProps.class
 )
-public class ServiceBeans {
+public class DataBeans {
 
     @Autowired
-    HazelCastConfig hazelCastConfig;
+    CassandraProps cassandraProps;
+
+
+
 }

@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -31,6 +32,7 @@ import lombok.Getter;
 
 @EqualsAndHashCode(callSuper = false)
 @Builder
+@Data
 public class VehicleDetails {
 
     @PrimaryKey
@@ -50,7 +52,6 @@ public class VehicleDetails {
     @Column
     private String intColor;
     @Column
-    @Getter
     private String keyName;
     @Column
     private Location location;

@@ -9,11 +9,13 @@ import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.interfaces.HazelCastService;
 import com.saat.auto.cafe.common.interfaces.VehicleDao;
 import com.saat.auto.cafe.common.interfaces.VehicleService;
+import com.saat.auto.cafe.common.models.ClientVehiclesCollection;
 import com.saat.auto.cafe.common.models.VehicleDetailsModel;
 import com.saat.auto.cafe.data.dao.DaoFactory;
 import com.saat.auto.cafe.data.dao.impl.VehicleDaoImpl;
 import com.saat.auto.cafe.service.cache.HazelCastCacheServiceImpl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -29,27 +31,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VehicleServiceImplTest extends TestBase {
 
 
-    @Inject
-    private HazelCastService hazelCastService;
 
-    @Inject
-    CassandraInstance cassandraInstance;
+    @Autowired
+    VehicleDao vehicleDao;
+    @Autowired
+    VehicleService vehicleService;
 
-    private VehicleDao vehicleDao;
-    private VehicleService vehicleService;
-    private CacheService cacheService;
-    private String vehicleId;
 
     @BeforeClass
-    public void init(){
+    public void init() {
 
-        cacheService = new
-                HazelCastCacheServiceImpl(hazelCastService, AutoCafeConstants.Caches.VEHICLE_CACHE,new Gson());
-        vehicleDao = DaoFactory.getVehicleDao(cassandraInstance);
-        vehicleService = new VehicleServiceImpl(cacheService, vehicleDao);
+//        CacheService cacheService = new HazelCastCacheServiceImpl(hazelCastService);
+//        vehicleService = new VehicleServiceImpl(cacheService, vehicleDao);
 
     }
-
 
 
     @Test
@@ -66,20 +61,31 @@ public class VehicleServiceImplTest extends TestBase {
     public void testGetVehicleDetailsModelWithCache() throws Exception {
 
 
-        VehicleDetailsModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(),ROOT_VDM.getClientId());
+        VehicleDetailsModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(), ROOT_VDM.getClientId());
         assertThat(vehicle).isNotNull();
         assertThat(vehicle.getId()).isEqualTo(ROOT_VDM.getId());
         assertThat(vehicle.getClientId()).isEqualTo(ROOT_VDM.getClientId());
 
     }
+
     @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
     public void testGetVehicleDetailsModelCacheReset() throws Exception {
 
 
-        VehicleDetailsModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(),ROOT_VDM.getClientId(),true);
+        VehicleDetailsModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(), ROOT_VDM.getClientId(), true);
         assertThat(vehicle).isNotNull();
         assertThat(vehicle.getId()).isEqualTo(ROOT_VDM.getId());
         assertThat(vehicle.getClientId()).isEqualTo(ROOT_VDM.getClientId());
+
+    }
+
+    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
+    public void testGetClientVehicles() throws Exception {
+
+        ClientVehiclesCollection collection = vehicleService.getClientVehicles(ROOT_VDM.getClientId());
+        assertThat(collection).isNotNull();
+        assertThat(collection.getClientVehicles()).isNotNull();
+
 
     }
 

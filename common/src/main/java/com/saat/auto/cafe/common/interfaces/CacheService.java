@@ -23,19 +23,13 @@ public interface CacheService {
     <T> T getCacheEntry(String key, Type type);
 
     /**
-     * Method to insert a generic type cached entry into cache
+     * Method to insert a cached entry into cache
      * @param key the key of the entry to insert
      * @param entry a instance instance of the entry as a JSON String
      * @param type the type of the entry to searialse
      */
     void insertCacheEntry(String key, Object entry,Type type);
 
-    /**
-     * Method to insert a non-generic type entry into cache
-     * @param key the key to use when added to the cache map
-     * @param entry the entry object to add
-     */
-    void insertCacheEntry(String key, Object entry);
 
     /**
      * Method to Get the injected Gson object

@@ -28,7 +28,7 @@
         <name>dev</name>
         <password>dev-pass</password>
     </group>
-    <management-center enabled="false">http://jqs.b.movetv.com:8080/mancenter</management-center>
+    <management-center enabled="false">http://localhost:8080/mancenter</management-center>
     <network>
         <port auto-increment="true" port-count="2">5701</port>
         <outbound-ports>
@@ -44,8 +44,7 @@
                 <multicast-port>54327</multicast-port>
             </multicast>
             <tcp-ip enabled="true">
-                <!--<interface>127.0.0.1</interface>-->
-                <interface>10.124.152.13</interface>
+                <interface>127.0.0.1</interface>
             </tcp-ip>
             <aws enabled="false">
                 <access-key>my-access-key</access-key>

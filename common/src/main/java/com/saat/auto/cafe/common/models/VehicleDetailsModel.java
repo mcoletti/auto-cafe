@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -26,6 +27,7 @@ import lombok.Getter;
  */
 
 @Builder
+@Data
 public class VehicleDetailsModel {
     @Getter
     private String clientId;

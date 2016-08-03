@@ -8,4 +8,6 @@ public class ApiConstants {
     public static final String DESCRIPTION = "This is the Advanced Automotive Cafe REST API";
     public static final String CONTACT_NAME = "Micah Coletti";
     public static final String CONTACT_EMAIL = "micah.coletti@gmail.com";
+//    @Value("${vechicleMp}")
+    public static final String VEHICLE_MP = "/vehicles";
 }

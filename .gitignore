@@ -4,8 +4,6 @@
 .git
 ### Gradle template
 .gradle
-build/
-
 # Ignore Gradle GUI config
 gradle-app.setting
 
@@ -22,10 +20,8 @@ gradle-app.setting
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 .idea
 # User-specific stuff:
-.idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries
-.idea/vcs.xml
 .idea/jsLibraryMappings.xml
 
 # Sensitive or high-churn files:
@@ -34,12 +30,7 @@ gradle-app.setting
 .idea/dataSources.local.xml
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
-.idea/uiDesigner.xml
-
 # Gradle:
-.idea/gradle.xml
-.idea/libraries
-
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
 
@@ -55,31 +46,27 @@ gradle-app.setting
 .idea_modules/
 
 # JIRA plugin
-atlassian-ide-plugin.xml
-
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 ### Java template
-*.class
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # Package Files #
 *.jar
-*.war
 *.ear
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-/common/build/
-.vagrant/
 **build/
 .vagrant
 *.retry
 *.original
 data/vagrant/api/logback.xml
 data/vagrant/api/micah
+/service/src/main/resources/application.yml
+/data/src/main/resources/application.yml
+/api/src/main/resources/application.yml

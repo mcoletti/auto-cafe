@@ -2,33 +2,18 @@ select * from cassandra_migration_version;
 
 select * from clients;
 select * from vehicle_details;
+select * from client_vehicles where client_id = 395b2f0c-8008-410c-8402-fb64a3a7a295;
 select * from vehicle_images;
 
-select * from client_vehicles;
 
-CREATE TABLE IF NOT EXISTS autocafe.client_locations (
-    client_id uuid,
-    location_id uuid,
-    location frozen<location>,
-    PRIMARY KEY (client_id,location_id)
-);
 
 CREATE TABLE IF NOT EXISTS autocafe.client_vehicles (
-    client_id text,
-    vehicle_id text,
-    key_name text,
-    PRIMARY KEY ((client_id),vehicle_id)
-)
-WITH CLUSTERING ORDER BY (vehicle_id ASC);
-
-CREATE TABLE IF NOT EXISTS autocafe.vehicle_images (
+    client_id uuid,
     vehicle_id uuid,
-    img_name text,
-    img_cdn_loc text,
-    img_size int,
-    img_suffix text,
-    img_type text,
-    img_order int,
-    PRIMARY KEY ((vehicle_id),img_type)
+    key_name text,
+    created_uuid timeuuid,
+    PRIMARY KEY (client_id,created_uuid)
 )
-WITH CLUSTERING ORDER BY (img_type ASC);
+WITH CLUSTERING ORDER BY (created_uuid DESC);
+
+INSERT INTO client_vehicles(client_id,vehicle_id,key_name) VALUES (395b2f0c-8008-410c-8402-fb64a3a7a295,85bf6c0e-b5fd-4e27-8ee0-06adf891990b,'micah');

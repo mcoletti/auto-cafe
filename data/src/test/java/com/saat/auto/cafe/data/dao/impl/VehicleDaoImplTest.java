@@ -1,5 +1,6 @@
 package com.saat.auto.cafe.data.dao.impl;
 
+import com.saat.auto.cafe.common.entitys.ClientVehicles;
 import com.saat.auto.cafe.common.interfaces.VehicleDao;
 import com.saat.auto.cafe.common.entitys.VehicleDetails;
 import com.saat.auto.cafe.common.entitys.VehicleImages;
@@ -61,8 +62,14 @@ public class VehicleDaoImplTest extends TestBase {
 
     }
 
-    @Test
+    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
     public void testGetByClientId() throws Exception {
+
+
+        List<ClientVehicles> cvList = vehicleDao.getByClientId(VD_ROOT.getClientId());
+        assertThat(cvList).isNotNull();
+        assertThat(cvList.size()).isGreaterThan(0);
+        assertThat(cvList.get(0).getClientId()).isEqualTo(VD_ROOT.getClientId());
 
     }
 

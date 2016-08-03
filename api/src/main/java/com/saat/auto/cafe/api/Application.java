@@ -5,6 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastConfigResourceCondition;
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastInstanceFactory;
 import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
@@ -19,9 +22,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * Created by mcoletti on 6/1/16.
  */
 @SpringBootApplication
-@EnableAutoConfiguration(exclude = {ErrorMvcAutoConfiguration.class,CassandraDataAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {
+        ErrorMvcAutoConfiguration.class,
+        CassandraDataAutoConfiguration.class,
+        HazelcastAutoConfiguration.class,
+        HazelcastConfigResourceCondition.class,
+        HazelcastInstanceFactory.class
+})
 @EnableSwagger2
 public class Application {
+
 
     public static void main(String[] args) {
         // This bootstraps Spring to run your app.
@@ -41,8 +51,7 @@ public class Application {
         return new ApiInfoBuilder()
                 .title(ApiConstants.TITLE)
                 .description(ApiConstants.DESCRIPTION)
-                .termsOfServiceUrl("").contact(new Contact(ApiConstants.CONTACT_NAME,"",ApiConstants.CONTACT_EMAIL))
-                .contact("yourteam")
+                .termsOfServiceUrl("").contact(new Contact(ApiConstants.CONTACT_NAME, "", ApiConstants.CONTACT_EMAIL))
                 .license("")
                 .licenseUrl("")
                 .version("1.0")

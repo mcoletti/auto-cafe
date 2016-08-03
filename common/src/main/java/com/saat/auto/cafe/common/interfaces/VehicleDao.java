@@ -1,8 +1,11 @@
 package com.saat.auto.cafe.common.interfaces;
 
+import com.saat.auto.cafe.common.entitys.ClientVehicles;
 import com.saat.auto.cafe.common.exceptions.VehicleDetailsException;
 import com.saat.auto.cafe.common.entitys.VehicleDetails;
 import com.saat.auto.cafe.common.entitys.VehicleImages;
+
+import org.springframework.data.cassandra.repository.CassandraRepository;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +13,7 @@ import java.util.UUID;
 /**
  * Created by mcoletti on 5/9/16.
  */
-public interface VehicleDao {
+public interface VehicleDao{
 
 
     /**
@@ -37,7 +40,7 @@ public interface VehicleDao {
      */
     VehicleDetails get(String keyName) throws VehicleDetailsException;
 
-    List<VehicleDetails> getByClientId(UUID clientId);
+    List<ClientVehicles> getByClientId(UUID clientId);
 
 
     /**

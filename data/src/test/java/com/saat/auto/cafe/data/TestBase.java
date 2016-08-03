@@ -5,8 +5,6 @@ import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.entitys.Location;
 
-import config.DataBeans;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
@@ -20,12 +18,11 @@ import java.util.Set;
 @ContextConfiguration(classes = DataBeans.class)
 public class TestBase extends AbstractTestNGSpringContextTests {
 
+
+
     @Autowired
     public CassandraInstance cassandraInstance;
 
-    static {
-//        System.setProperty("prop.path", ClientsDaoImplTest.class.getClassLoader().getResource("app.properties").getPath());
-    }
 
     public Location getLoc(){
 
