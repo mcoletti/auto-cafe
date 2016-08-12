@@ -30,8 +30,8 @@ public class LocationModel {
 
     public Location toEntity() {
 
-        return Location.builder()
-                .name(name)
-                .address(address.toEntity()).build();
+        return null; // Location.builder()
+//                .name(name)
+//                .address(address.toEntity()).build();
     }
 }

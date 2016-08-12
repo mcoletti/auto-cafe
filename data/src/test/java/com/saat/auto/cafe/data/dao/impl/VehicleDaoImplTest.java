@@ -53,12 +53,16 @@ public class VehicleDaoImplTest extends TestBase {
         String modifiedUser = "testUser2";
         LOCAL_CV.setModifiedBy(modifiedUser);
 
-        VehicleDetail vehicleDetail = VehicleDetail.builder()
-                .bodyStyle("sedan").extColor("blue")
-                .intColor("black").make("honda")
-                .model("accord").trim("stuff")
+        VehicleDetail vehicleDetail = new VehicleDetail();
+        vehicleDetail.setBodyStyle("sedan");
+        vehicleDetail.setExtColor("blue");
+        vehicleDetail.setIntColor("brown");
+        vehicleDetail.setMake("honda");
+        vehicleDetail.setModel("accord");
+        vehicleDetail.setTrim("stuff");
+        vehicleDetail.setMileage(60000);
+        vehicleDetail.setYear(2015);
 
-                .year(2013).mileage(70000).build();
         LOCAL_CV.setDetails(vehicleDetail);
 
         LOCAL_CV = vehicleDao.upsetClientVehicle(LOCAL_CV);
@@ -113,15 +117,27 @@ public class VehicleDaoImplTest extends TestBase {
         DateTime createdDtm = DateTime.now();
         UUID timeUuid = UUIDGen.getTimeUUID(createdDtm.getMillis());
 
-        ROOT_CV = ClientVehicle.builder()
-                .clientId(clientId).vehicleId(UUID.randomUUID())
-                .stockNum(12345)
-                .shortDesc("Cool Car")
-                .price(13499)
-                .details(getVD()).createdBy("testUser")
-                .location(getLoc())
-                .createdDtm(createdDtm)
-                .modifiedBy("testUser").modifiedDtm(DateTime.now()).build();
+        ROOT_CV = new ClientVehicle();
+        ROOT_CV.setClientId(clientId);
+        ROOT_CV.setVehicleId(UUID.randomUUID());
+        ROOT_CV.setStockNum(12345);
+        ROOT_CV.setShortDesc("coolCar");
+        ROOT_CV.setPrice(13499);
+        ROOT_CV.setDetails(getVD());
+        ROOT_CV.setLocation(getLoc());
+        ROOT_CV.setCreatedBy("testUser");
+        ROOT_CV.setCreatedDtm(DateTime.now().toDate());
+        ROOT_CV.setModifiedBy("testUser");
+        ROOT_CV.setModifiedDtm(DateTime.now().toDate());
+//
+//                .clientId(clientId).vehicleId(UUID.randomUUID())
+//                .stockNum(12345)
+//                .shortDesc("Cool Car")
+//                .price(13499)
+//                .details(getVD()).createdBy("testUser")
+//                .location(getLoc())
+//                .createdDtm(createdDtm)
+//                .modifiedBy("testUser").modifiedDtm(DateTime.now()).build();
 
         return ROOT_CV;
 
@@ -130,12 +146,16 @@ public class VehicleDaoImplTest extends TestBase {
 
     private VehicleDetail getVD() {
 
-
-        return VehicleDetail.builder()
-                .bodyStyle("sedan").extColor("red")
-                .intColor("black").make("ford")
-                .model("focus").trim("stuff")
-                .year(2013).mileage(66389).build();
+        VehicleDetail vd = new VehicleDetail();
+        vd.setBodyStyle("sedan");
+        vd.setExtColor("red");
+        vd.setIntColor("black");
+        vd.setMake("ford");
+        vd.setModel("focus");
+        vd.setTrim("stuff");
+        vd.setMileage(60000);
+        vd.setYear(2013);
+        return vd;
 
 
     }

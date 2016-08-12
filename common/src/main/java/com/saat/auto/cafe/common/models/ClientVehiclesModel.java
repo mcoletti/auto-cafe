@@ -92,19 +92,20 @@ public class ClientVehiclesModel {
      */
     public ClientVehicle toEntity(){
 
+        return null;
 
-        return ClientVehicle.builder()
-                .clientId(UUID.fromString(clientId))
-                .vehicleId(UUID.fromString(vehicleId))
-                .stockNum(stockNum)
-                .shortDesc(shortDesc)
-                .price(price)
-                .details(details.toEntity())
-                .location(location.toEntity())
-                .createdBy(createdBy)
-                .createdDtm(DateTime.parse(createdDtm))
-                .modifiedBy(modifiedBy)
-                .modifiedDtm(DateTime.parse(modifiedDtm)).build();
+//        return ClientVehicle.builder()
+//                .clientId(UUID.fromString(clientId))
+//                .vehicleId(UUID.fromString(vehicleId))
+//                .stockNum(stockNum)
+//                .shortDesc(shortDesc)
+//                .price(price)
+//                .details(details.toEntity())
+//                .location(location.toEntity())
+//                .createdBy(createdBy)
+//                .createdDtm(DateTime.parse(createdDtm))
+//                .modifiedBy(modifiedBy)
+//                .modifiedDtm(DateTime.parse(modifiedDtm)).build();
 
 
     }

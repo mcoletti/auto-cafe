@@ -4,8 +4,7 @@ import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
-//import com.saat.auto.cafe.common.AutoCafeConstants;
-import com.saat.auto.cafe.common.AutoCafeConstants.Schema;
+import com.datastax.driver.mapping.Mapper;
 import com.saat.auto.cafe.common.AutoCafeConstants.Schema.ClientVehiclesTbl;
 import com.saat.auto.cafe.common.AutoCafeConstants.Schema.VehicleImagesTbl;
 import com.saat.auto.cafe.common.entitys.ClientVehicle;
@@ -14,8 +13,6 @@ import com.saat.auto.cafe.common.entitys.VehicleImages;
 import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.interfaces.VehicleDao;
-import com.saat.auto.cafe.data.dao.mappers.ClientVehicleRowMapper;
-import com.saat.auto.cafe.data.dao.mappers.VehicleImagesRowMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +34,7 @@ public class VehicleDaoImpl implements VehicleDao {
     private static final Logger log = LoggerFactory.getLogger(ClientsDaoImpl.class);
 
     private final CassandraInstance ci;
+    private Mapper<ClientVehicle> clientVehicleMapper;
 
     /**
      * Constructor used for testing
@@ -56,7 +54,7 @@ public class VehicleDaoImpl implements VehicleDao {
     public VehicleImages insertVehicleImage(VehicleImages vi) throws ClientVehicleException {
 
         try {
-            vi = ci.getCassandraTemplate().insert(vi);
+//            vi = ci.getCassandraTemplate().insert(vi);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ClientVehicleException(e);
@@ -70,12 +68,12 @@ public class VehicleDaoImpl implements VehicleDao {
     @Override
     public List<VehicleImages> getVehicleImageList(UUID vehicleId) throws ClientVehicleException {
 
-        List<VehicleImages> imageList;
+        List<VehicleImages> imageList = null;
         try {
             Select s = QueryBuilder.select().from(VehicleImagesTbl.NAME);
             s.where(eq(VehicleImagesTbl.Columns.VEHICLE_ID, vehicleId));
 
-            imageList = ci.getCassandraTemplate().query(s, new VehicleImagesRowMapper());
+//            imageList = ci.getCassandraTemplate().query(s, new VehicleImagesRowMapper());
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Error Getting the image List for vehicleId: {} - {}", vehicleId, e.getMessage());
@@ -89,18 +87,8 @@ public class VehicleDaoImpl implements VehicleDao {
 
 
         try {
-            ClientVehicle cvCheck = get(cv.getClientId(), cv.getVehicleId());
-
-            if (cvCheck == null) {
-                // Add new Client Vehicle Record
-                Insert insert = cv.getInsertStatement(ci.getCluster());
-                ci.getCassandraTemplate().execute(insert);
-
-            } else {
-                // Update the Client Vehicle Record
-                Statement update = cv.getUpdateStatement(ci.getCluster());
-                ci.getCassandraTemplate().execute(update);
-            }
+            clientVehicleMapper = ci.mappingManager().mapper(ClientVehicle.class);
+            clientVehicleMapper.save(cv);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ClientVehicleException(e);
@@ -118,7 +106,7 @@ public class VehicleDaoImpl implements VehicleDao {
         try {
             Select s = QueryBuilder.select().from(ClientVehiclesTbl.NAME);
             s.where(eq(ClientVehiclesTbl.Columns.CLIENT_ID, clientId));
-            cvList = ci.getCassandraTemplate().query(s, new ClientVehicleRowMapper());
+//            cvList = ci.getCassandraTemplate().query(s, new ClientVehicleRowMapper());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,12 +119,12 @@ public class VehicleDaoImpl implements VehicleDao {
     @Override
     public ClientVehicle get(UUID clientId, UUID vehicleId) throws ClientVehicleException {
 
-        ClientVehicle cv;
+        ClientVehicle cv = null;
 
         try {
             Select s = QueryBuilder.select().from(ClientVehiclesTbl.NAME);
             s.where(eq(ClientVehiclesTbl.Columns.CLIENT_ID, clientId)).and(eq(ClientVehiclesTbl.Columns.VEHICLE_ID, vehicleId));
-            cv = ci.getCassandraTemplate().queryForObject(s, new ClientVehicleRowMapper());
+//            cv = ci.getCassandraTemplate().queryForObject(s, new ClientVehicleRowMapper());
         } catch (Exception e) {
             if (e.getMessage().contains("0 rows")) {
                 cv = null;

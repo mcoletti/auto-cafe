@@ -56,12 +56,12 @@ public class AddressModel {
     private List<String> phones;
 
     public Address toEntity() {
-        return Address.builder()
-                .street1(street1)
-                .street2(street2)
-                .city(city)
-                .state(state)
-                .zipCode(zipCode)
-                .phones(new HashSet<>(phones)).build();
+        return null; //  Address.builder()
+//                .street1(street1)
+//                .street2(street2)
+//                .city(city)
+//                .state(state)
+//                .zipCode(zipCode)
+//                .phones(new HashSet<>(phones)).build();
     }
 }

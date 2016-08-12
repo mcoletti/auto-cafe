@@ -3,23 +3,27 @@ package com.saat.auto.cafe.common.entitys;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.UDTValue;
 import com.datastax.driver.mapping.annotations.Field;
+import com.datastax.driver.mapping.annotations.Frozen;
 import com.datastax.driver.mapping.annotations.UDT;
 import com.saat.auto.cafe.common.models.LocationModel;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by mcoletti on 5/17/16.
  */
-@UDT(name = "location",keyspace = "autocafedb")
+@UDT(name = "location",keyspace = "autocafe")
 @Data
-@Builder
+@NoArgsConstructor
 public class Location{
 
     @Field
     private String name;
+
     @Field
+    @Frozen
     private Address address;
 
     /**
@@ -43,10 +47,11 @@ public class Location{
      */
     public static Location fromUdtValue(UDTValue udtValue){
 
-
-        return Location.builder()
-                .name(udtValue.getString("name"))
-                .address(Address.fromUdtValue(udtValue.getUDTValue("address"))).build();
+        return null;
+//
+//        return Location.builder()
+//                .name(udtValue.getString("name"))
+//                .address(Address.fromUdtValue(udtValue.getUDTValue("address"))).build();
     }
 
     public LocationModel toModel() {

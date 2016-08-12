@@ -1,37 +1,38 @@
 package com.saat.auto.cafe.common.entitys;
 
-import org.springframework.data.cassandra.mapping.Column;
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
+import com.datastax.driver.mapping.annotations.Column;
+import com.datastax.driver.mapping.annotations.PartitionKey;
+import com.datastax.driver.mapping.annotations.Table;
+
 
 import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 
 /**
  * Created by micahcoletti on 7/18/16.
  */
-@Table(value = "vehicle_images")
+@Table(name = "vehicle_images")
 @Builder
+@Data
 public class VehicleImages {
 
 
-    @PrimaryKey(value= "vehicle_id")
-    @Getter
+    @PartitionKey
+    @Column(name = "vehicle_id")
     private UUID vehicleId;
-    @Column(value = "img_type")
+    @Column(name = "img_type")
     private String imgType;
-    @Column(value = "img_name")
+    @Column(name = "img_name")
     private String imgName;
-    @Column(value = "img_cdn_loc")
+    @Column(name = "img_cdn_loc")
     private String imgCdnLoc;
-    @Column(value = "img_size")
+    @Column(name = "img_size")
     private int imgSize;
-    @Column(value = "img_suffix")
+    @Column(name = "img_suffix")
     private String imgSuffix;
-    @Column(value = "img_order")
+    @Column(name = "img_order")
     private int imgOrder;
 
 

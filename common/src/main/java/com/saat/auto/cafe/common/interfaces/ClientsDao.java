@@ -14,6 +14,4 @@ public interface ClientsDao {
 
     Client upsert(Client client) throws DaoException;
     Client get(UUID id) throws DaoException;
-    Client get(String clientName) throws DaoException;
-    List<ClientVehicle> getClientVehicles(UUID clientId);
 }

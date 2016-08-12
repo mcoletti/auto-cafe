@@ -3,6 +3,8 @@ package com.saat.auto.cafe.common.interfaces;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.UDTValue;
+import com.datastax.driver.mapping.Mapper;
+import com.datastax.driver.mapping.MappingManager;
 
 
 /**
@@ -15,6 +17,7 @@ public interface CassandraInstance {
     Session getSession();
 //    CassandraOperations getCassandraTemplate();
     UDTValue getUdtValue(String udtType);
+    MappingManager mappingManager();
 
 
 }

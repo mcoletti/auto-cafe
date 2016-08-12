@@ -33,7 +33,7 @@ CREATE TYPE IF NOT EXISTS autocafe.vehicle_detail (
 CREATE TABLE IF NOT EXISTS autocafe.clients (
     id uuid,
     client_name text,
-    location Map<text, frozen<location>>,
+    locations Map<text,frozen<location>>,
     created_by text,
     created_dtm timestamp,
     modified_by text,
@@ -41,8 +41,6 @@ CREATE TABLE IF NOT EXISTS autocafe.clients (
     PRIMARY KEY (id,client_name)
 )
 WITH CLUSTERING ORDER BY (client_name ASC);
-
-CREATE INDEX idx_client_name ON autocafe.clients (client_name);
 
 
 -- Client Vehicles

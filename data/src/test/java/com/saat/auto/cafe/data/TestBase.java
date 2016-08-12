@@ -30,18 +30,28 @@ public class TestBase extends AbstractTestNGSpringContextTests {
 
         Set<String> phones = new HashSet<>();
         phones.add("801.499.9683");
-        Address address = Address.builder()
-                .street1("1234")
-                .street2("1234")
-                .city("provo")
-                .state("UT")
-                .zipCode(84604)
-                .phones(phones).build();
+        Address a = new Address();
+        a.setStreet1("1234");
+        a.setStreet2("1234");
+        a.setCity("provo");
+        a.setState("ut");
+        a.setZipCode(84604);
+        a.setPhones(phones);
 
-        Location location = Location.builder()
-                .name("testLoc")
-                .address(address).build();
-        return location ;
+//                .street1("1234")
+//                .street2("1234")
+//                .city("provo")
+//                .state("UT")
+//                .zipCode(84604)
+//                .phones(phones).build();
+
+        Location l = new Location();
+        l.setName("testLoc");
+        l.setAddress(a);
+//
+//                .name("testLoc")
+//                .address(address).build();
+        return l ;
 
     }
 

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,34 +42,52 @@ public class ClientDaoImplTest extends TestBase {
         // Test Add New
         clientId = UUID.randomUUID();
         String user = "testUser";
-        Client client = Client.builder()
-                .id(clientId)
-                .createdBy(user)
-                .createdDtm(DateTime.now())
-                .clientName("testClient")
-                .modifiedBy("testUser")
-                .modifiedDtm(DateTime.now())
-                .location(getLoc()).build();
+
+        Map<String,Location> locationMap = new HashMap<>();
+        locationMap.put("ogdenLocation",getLoc());
+        locationMap.put("loganLocation",getLoc());
+
+        Client c = new Client();
+        c.setId(clientId);
+        c.setClientName("testClient");
+        c.setCreatedBy(user);
+        c.setCreatedDtm(DateTime.now().toDate());
+        c.setModifiedBy("tsetUser");
+        c.setModifiedDtm(DateTime.now().toDate());
+        c.setLocations(locationMap);
+
+//                .id(clientId)
+//                .createdBy(user)
+//                .createdDtm(DateTime.now().toDate())
+//                .clientName("testClient")
+//                .modifiedBy("testUser")
+//                .modifiedDtm(DateTime.now().toDate())
+//                .locations(locationMap).build();
 
 
-        client = clientsDao.upsert(client);
-        assertThat(client).isNotNull();
-        assertThat(client.getId()).isEqualTo(clientId);
+        c = clientsDao.upsert(c);
+        assertThat(c).isNotNull();
+        assertThat(c.getId()).isEqualTo(clientId);
 
         // Test Update
         user = "testUser2";
         DateTime updateDtm = DateTime.now();
-        client.setModifiedBy(user);
-        client.setModifiedDtm(updateDtm);
+        c.setModifiedBy(user);
+        c.setModifiedDtm(updateDtm.toDate());
 
-        Location location = Location.builder()
-                .name("newLocation")
-                .address(client.getLocation().getAddress()).build();
-        client.setLocation(location);
+        Location location = new Location();
+        location.setName("newLocation");
+        location.setAddress(c.getLocations().get("ogdenLocation").getAddress());
+//
+//                .name("newLocation")
+//                .address(c.getLocations().get("ogdenLocation").getAddress()).build();
+        c.getLocations().put("newLocation",location);
 
-        client = clientsDao.upsert(client);
-        assertThat(client).isNotNull();
-        assertThat(client.getModifiedBy()).isEqualTo(user);
+
+
+        c = clientsDao.upsert(c);
+        assertThat(c).isNotNull();
+        assertThat(c.getModifiedBy()).isEqualTo(user);
     }
 
     @Test(dependsOnMethods = {"testUpsert"})
@@ -81,7 +101,9 @@ public class ClientDaoImplTest extends TestBase {
 
     @Test
     public void testGetByName() throws Exception {
-
+        Client cl = clientsDao.get(clientId);
+        assertThat(cl).isNotNull();
+        assertThat(cl.getId()).isEqualTo(clientId);
     }
 
 

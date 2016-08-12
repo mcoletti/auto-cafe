@@ -5,25 +5,27 @@ import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.Insert;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.mapping.annotations.ClusteringColumn;
+import com.datastax.driver.mapping.annotations.Column;
+import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import com.saat.auto.cafe.common.AutoCafeConstants;
 import com.saat.auto.cafe.common.models.ClientVehiclesModel;
 
-import org.apache.cassandra.db.marshal.TimeUUIDType;
-import org.apache.cassandra.utils.UUIDGen;
 import org.joda.time.DateTime;
-import org.springframework.data.cassandra.mapping.Column;
-import org.springframework.data.cassandra.mapping.PrimaryKey;
 
-import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
+
+//import org.springframework.data.cassandra.mapping.Column;
+//import org.springframework.data.cassandra.mapping.PrimaryKey;
 
 //import org.springframework.data.cassandra.mapping.Table;
 
@@ -35,61 +37,64 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
         readConsistency = AutoCafeConstants.READ_CONSITENCY,
         writeConsistency = AutoCafeConstants.WRITE_CONSITENCY
 )
-@Builder
+@NoArgsConstructor
 @Data
 public class ClientVehicle {
 
-    @PrimaryKey(value = "client_id")
+    @PartitionKey
+    @Column(name = "client_id")
     private UUID clientId;
-    @ClusteringColumn
+    @Column(name = "vehicle_id")
     private UUID vehicleId;
-//    @Column(value = "created")
+//    @Column(name = "created")
 //    private UUID created;
-    @Column(value = "stock_num")
+    @Column(name = "stock_num")
     @Getter
     private int stockNum;
-    @Column(value = "short_desc")
+    @Column(name = "short_desc")
     private String shortDesc;
-    @Column(value = "price")
+    @Column(name = "price")
     private double price;
-    @Column(value = "vehicle_detail")
+    @Column(name = "details")
     private VehicleDetail details;
     private Location location;
-    @Column(value = "created_by")
+    @Column(name = "created_by")
     private String createdBy;
-    @Column(value = "created_dtm")
-    private DateTime createdDtm;
-    @Column(value = "modifiedBy")
+    @Column(name = "created_dtm")
+    private Date createdDtm;
+    @Column(name = "modified_by")
     private String modifiedBy;
-    @Column(value = "modified_dtm")
-    private DateTime modifiedDtm;
+    @Column(name = "modified_dtm")
+    private Date modifiedDtm;
 
 
     public Insert getInsertStatement(Cluster cluster){
 
 
-        Insert insert = QueryBuilder.insertInto("client_vehicles")
-                .value("client_id",clientId).value("vehicle_id",vehicleId).value("stock_num",stockNum)
-                .value("short_desc",shortDesc).value("price",price)
-                .value("created_dtm", createdDtm.toDate()).value("created_by",createdBy)
-                .value("details", details.toUdtValue(cluster))
-                .value("location",location.toUdtValue(cluster))
-                .value("modified_by", modifiedBy)
-                .value("modified_dtm",modifiedDtm.toDate());
+//        Insert insert = QueryBuilder.insertInto("client_vehicles")
+//                .name("client_id",clientId).name("vehicle_id",vehicleId).name("stock_num",stockNum)
+//                .name("short_desc",shortDesc).name("price",price)
+//                .name("created_dtm", createdDtm.toDate()).name("created_by",createdBy)
+//                .name("details", details.toUdtValue(cluster))
+//                .name("location",location.toUdtValue(cluster))
+//                .name("modified_by", modifiedBy)
+//                .name("modified_dtm",modifiedDtm.toDate());
 
 
-        return insert;
+        return null;
     }
 
     public Statement getUpdateStatement(Cluster cluster){
 
-        Statement update = QueryBuilder.update("client_vehicles")
-                .with(set("stock_num",stockNum)).and(set("price",price))
-                .and(set("short_desc",shortDesc)).and(set("details",details.toUdtValue(cluster)))
-                .and(set("modified_by",modifiedBy)).and(set("modified_dtm",modifiedDtm.toDate()))
-                .and(set("location",location.toUdtValue(cluster)))
-                .where(eq("client_id",clientId)).and(eq("vehicle_id",vehicleId));
-        return update;
+        return null;
+
+//        Statement update = QueryBuilder.update("client_vehicles")
+//                .with(set("stock_num",stockNum)).and(set("price",price))
+//                .and(set("short_desc",shortDesc)).and(set("details",details.toUdtValue(cluster)))
+//                .and(set("modified_by",modifiedBy)).and(set("modified_dtm",modifiedDtm.toDate()))
+//                .and(set("location",location.toUdtValue(cluster)))
+//                .where(eq("client_id",clientId)).and(eq("vehicle_id",vehicleId));
+//        return update;
     }
 
     /**

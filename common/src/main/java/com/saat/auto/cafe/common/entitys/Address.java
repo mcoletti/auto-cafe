@@ -4,7 +4,6 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.UDTValue;
 import com.datastax.driver.mapping.annotations.Field;
 import com.datastax.driver.mapping.annotations.UDT;
-import com.saat.auto.cafe.common.AutoCafeConstants;
 import com.saat.auto.cafe.common.AutoCafeConstants.Schema;
 import com.saat.auto.cafe.common.AutoCafeConstants.UdtTypes;
 import com.saat.auto.cafe.common.models.AddressModel;
@@ -15,16 +14,16 @@ import java.util.Set;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by mcoletti on 6/17/16.
  */
-@UDT(keyspace = "autocafe", name = "address")
+@UDT(name = "address", keyspace = "autocafe")
 @Data
-@Builder
+@NoArgsConstructor
 public class Address {
     @Field
-    // @PrimaryKey
     private String street1;
     @Field
     private String street2;
@@ -39,8 +38,6 @@ public class Address {
 
     /**
      * Method to Convert to a UDT type Value
-     * @param cluster
-     * @return
      */
     public UDTValue toUdtValue(Cluster cluster) {
 
@@ -51,7 +48,7 @@ public class Address {
                 .setString("street1", street1)
                 .setString("street2", street2)
                 .setString("city", city)
-                .setString("state",state)
+                .setString("state", state)
                 .setInt("zip_code", zipCode)
                 .setSet("phones", phones);
         return addressUdt;
@@ -59,19 +56,17 @@ public class Address {
 
     /**
      * Static Helper Method that will convert from a UdtValue to an Address Object
-     * @param udtValue
-     * @return
      */
-    public static Address fromUdtValue(UDTValue udtValue){
+    public static Address fromUdtValue(UDTValue udtValue) {
 
-
-        return Address.builder()
-                .street1(udtValue.getString("street1"))
-                .street2(udtValue.getString("street2"))
-                .city(udtValue.getString("city"))
-                .state(udtValue.getString("state"))
-                .zipCode(udtValue.getInt("zip_code"))
-                .phones(udtValue.getSet("phones",String.class)).build();
+        return null;
+//        return Address.builder()
+//                .street1(udtValue.getString("street1"))
+//                .street2(udtValue.getString("street2"))
+//                .city(udtValue.getString("city"))
+//                .state(udtValue.getString("state"))
+//                .zipCode(udtValue.getInt("zip_code"))
+//                .phones(udtValue.getSet("phones",String.class)).build();
     }
 
 

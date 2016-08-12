@@ -23,15 +23,17 @@ public class VehicleDetailModel {
     private String trim;
 
     public VehicleDetail toEntity(){
-        return VehicleDetail.builder()
-                .bodyStyle(bodyStyle)
-                .extColor(extColor)
-                .intColor(intColor)
-                .mileage(mileage)
-                .make(make)
-                .model(model)
-                .year(year)
-                .trim(trim).build();
+
+        return null;
+//        return VehicleDetail.builder()
+//                .bodyStyle(bodyStyle)
+//                .extColor(extColor)
+//                .intColor(intColor)
+//                .mileage(mileage)
+//                .make(make)
+//                .model(model)
+//                .year(year)
+//                .trim(trim).build();
     }
 
 
