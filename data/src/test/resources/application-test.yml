@@ -4,4 +4,4 @@ cassandra:
   port: 9042
   userName: admin
   password: admin
-  consistency-level: quorum
+  consistencyLevel: quorum

@@ -5,12 +5,20 @@
 #- name: adding dse repo
 #  apt_repository: repo='deb http://datastaxrepo_gmail.com:utJVKEg4lKeaWTX@debian.datastax.com/enterprise stable main' filename='datastax.sources.list'
 
-- name: adding datastax repo
-  apt_repository: repo='deb http://debian.datastax.com/community stable main' filename='cassandra.sources.list'
+#- name: adding datastax repo
+#  apt_repository: repo='deb http://www.apache.org/dist/cassandra/debian 32x main' filename='cassandra.sources.list'
+
+#- name: adding datastax repo
+#  apt_repository: repo='deb http://debian.datastax.com/community stable main' filename='cassandra.sources.list'
+
+- name:
+  apt_repository: repo='deb http://datastaxrepo_gmail.com:utJVKEg4lKeaWTX@debian.datastax.com/enterprise stable main' filename='datastax.sources.list'
+
+#- name:
 #  shell: echo "deb http://datastaxrepo_gmail.com:utJVKEg4lKeaWTX@debian.datastax.com/enterprise stable main" | sudo tee -a /etc/apt/sources.list.d/datastax.sources.list
 
-#- name: adding repo key
-#  apt_key: url=https://debian.datastax.com/debian/repo_key state=present validate_certs=no
+- name: adding repo key
+  apt_key: url=https://debian.datastax.com/debian/repo_key state=present validate_certs=no
 
 - name: updating machine
   apt: update_cache=yes

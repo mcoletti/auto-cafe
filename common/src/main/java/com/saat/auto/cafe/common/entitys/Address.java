@@ -4,9 +4,16 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.UDTValue;
 import com.datastax.driver.mapping.annotations.Field;
 import com.datastax.driver.mapping.annotations.UDT;
+import com.saat.auto.cafe.common.AutoCafeConstants;
+import com.saat.auto.cafe.common.AutoCafeConstants.Schema;
+import com.saat.auto.cafe.common.AutoCafeConstants.UdtTypes;
+import com.saat.auto.cafe.common.models.AddressModel;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -14,6 +21,7 @@ import lombok.Data;
  */
 @UDT(keyspace = "autocafe", name = "address")
 @Data
+@Builder
 public class Address {
     @Field
     // @PrimaryKey
@@ -36,7 +44,10 @@ public class Address {
      */
     public UDTValue toUdtValue(Cluster cluster) {
 
-        UDTValue addressUdt = cluster.getMetadata().getKeyspace("autocafe").getUserType("address").newValue()
+        // Default null values
+        street2 = street2 != null ? street2 : "";
+        phones = phones != null ? phones : new HashSet<>();
+        UDTValue addressUdt = cluster.getMetadata().getKeyspace(Schema.KEY_SPACE).getUserType(UdtTypes.Address.NAME).newValue()
                 .setString("street1", street1)
                 .setString("street2", street2)
                 .setString("city", city)
@@ -53,16 +64,24 @@ public class Address {
      */
     public static Address fromUdtValue(UDTValue udtValue){
 
-        Address address = new Address();
-        address.setCity(udtValue.getString("city"));
-        address.setStreet1(udtValue.getString("street1"));
-        address.setStreet2(udtValue.getString("street2"));
-        address.setCity(udtValue.getString("city"));
-        address.setState(udtValue.getString("state"));
-        address.setZipCode(udtValue.getInt("zip_code"));
-        address.setPhones(udtValue.getSet("phones",String.class));
-        return address;
+
+        return Address.builder()
+                .street1(udtValue.getString("street1"))
+                .street2(udtValue.getString("street2"))
+                .city(udtValue.getString("city"))
+                .state(udtValue.getString("state"))
+                .zipCode(udtValue.getInt("zip_code"))
+                .phones(udtValue.getSet("phones",String.class)).build();
     }
 
 
+    public AddressModel toModel() {
+        return AddressModel.builder()
+                .street1(street1)
+                .street2(street2)
+                .city(city)
+                .state(state)
+                .zipCode(zipCode)
+                .phones(new ArrayList<>(phones)).build();
+    }
 }

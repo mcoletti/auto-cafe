@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,22 +28,20 @@ public class TestBase extends AbstractTestNGSpringContextTests {
 
     public Location getLoc(){
 
-        Location location = new Location();
-        location.setName("testLoc");
-
-        Address address = new Address();
-        address.setStreet1("1234");
-        address.setStreet2("1234");
         Set<String> phones = new HashSet<>();
         phones.add("801.499.9683");
-        address.setPhones(phones);
-        address.setCity("provo");
-        address.setState("UT");
-        address.setZipCode(84604);
+        Address address = Address.builder()
+                .street1("1234")
+                .street2("1234")
+                .city("provo")
+                .state("UT")
+                .zipCode(84604)
+                .phones(phones).build();
 
-        location.setAddress(address);
-
-        return location;
+        Location location = Location.builder()
+                .name("testLoc")
+                .address(address).build();
+        return location ;
 
     }
 

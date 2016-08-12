@@ -3,28 +3,36 @@ package com.saat.auto.cafe.data.utils;
 import com.contrastsecurity.cassandra.migration.CassandraMigration;
 import com.contrastsecurity.cassandra.migration.config.Keyspace;
 import com.contrastsecurity.cassandra.migration.config.ScriptsLocations;
-import com.saat.auto.cafe.common.utils.PropertyFactory;
+import com.saat.auto.cafe.common.ApplicationProps;
 
-import org.apache.commons.configuration.Configuration;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.InputStream;
+
+//import org.apache.commons.configuration.Configuration;
 
 /**
  * Created by mcoletti on 6/15/16.
  */
+
 public class Migration {
 
+    private static ApplicationProps props;
+
+
     public static void main(String[] args){
-
-
-        Configuration config = null;
+//        Configuration config = null;
         try {
-            config = PropertyFactory.getConfig(Migration.class.getClassLoader().getResource("app.properties").getPath());
+            Yaml yaml = new Yaml();
+            InputStream in = Migration.class.getClassLoader().getResourceAsStream("props/application.yml");
+            props = yaml.loadAs(in, ApplicationProps.class);
             Keyspace keyspace = new Keyspace();
-            keyspace.setName(config.getString("keyspace"));
-            String[] contactPoints = config.getStringArray("contactPoints");
+            keyspace.setName(props.getKeySpace());
+            String[] contactPoints = props.getContactPoints().split(",");
             keyspace.getCluster().setContactpoints(contactPoints);
-            keyspace.getCluster().setPort(config.getInt("dbPort"));
-            keyspace.getCluster().setUsername(config.getString("dbUser"));
-            keyspace.getCluster().setPassword(config.getString("dbPass"));
+            keyspace.getCluster().setPort(props.getPort());
+            keyspace.getCluster().setUsername(props.getUserName());
+            keyspace.getCluster().setPassword(props.getPassword());
 
 
             CassandraMigration cm = new CassandraMigration();

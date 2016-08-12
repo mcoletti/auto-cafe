@@ -1,8 +1,8 @@
 - name: starting dse
   service: name=dse enabled=yes state=started
 
-- name: sleep for 10s then execute cqlsh script
-  shell: sleep 10
-
-- name: create autocafe kepspace
-  shell: "cqlsh {{ config.listen_address }} -u admin -p admin --execute=\"CREATE KEYSPACE IF NOT EXISTS autocafe WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 2};\""
+#- name: sleep for 10s then execute cqlsh script
+#  shell: sleep 10
+#
+#- name: create autocafe kepspace
+#  shell: "cqlsh {{ config.listen_address }} -u admin -p admin --execute=\"CREATE KEYSPACE IF NOT EXISTS autocafe WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 2};\""

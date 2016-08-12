@@ -10,4 +10,5 @@ public class ApiConstants {
     public static final String CONTACT_EMAIL = "micah.coletti@gmail.com";
 //    @Value("${vechicleMp}")
     public static final String VEHICLE_MP = "/vehicles";
+    public static final String CROSS_ORIGINS = "http://localhost:4200"  ;
 }

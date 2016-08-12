@@ -7,6 +7,3 @@
 
 - name: configuring datastax enterprise
   template: src=templates/cassandra.yaml dest=/etc/dse/cassandra/cassandra.yaml
-
-#- name: excute host file update
-#  shell: echo "{{ config.listen_address }} cnode" | sudo tee -a /etc/hosts

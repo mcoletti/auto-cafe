@@ -1,6 +1,6 @@
 select * from cassandra_migration_version;
 
-select * from clients;
+select * from client;
 select * from vehicle_details;
 select * from client_vehicles where client_id = 395b2f0c-8008-410c-8402-fb64a3a7a295;
 select * from vehicle_images;

@@ -1,4 +1,4 @@
-package com.saat.auto.cafe.data;
+package com.saat.auto.cafe.common;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -11,18 +11,26 @@ import lombok.Data;
  */
 @Component
 @Data
-public class CassandraProps {
+public class ApplicationProps {
 
     @Value("${contactPoints}")
     private String contactPoints;
     @Value("${keySpace}")
-    private String keySpaceName;
+    private String keySpace;
     @Value("${port}")
-    private String port;
+    private int port;
     @Value("${userName}")
     private String userName;
     @Value("${password}")
     private String password;
+    @Value("${consistencyLevel}")
+    private String consistencyLevel;
+    @Value("${maxIdleSecs}")
+    private int maxIdleSecs;
+    @Value("${ttl}")
+    private int ttl;
+    @Value("${cacheName}")
+    private String cacheName;
 
 
 }

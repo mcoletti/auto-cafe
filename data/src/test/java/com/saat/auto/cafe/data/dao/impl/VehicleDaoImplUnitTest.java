@@ -1,9 +1,9 @@
 // package com.saat.auto.cafe.data.dao.impl;
 //
-// import com.saat.auto.cafe.common.exceptions.VehicleDetailsException;
+// import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
 // import com.saat.auto.cafe.common.interfaces.VehicleDao;
 // import com.saat.auto.cafe.common.models.CatalogImage;
-// import com.saat.auto.cafe.common.models.VehicleDetailsModel;
+// import com.saat.auto.cafe.common.models.VehicleDetailModel;
 //
 // import org.mockito.Mock;
 // import org.testng.Reporter;
@@ -28,8 +28,8 @@
 //
 //     private List<CatalogImage> ciList;
 //     private List<CatalogImage> ciList2;
-//     private VehicleDetailsModel vi1;
-//     private VehicleDetailsModel vi2;
+//     private VehicleDetailModel vi1;
+//     private VehicleDetailModel vi2;
 //     private int vehicleId1;
 //     private int vehicleId2;
 //
@@ -39,13 +39,13 @@
 //
 //
 //     @BeforeClass
-//     public void init() throws VehicleDetailsException {
+//     public void init() throws ClientVehicleException {
 //         Reporter.log("#### Setting up Vehicle Unit Test ####",true);
 //         initMocks(this);
 //
 //         Random random = new Random();
 //         vehicleId1 = random.nextInt();
-//         vi1 = VehicleDetailsModel.builder().build();
+//         vi1 = VehicleDetailModel.builder().build();
 //         vi1.setId(vehicleId1);
 //         vi1.setKeyName(String.format("testKeyName-%s", vehicleId1));
 //         CatalogImage ci = getCi(vi1.getId());
@@ -55,7 +55,7 @@
 //
 //         ciList2 = new ArrayList<>();
 //         vehicleId2 = random.nextInt();
-//         vi2 = VehicleDetailsModel.builder().build();
+//         vi2 = VehicleDetailModel.builder().build();
 //         vi2.setId(vehicleId2);
 //         vi2.setKeyName(String.format("testKeyName-%s", vehicleId2));
 //         ci = getCi(vi2.getId());
@@ -119,7 +119,7 @@
 //     @Test
 //     public void testGetVehicleInventoryById() throws Exception {
 //
-//         VehicleDetailsModel result = vehicleDao.get(vehicleId1);
+//         VehicleDetailModel result = vehicleDao.get(vehicleId1);
 //         assertThat(result).isNotNull();
 //         assertThat(result).isEqualTo(vi1);
 //

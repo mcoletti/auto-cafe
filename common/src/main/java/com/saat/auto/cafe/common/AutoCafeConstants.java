@@ -7,7 +7,38 @@ public class AutoCafeConstants {
     public static final String READ_CONSITENCY = "QUORUM";
     public static final String WRITE_CONSITENCY = "QUORUM";
 
+
     public class Caches {
         public static final String VEHICLE_CACHE = "vehicleCache";
+    }
+
+    public static class UdtTypes{
+
+        public class Address {
+            public static final String NAME = "address";
+        }
+    }
+
+    public static class Schema {
+        public static final String KEY_SPACE = "autocafe";
+
+        public static class VehicleImagesTbl {
+            public static final String NAME = "vehicle_images";
+
+            public class Columns {
+
+                public static final String VEHICLE_ID = "vehicle_id";
+            }
+        }
+
+        public static class ClientVehiclesTbl {
+            public static final String NAME = "client_vehicles";
+
+            public class Columns {
+
+                public static final String CLIENT_ID = "client_id";
+                public static final String VEHICLE_ID = "vehicle_id";
+            }
+        }
     }
 }

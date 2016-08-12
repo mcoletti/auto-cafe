@@ -4,8 +4,8 @@ import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.datastax.driver.core.querybuilder.Select;
 import com.saat.auto.cafe.common.db.SchemaConstants;
 import com.saat.auto.cafe.common.db.SchemaConstants.ClientsTable;
-import com.saat.auto.cafe.common.entitys.ClientVehicles;
-import com.saat.auto.cafe.common.entitys.Clients;
+import com.saat.auto.cafe.common.entitys.Client;
+import com.saat.auto.cafe.common.entitys.ClientVehicle;
 import com.saat.auto.cafe.common.exceptions.DaoException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.interfaces.ClientsDao;
@@ -13,18 +13,17 @@ import com.saat.auto.cafe.data.dao.mappers.ClientRowMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.saat.auto.cafe.data.DataBeans;
-
 /**
  * Created by mcoletti on 6/16/16.
  */
-@ContextConfiguration(classes = DataBeans.class)
+@Component
 public class ClientsDaoImpl implements ClientsDao {
 
 
@@ -32,29 +31,29 @@ public class ClientsDaoImpl implements ClientsDao {
 
     private final CassandraInstance ci;
 
-    protected ClientsDaoImpl(CassandraInstance cassandraInstance) {
-        this.ci = cassandraInstance;
+    @Autowired
+    public ClientsDaoImpl(CassandraInstance ci) {
+        this.ci = ci;
     }
 
-
     @Override
-    public Clients upsert(Clients clients) throws DaoException {
+    public Client upsert(Client client) throws DaoException {
 
         // Check to see if customer is already in DB
-        Clients clUpdate = get(clients.getId());
+        Client clUpdate = get(client.getId());
         try {
             if (clUpdate == null) {
-                log.debug("Inserting new ClientsModel - ClientsModel Name: {} and id: {}", clients.getClientName(), clients.getId());
+                log.debug("Inserting new ClientsModel - ClientsModel Name: {} and id: {}", client.getClientName(), client.getId());
 
-                ci.getCassandraTemplate().execute(clients.getInsertStatement(ci.getCluster()));
+                ci.getCassandraTemplate().execute(client.getInsertStatement(ci.getCluster()));
 
-//                ci.getCassandraTemplate().insert(clients);
+//                ci.getCassandraTemplate().insert(client);
             } else {
-                log.debug("Updating ClientsModel - ClientsModel Name: {} and id: {}", clients.getClientName(), clients.getId());
+                log.debug("Updating ClientsModel - ClientsModel Name: {} and id: {}", client.getClientName(), client.getId());
 
-                ci.getCassandraTemplate().execute(clients.getUpdateStatement());
+                ci.getCassandraTemplate().execute(client.getUpdateStatement(ci.getCluster()));
 
-//                ci.getCassandraTemplate().update(clients);
+//                ci.getCassandraTemplate().update(client);
             }
         } catch (Exception e) {
             log.error("Error updating or inserting ClientsModel Record - {}", e.getMessage());
@@ -62,14 +61,14 @@ public class ClientsDaoImpl implements ClientsDao {
             throw new DaoException(e);
         }
 
-        return clients;
+        return client;
     }
 
     @Override
-    public Clients get(UUID id) throws DaoException {
+    public Client get(UUID id) throws DaoException {
 
 
-        Clients client;
+        Client client;
         try {
             log.debug("Getting ClientsModel Record for id: {}", id);
             Select s = QueryBuilder.select().from("clients");
@@ -89,9 +88,9 @@ public class ClientsDaoImpl implements ClientsDao {
     }
 
     @Override
-    public Clients get(String clientName) throws DaoException {
+    public Client get(String clientName) throws DaoException {
 
-        Clients client;
+        Client client;
         try {
             Select s = QueryBuilder.select().from(ClientsTable.NAME);
             s.where(QueryBuilder.eq(ClientsTable.Columns.ClientName, clientName));
@@ -108,7 +107,7 @@ public class ClientsDaoImpl implements ClientsDao {
 
 
     @Override
-    public List<ClientVehicles> getClientVehicles(UUID clientId) {
+    public List<ClientVehicle> getClientVehicles(UUID clientId) {
         return null;
     }
 }

@@ -13,7 +13,7 @@ import lombok.Data;
 @Builder
 @Data
 @ApiModel(description = "Client Vehicles Collection Model")
-public class ClientVehiclesCollection {
+public class ClientVehicleCollectionModel {
 
     @ApiModelProperty(
             position = 1,

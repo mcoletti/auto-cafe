@@ -4,7 +4,10 @@ import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.entitys.Location;
 import com.saat.auto.cafe.common.interfaces.CacheService;
 import com.saat.auto.cafe.common.interfaces.HazelCastService;
-import com.saat.auto.cafe.common.models.VehicleDetailsModel;
+import com.saat.auto.cafe.common.models.AddressModel;
+import com.saat.auto.cafe.common.models.ClientVehiclesModel;
+import com.saat.auto.cafe.common.models.LocationModel;
+import com.saat.auto.cafe.common.models.VehicleDetailModel;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import com.saat.auto.cafe.data.DataBeans;
 
@@ -24,58 +28,56 @@ import com.saat.auto.cafe.data.DataBeans;
 public class TestBase extends AbstractTestNGSpringContextTests {
 
 
-
     @Autowired
     HazelCastService hazelCastService;
 
     @Autowired
     CacheService cacheService;
 
-    public VehicleDetailsModel ROOT_VDM;
-    /**
-     * Helper Method to get a new vehicle object
-     * @param vehicleId
-     * @return
-     */
-    public void setROOT_VDM(String vehicleId){
-        VehicleDetailsModel vd = VehicleDetailsModel.builder()
-                .id(vehicleId)
-                .clientId("395b2f0c-8008-410c-8402-fb64a3a7a295")
-                .keyName("micah").stockNum(1234)
-                .extColor("black").intColor("red")
-                .trim("na").price(new BigDecimal(15500.00))
-                .mileage("115,000").category("sedans")
-                .make("Honda").model("Accord")
-                .year(2003)
-                .bodyStyle("sedan")
-                .manufacture("Honda")
-                .location(getLoc())
+    public ClientVehiclesModel ROOT_CVM;
+
+
+    public void setROOT_CVM() {
+
+        ROOT_CVM = ClientVehiclesModel.builder()
+                .clientId("")
+                .vehicleId(UUID.randomUUID().toString())
                 .createdBy("testUser")
                 .createdDtm(DateTime.now().toString())
                 .modifiedBy("testUser")
-                .modifiedDtm(DateTime.now().toString()).build();
-        ROOT_VDM = vd;
+                .modifiedDtm(DateTime.now().toString())
+                .details(getDetails())
+                .location(getLocation())
+                .price(66500)
+                .shortDesc("Cool Car")
+                .stockNum(123456789)
+                .build();
     }
 
-    public Location getLoc(){
-
-        Location location = new Location();
-        location.setName("testLoc");
-
-        Address address = new Address();
-        address.setStreet1("1234");
-        address.setStreet2("1234");
-        Set<String> phones = new HashSet<>();
-        phones.add("801.499.9683");
-        address.setPhones(phones);
-        address.setCity("provo");
-        address.setState("UT");
-        address.setZipCode(84604);
-
-        location.setAddress(address);
-
-        return location;
-
+    private LocationModel getLocation() {
+        return LocationModel.builder()
+                .name("ogden")
+                .address(getAddress()).build();
     }
 
+    private AddressModel getAddress() {
+        return AddressModel.builder()
+                .street1("12345")
+                .street2("12345")
+                .city("provo")
+                .state("UT")
+                .zipCode(84604).build();
+    }
+
+    private VehicleDetailModel getDetails() {
+        return VehicleDetailModel.builder()
+                .bodyStyle("sedan")
+                .extColor("red")
+                .intColor("black")
+                .make("ford")
+                .model("focus")
+                .mileage(66000)
+                .year(2013)
+                .build();
+    }
 }

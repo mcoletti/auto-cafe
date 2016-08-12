@@ -22,18 +22,7 @@ cluster_name: '{{ config.cluster_name }}'
 #
 # If you already have a cluster with 1 token per node, and wish to migrate to
 # multiple tokens per node, see http://wiki.apache.org/cassandra/Operations
-num_tokens: 128
-
-# Triggers automatic allocation of num_tokens tokens for this node. The allocation
-# algorithm attempts to choose tokens in a way that optimizes replicated load over
-# the nodes in the datacenter for the replication strategy used by the specified
-# keyspace.
-#
-# The load assigned to each node will be close to proportional to its number of
-# vnodes.
-#
-# Only supported with the Murmur3Partitioner.
-# allocate_tokens_for_keyspace: KEYSPACE
+num_tokens: 256
 
 # initial_token allows you to specify tokens manually.  While you can use # it with
 # vnodes (num_tokens > 1, above) -- in which case you should provide a
@@ -42,48 +31,24 @@ num_tokens: 128
 # initial_token:
 
 # See http://wiki.apache.org/cassandra/HintedHandoff
-# May either be "true" or "false" to enable globally
+# May either be "true" or "false" to enable globally, or contain a list
+# of data centers to enable per-datacenter.
+# hinted_handoff_enabled: DC1,DC2
 hinted_handoff_enabled: true
-# When hinted_handoff_enabled is true, a black list of data centers that will not
-# perform hinted handoff
-#hinted_handoff_disabled_datacenters:
-#    - DC1
-#    - DC2
 # this defines the maximum amount of time a dead host will have hints
 # generated.  After it has been dead this long, new hints for it will not be
 # created until it has been seen alive and gone down again.
 max_hint_window_in_ms: 10800000 # 3 hours
-
 # Maximum throttle in KBs per second, per delivery thread.  This will be
 # reduced proportionally to the number of nodes in the cluster.  (If there
 # are two nodes in the cluster, each delivery thread will use the maximum
 # rate; if there are three, each will throttle to half of the maximum,
 # since we expect two nodes to be delivering hints simultaneously.)
 hinted_handoff_throttle_in_kb: 1024
-
 # Number of threads with which to deliver hints;
 # Consider increasing this number when you have multi-dc deployments, since
 # cross-dc handoff tends to be slower
 max_hints_delivery_threads: 2
-
-# Directory where Cassandra should store hints.
-# If not set, the default directory is $CASSANDRA_HOME/data/hints.
-hints_directory: /var/lib/cassandra/hints
-
-# How often hints should be flushed from the internal buffers to disk.
-# Will *not* trigger fsync.
-hints_flush_period_in_ms: 10000
-
-# Maximum size for a single hints file, in megabytes.
-max_hints_file_size_in_mb: 128
-
-# Compression to apply to the hint files. If omitted, hints files
-# will be written uncompressed. LZ4, Snappy, and Deflate compressors
-# are supported.
-#hints_compression:
-#   - class_name: LZ4Compressor
-#     parameters:
-#         -
 
 # Maximum throttle in KBs per second, total. This will be
 # reduced proportionally to the number of nodes in the cluster.
@@ -92,49 +57,32 @@ batchlog_replay_throttle_in_kb: 1024
 # Authentication backend, implementing IAuthenticator; used to identify users
 # Out of the box, Cassandra provides org.apache.cassandra.auth.{AllowAllAuthenticator,
 # PasswordAuthenticator}.
-# DataStax Enterprise (DSE) also provides the DseAuthenticator for external authentication
-# with Kerberos and LDAP as well as internal authentication.
 #
 # - AllowAllAuthenticator performs no checks - set it to disable authentication.
 # - PasswordAuthenticator relies on username/password pairs to authenticate
 #   users. It keeps usernames and hashed passwords in system_auth.credentials table.
 #   Please increase system_auth keyspace replication factor if you use this authenticator.
 #   If using PasswordAuthenticator, CassandraRoleManager must also be used (see below)
-# - com.datastax.bdp.cassandra.auth.DseAuthenticator For external authentication
-#   with multiple authentication schemes. Additional configuration is required in dse.yaml.
-#   If using DseAuthenticator, DseRoleManager must also be used (see below)
 authenticator: AllowAllAuthenticator
-#authenticator: com.datastax.bdp.cassandra.auth.DseAuthenticator
 
 # Authorization backend, implementing IAuthorizer; used to limit access/provide permissions
 # Out of the box, Cassandra provides org.apache.cassandra.auth.{AllowAllAuthorizer,
 # CassandraAuthorizer}.
-# DataStax Enterprise (DSE) also provides the DseAuthorizer which must be used in place
-# of the CassandraAuthorizer if the DseAuthenticator is being used
 #
 # - AllowAllAuthorizer allows any action to any user - set it to disable authorization.
 # - CassandraAuthorizer stores permissions in system_auth.permissions table. Please
 #   increase system_auth keyspace replication factor if you use this authorizer.
-# - com.datastax.bdp.cassandra.auth.DseAuthorizer for enhanced permission management of
-#   DSE specific resources. Additional configuration is required in dse.yaml
 authorizer: AllowAllAuthorizer
-#authorizer: com.datastax.bdp.cassandra.auth.DseAuthorizer
-
 # Part of the Authentication & Authorization backend, implementing IRoleManager; used
 # to maintain grants and memberships between roles.
 # Out of the box, Cassandra provides org.apache.cassandra.auth.CassandraRoleManager,
 # which stores role information in the system_auth keyspace. Most functions of the
 # IRoleManager require an authenticated login, so unless the configured IAuthenticator
 # actually implements authentication, most of this functionality will be unavailable.
-# DataStax Enterprise (DSE) also provides the DseRoleManager that supports LDAP roles
-# as well as the internal roles supported by CassandraRoleManager.
 #
 # - CassandraRoleManager stores role data in the system_auth keyspace. Please
 #   increase system_auth keyspace replication factor if you use this role manager.
-# - DseRoleManager stores role options in the dse_security keyspace. Please
-#   increase the dse_security keyspace replication factor if you use this role
-#   manager. Additional configuration is required in dse.yaml
-role_manager: com.datastax.bdp.cassandra.auth.DseRoleManager
+role_manager: CassandraRoleManager
 
 # Validity period for roles cache (fetching permissions can be an
 # expensive operation depending on the authorizer). Granted roles are cached for
@@ -183,7 +131,7 @@ partitioner: org.apache.cassandra.dht.Murmur3Partitioner
 # the configured compaction strategy.
 # If not set, the default directory is $CASSANDRA_HOME/data/data.
 data_file_directories:
-     - /var/lib/cassandra/data
+    - /var/lib/cassandra/data
 
 # commit log.  when running on magnetic HDD, this should be a
 # separate spindle than the data directories.
@@ -202,7 +150,6 @@ commitlog_directory: /var/lib/cassandra/commitlog
 #              data at CL.ONE!
 # ignore: ignore fatal errors and let requests fail, as in pre-1.2 Cassandra
 disk_failure_policy: stop
-
 # policy for commit disk failures:
 # die: shut down gossip and Thrift and kill the JVM, so the node can be replaced.
 # stop: shut down gossip and Thrift, leaving the node effectively dead, but
@@ -329,12 +276,6 @@ commitlog_sync_period_in_ms: 10000
 # archiving commitlog segments (see commitlog_archiving.properties),
 # then you probably want a finer granularity of archiving; 8 or 16 MB
 # is reasonable.
-# Max mutation size is also configurable via max_mutation_size_in_kb setting in
-# cassandra.yaml. The default is half the size commitlog_segment_size_in_mb * 1024.
-#
-# NOTE: If max_mutation_size_in_kb is set explicitly then commitlog_segment_size_in_mb must
-# be set to at least twice the size of max_mutation_size_in_kb / 1024
-#
 commitlog_segment_size_in_mb: 32
 
 # Compression to apply to the commit log. If omitted, the commit log
@@ -373,26 +314,9 @@ concurrent_reads: 32
 concurrent_writes: 32
 concurrent_counter_writes: 32
 
-# For materialized view writes, as there is a read involved, so this should
-# be limited by the less of concurrent reads or concurrent writes.
-concurrent_materialized_view_writes: 32
-
-# Maximum memory to use for pooling sstable buffers. Defaults to the smaller
-# of 1/4 of heap or 512MB. This pool is allocated off-heap, so is in addition
-# to the memory allocated for heap. Memory is only allocated as needed.
+# Total memory to use for sstable-reading buffers.  Defaults to
+# the smaller of 1/4 of heap or 512MB.
 # file_cache_size_in_mb: 512
-
-# Flag indicating whether to allocate on or off heap when the sstable buffer
-# pool is exhausted, that is when it has exceeded the maximum memory
-# file_cache_size_in_mb, beyond which it will not cache buffers but allocate on request.
-
-# buffer_pool_use_heap_if_exhausted: true
-
-# The strategy for optimizing disk read
-# Possible values are:
-# ssd (for solid state disks, the default)
-# spinning (for spinning disks)
-# disk_optimization_strategy: ssd
 
 # Total permitted memory to use for memtables. Cassandra will stop
 # accepting writes when the limit is exceeded until a flush completes,
@@ -414,6 +338,7 @@ concurrent_materialized_view_writes: 32
 # Options are:
 #   heap_buffers:    on heap nio buffers
 #   offheap_buffers: off heap (direct) nio buffers
+#   offheap_objects: native memory, eliminating nio buffer heap overhead
 memtable_allocation_type: heap_buffers
 
 # Total space to use for commit logs on disk.
@@ -457,7 +382,7 @@ index_summary_resize_interval_in_minutes: 60
 # buffers. Enable this to avoid sudden dirty buffer flushing from
 # impacting read latencies. Almost always a good idea on SSDs; not
 # necessarily on platters.
-trickle_fsync: true
+trickle_fsync: false
 trickle_fsync_interval_in_kb: 10240
 
 # TCP port, for commands and data
@@ -510,17 +435,9 @@ listen_address: {{ config.listen_address }}
 # Please note that the address on which the native transport is bound is the
 # same as the rpc_address. The port however is different and specified below.
 start_native_transport: true
-# port for the CQL native transport to listen for clients on
+# port for the CQL native transport to listen for client on
 # For security reasons, you should not expose this port to the internet.  Firewall it if needed.
 native_transport_port: 9042
-# Enabling native transport encryption in client_encryption_options allows you to either use
-# encryption for the standard port or to use a dedicated, additional port along with the unencrypted
-# standard native_transport_port.
-# Enabling client encryption and keeping native_transport_port_ssl disabled will use encryption
-# for native_transport_port. Setting native_transport_port_ssl to a different value
-# from native_transport_port will use encryption for native_transport_port_ssl while
-# keeping native_transport_port unencrypted.
-# native_transport_port_ssl: 9142
 # The maximum threads for handling requests when the native transport is used.
 # This is similar to rpc_max_threads though the default differs slightly (and
 # there is no native_transport_min_threads, idle threads will always be stopped
@@ -528,8 +445,7 @@ native_transport_port: 9042
 # native_transport_max_threads: 128
 #
 # The maximum size of allowed frame. Frame (requests) larger than this will
-# be rejected as invalid. The default is 256MB. If you're changing this parameter,
-# you may want to adjust max_value_size_in_mb accordingly.
+# be rejected as invalid. The default is 256MB.
 # native_transport_max_frame_size_in_mb: 256
 
 # The maximum number of concurrent client connections.
@@ -541,7 +457,7 @@ native_transport_port: 9042
 # native_transport_max_concurrent_connections_per_ip: -1
 
 # Whether to start the thrift rpc server.
-start_rpc: true
+start_rpc: false
 
 # The address or interface to bind the Thrift RPC service and native transport
 # server to.
@@ -561,11 +477,11 @@ start_rpc: true
 # you can specify which should be chosen using rpc_interface_prefer_ipv6. If false the first ipv4
 # address will be used. If true the first ipv6 address will be used. Defaults to false preferring
 # ipv4. If there is only one address it will be selected regardless of ipv4/ipv6.
-rpc_address: {{ config.rpc_address }}
+rpc_address: {{ config.listen_address }}
 # rpc_interface: eth1
 # rpc_interface_prefer_ipv6: false
 
-# port for Thrift to listen for clients on
+# port for Thrift to listen for client on
 rpc_port: 9160
 
 # RPC address to broadcast to drivers and other Cassandra nodes. This cannot
@@ -579,14 +495,14 @@ rpc_keepalive: true
 
 # Cassandra provides two out-of-the-box options for the RPC Server:
 #
-# sync  -> One thread per thrift connection. For a very large number of clients, memory
+# sync  -> One thread per thrift connection. For a very large number of client, memory
 #          will be your limiting factor. On a 64 bit JVM, 180KB is the minimum stack size
 #          per thread, and that will correspond to your use of virtual memory (but physical memory
 #          may be limited depending on use of stack space).
 #
-# hsha  -> Stands for "half synchronous, half asynchronous." All thrift clients are handled
+# hsha  -> Stands for "half synchronous, half asynchronous." All thrift client are handled
 #          asynchronously using a small number of threads that does not vary with the amount
-#          of thrift clients (and thus scales well to many clients). The rpc requests are still
+#          of thrift client (and thus scales well to many client). The rpc requests are still
 #          synchronous (one thread per active request). If hsha is selected then it is essential
 #          that rpc_max_threads is changed from the default value of unlimited.
 #
@@ -601,9 +517,9 @@ rpc_server_type: sync
 #
 # Regardless of your choice of RPC server (see above), the number of maximum requests in the
 # RPC thread pool dictates how many concurrent requests are possible (but if you are using the sync
-# RPC server, it also dictates the number of clients that can be connected at all).
+# RPC server, it also dictates the number of client that can be connected at all).
 #
-# The default is unlimited and thus provides no protection against clients overwhelming the server. You are
+# The default is unlimited and thus provides no protection against client overwhelming the server. You are
 # encouraged to set a maximum that makes sense for you in production, but do keep in mind that
 # rpc_max_threads represents the maximum number of client requests this server may execute concurrently.
 #
@@ -671,12 +587,12 @@ tombstone_failure_threshold: 100000
 column_index_size_in_kb: 64
 
 
-# Log WARN on any batch size exceeding this value. 64kb per batch by default.
+# Log WARN on any batch size exceeding this value. 5kb per batch by default.
 # Caution should be taken on increasing the size of this threshold as it can lead to node instability.
-batch_size_warn_threshold_in_kb: 64
+batch_size_warn_threshold_in_kb: 5
 
-# Fail any batch exceeding this value. 640kb (10x warn threshold) by default.
-batch_size_fail_threshold_in_kb: 640
+# Fail any batch exceeding this value. 50kb (10x warn threshold) by default.
+batch_size_fail_threshold_in_kb: 50
 
 # Log WARN on any batches not of type LOGGED than span across more partitions than this limit
 unlogged_batch_across_partitions_warn_threshold: 10
@@ -818,14 +734,10 @@ cross_node_timeout: false
 #    address, respectively.  Unless this happens to match your
 #    deployment conventions, this is best used as an example of
 #    writing a custom Snitch class and is provided in that spirit.
-# DataStax Enterprise (DSE) provides
-#  - com.datastax.bdp.snitch.DseSimpleSnitch:
-#    Proximity is determined by DSE workload, which places Cassandra,
-#    Analytics, and Solr nodes into their separate datacenters.
 #
 # You can use a custom Snitch by setting this to the full class name
 # of the snitch, which will be assumed to be on your classpath.
-endpoint_snitch: com.datastax.bdp.snitch.DseSimpleSnitch
+endpoint_snitch: SimpleSnitch
 
 # controls how often to perform the more expensive part of host score
 # calculation
@@ -833,6 +745,7 @@ dynamic_snitch_update_interval_in_ms: 100
 # controls how often to reset all host scores, allowing a bad host to
 # possibly recover
 dynamic_snitch_reset_interval_in_ms: 600000
+
 # if set greater than zero and read_repair_chance is < 1.0, this will allow
 # 'pinning' of replicas to hosts in order to increase cache capacity.
 # The badness threshold will control how much worse the pinned host has to be
@@ -899,9 +812,9 @@ request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 #
 server_encryption_options:
     internode_encryption: none
-    keystore: resources/dse/conf/.keystore
+    keystore: conf/.keystore
     keystore_password: cassandra
-    truststore: resources/dse/conf/.truststore
+    truststore: conf/.truststore
     truststore_password: cassandra
     # More advanced defaults below:
     # protocol: TLS
@@ -915,11 +828,11 @@ client_encryption_options:
     enabled: false
     # If enabled and optional is set to true encrypted and unencrypted connections are handled.
     optional: false
-    keystore: resources/dse/conf/.keystore
+    keystore: conf/.keystore
     keystore_password: cassandra
     # require_client_auth: false
     # Set trustore and truststore_password if require_client_auth is true
-    # truststore: resources/dse/conf/.truststore
+    # truststore: conf/.truststore
     # truststore_password: cassandra
     # More advanced defaults below:
     # protocol: TLS
@@ -932,7 +845,7 @@ client_encryption_options:
 # can be:  all  - all traffic is compressed
 #          dc   - traffic between different datacenters is compressed
 #          none - nothing is compressed.
-internode_compression: dc
+internode_compression: all
 
 # Enable or disable tcp_nodelay for inter-dc communication.
 # Disabling it will result in larger (but fewer) network packets being sent,
@@ -947,17 +860,14 @@ tracetype_repair_ttl: 604800
 # GC Pauses greater than gc_warn_threshold_in_ms will be logged at WARN level
 # Adjust the threshold based on your application throughput requirement
 # By default, Cassandra logs GC Pauses greater than 200 ms at INFO level
-gc_warn_threshold_in_ms: 1000
+# gc_warn_threshold_in_ms: 1000
 
 # UDFs (user defined functions) are disabled by default.
-# As of Cassandra 3.0 there is a sandbox in place that should prevent execution of evil code.
+# As of Cassandra 2.2, there is no security manager or anything else in place that
+# prevents execution of evil code. CASSANDRA-9402 will fix this issue for Cassandra 3.0.
+# This will inherently be backwards-incompatible with any 2.2 UDF that perform insecure
+# operations such as opening a socket or writing to the filesystem.
 enable_user_defined_functions: false
-
-# Enables scripted UDFs (JavaScript UDFs).
-# Java UDFs are always enabled, if enable_user_defined_functions is true.
-# Enable this option to be able to use UDFs with "language javascript" or any custom JSR-223 provider.
-# This option has no effect, if enable_user_defined_functions is false.
-enable_scripted_user_defined_functions: false
 
 # The default Windows kernel timer and scheduling resolution is 15.6ms for power conservation.
 # Lowering this value on Windows can provide much tighter latency and better throughput, however
@@ -965,8 +875,3 @@ enable_scripted_user_defined_functions: false
 # below their system default. The sysinternals 'clockres' tool can confirm your system's default
 # setting.
 windows_timer_interval: 1
-
-# Maximum size of any value in SSTables. Safety measure to detect SSTable corruption
-# early. Any value size larger than this threshold will result into marking an SSTable
-# as corrupted.
-# max_value_size_in_mb: 256

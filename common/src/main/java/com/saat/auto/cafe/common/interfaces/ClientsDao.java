@@ -1,8 +1,8 @@
 package com.saat.auto.cafe.common.interfaces;
 
+import com.saat.auto.cafe.common.entitys.Client;
 import com.saat.auto.cafe.common.exceptions.DaoException;
-import com.saat.auto.cafe.common.entitys.ClientVehicles;
-import com.saat.auto.cafe.common.entitys.Clients;
+import com.saat.auto.cafe.common.entitys.ClientVehicle;
 
 import java.util.List;
 import java.util.UUID;
@@ -12,8 +12,8 @@ import java.util.UUID;
  */
 public interface ClientsDao {
 
-    Clients upsert(Clients clients) throws DaoException;
-    Clients get(UUID id) throws DaoException;
-    Clients get(String clientName) throws DaoException;
-    List<ClientVehicles> getClientVehicles(UUID clientId);
+    Client upsert(Client client) throws DaoException;
+    Client get(UUID id) throws DaoException;
+    Client get(String clientName) throws DaoException;
+    List<ClientVehicle> getClientVehicles(UUID clientId);
 }

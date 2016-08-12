@@ -31,12 +31,12 @@ Vagrant.configure("2") do |config|
     end
   end
  end
- #config.vm.define "apiserver" do |apinode|
- #   apinode.vm.box = VM_DEFAULT_BOX_NAME
- #   apinode.vm.synced_folder "api/" , "/opt/autocafe" , create: true
- #   apinode.vm.network  "private_network", ip: "192.168.56.14"
- # config.vm.provision "ansible" do |ansible|
- #  ansible.playbook = "apiserver.yml"
- # end
- #end
+ config.vm.define "opscenter" do |node|
+    node.vm.box = VM_DEFAULT_BOX_NAME
+    #apinode.vm.synced_folder "api/" , "/opt/autocafe" , create: true
+    node.vm.network  "private_network", ip: "192.168.56.14"
+ config.vm.provision "ansible" do |ansible|
+   ansible.playbook = "tasks/opscenter.yml"
+  end
+ end
 end

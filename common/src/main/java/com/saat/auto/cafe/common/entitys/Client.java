@@ -16,6 +16,7 @@ import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 import java.util.UUID;
 
+import lombok.Builder;
 import lombok.Data;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
@@ -29,10 +30,11 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
         readConsistency = AutoCafeConstants.READ_CONSITENCY,
         writeConsistency = AutoCafeConstants.WRITE_CONSITENCY
 )
+@Builder
 @Data
-public class Clients {
+public class Client {
 
-    @PrimaryKeyColumn(ordinal = 0,type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKey
     private UUID id;
     @Column(value = "client_name")
     private String clientName;
@@ -58,11 +60,11 @@ public class Clients {
         return insert;
     }
 
-    public Statement getUpdateStatement(){
+    public Statement getUpdateStatement(Cluster cluster){
 
         Statement update = QueryBuilder.update("clients")
-                .with(set("client_name",clientName)).and(set("modified_by",modifiedBy)).and(set("modified_dtm",modifiedDtm.toDate()))
-                .where(eq("id",id));
+                .with(set("location",location.toUdtValue(cluster))).and(set("modified_by",modifiedBy)).and(set("modified_dtm",modifiedDtm.toDate()))
+                .where(eq("id",id)).and(eq("client_name",clientName));
 
         return update;
     }

@@ -4,7 +4,9 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.UDTValue;
 import com.datastax.driver.mapping.annotations.Field;
 import com.datastax.driver.mapping.annotations.UDT;
+import com.saat.auto.cafe.common.models.LocationModel;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -12,6 +14,7 @@ import lombok.Data;
  */
 @UDT(name = "location",keyspace = "autocafedb")
 @Data
+@Builder
 public class Location{
 
     @Field
@@ -40,11 +43,16 @@ public class Location{
      */
     public static Location fromUdtValue(UDTValue udtValue){
 
-        Location location = new Location();
-        location.setAddress(Address.fromUdtValue(udtValue.getUDTValue("address")));
-        location.setName(udtValue.getString("name"));
 
-        return location;
+        return Location.builder()
+                .name(udtValue.getString("name"))
+                .address(Address.fromUdtValue(udtValue.getUDTValue("address"))).build();
     }
 
+    public LocationModel toModel() {
+
+        return LocationModel.builder()
+                .name(name)
+                .address(address.toModel()).build();
+    }
 }

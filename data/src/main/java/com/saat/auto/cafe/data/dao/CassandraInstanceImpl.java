@@ -2,8 +2,9 @@ package com.saat.auto.cafe.data.dao;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.UDTValue;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
-import com.saat.auto.cafe.data.CassandraProps;
+import com.saat.auto.cafe.common.ApplicationProps;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraOperations;
@@ -19,11 +20,10 @@ public class CassandraInstanceImpl implements CassandraInstance {
 
     private final Cluster cluster;
     private final Session session;
-    private final CassandraOperations operations;
-    private CassandraProps config;
+    private ApplicationProps config;
 
     @Autowired
-    public CassandraInstanceImpl(CassandraProps config) {
+    public CassandraInstanceImpl(ApplicationProps config) {
         // Setup the Cluster
         String[] contactPoints = config.getContactPoints().split(",");
         Cluster.Builder builder = Cluster.builder();
@@ -33,8 +33,8 @@ public class CassandraInstanceImpl implements CassandraInstance {
         cluster = builder.build();
 
         // Setup the Session
-        session = cluster.connect(config.getKeySpaceName());
-        operations = new CassandraTemplate(session);
+        session = cluster.connect(config.getKeySpace());
+//        operations = new CassandraTemplate(session);
 
     }
 
@@ -52,7 +52,7 @@ public class CassandraInstanceImpl implements CassandraInstance {
     }
 
     @Override
-    public CassandraOperations getCassandraTemplate() {
-        return operations;
+    public UDTValue getUdtValue(String udtType) {
+        return cluster.getMetadata().getKeyspace(config.getKeySpace()).getUserType(udtType).newValue();
     }
 }

@@ -1,17 +1,17 @@
 package com.saat.auto.cafe.data.dao.impl;
 
-import com.saat.auto.cafe.common.entitys.ClientVehicles;
+import com.saat.auto.cafe.common.entitys.ClientVehicle;
+import com.saat.auto.cafe.common.entitys.ClientVehicleCollection;
 import com.saat.auto.cafe.common.interfaces.VehicleDao;
-import com.saat.auto.cafe.common.entitys.VehicleDetails;
-import com.saat.auto.cafe.common.entitys.VehicleImages;
+import com.saat.auto.cafe.common.entitys.VehicleDetail;
 import com.saat.auto.cafe.data.TestBase;
 
+import org.apache.cassandra.utils.UUIDGen;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,99 +23,120 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VehicleDaoImplTest extends TestBase {
 
 
-//    private VehicleDao vehicleDao;
-    private VehicleDetails VD_ROOT;
-    private VehicleDetails VD_LOCAL;
+    //    private VehicleDao vehicleDao;
+    private VehicleDetail VD_ROOT;
+    private VehicleDetail VD_LOCAL;
+
+    private ClientVehicle ROOT_CV;
+    private ClientVehicle LOCAL_CV;
+    private UUID clientId;
 
     @Autowired
     VehicleDao vehicleDao;
 
     @BeforeClass
     public void init() {
+        clientId = UUID.fromString("65026b3e-a833-4263-81a5-dedc2a6efed5");
+    }
 
-//        vehicleDao = new VehicleDaoImpl(cassandraInstance);
+
+    @Test
+    public void testUpsetClientVehicleNew() throws Exception {
+        setRootCV();
+        LOCAL_CV = vehicleDao.upsetClientVehicle(ROOT_CV);
+        assertThat(LOCAL_CV).isNotNull();
+        assertThat(LOCAL_CV.getClientId()).isEqualTo(ROOT_CV.getClientId());
+        assertThat(LOCAL_CV.getVehicleId()).isEqualTo(ROOT_CV.getVehicleId());
+        assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
+//
+//
+        String modifiedUser = "testUser2";
+        LOCAL_CV.setModifiedBy(modifiedUser);
+
+        VehicleDetail vehicleDetail = VehicleDetail.builder()
+                .bodyStyle("sedan").extColor("blue")
+                .intColor("black").make("honda")
+                .model("accord").trim("stuff")
+
+                .year(2013).mileage(70000).build();
+        LOCAL_CV.setDetails(vehicleDetail);
+
+        LOCAL_CV = vehicleDao.upsetClientVehicle(LOCAL_CV);
+        assertThat(LOCAL_CV).isNotNull();
+
+        assertThat(LOCAL_CV.getModifiedBy()).isEqualTo(modifiedUser);
+        assertThat(LOCAL_CV.getDetails().getMake()).isEqualTo("honda");
+        assertThat(LOCAL_CV.getClientId()).isEqualTo(ROOT_CV.getClientId());
+        assertThat(LOCAL_CV.getVehicleId()).isEqualTo(ROOT_CV.getVehicleId());
+        assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
 
     }
 
     @Test
-    public void testUpsertVehicleDetails() throws Exception {
+    public void testUpsetClientVehicleUpdate() throws Exception {
+        setRootCV();
 
-        setRootVD(UUID.randomUUID());
-        VD_LOCAL = vehicleDao.upsertVehicleDetails(VD_ROOT);
-        assertThat(VD_LOCAL).isNotNull();
-        assertThat(VD_LOCAL.getId()).isEqualTo(VD_ROOT.getId());
+        String updateUser = "testUser33";
+        ROOT_CV.setModifiedBy(updateUser);
 
-    }
 
-    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
-    public void testGetByUUid() throws Exception {
+        LOCAL_CV = vehicleDao.upsetClientVehicle(ROOT_CV);
+        assertThat(LOCAL_CV).isNotNull();
+        assertThat(LOCAL_CV.getClientId()).isEqualTo(ROOT_CV.getClientId());
+        assertThat(LOCAL_CV.getVehicleId()).isEqualTo(ROOT_CV.getVehicleId());
+        assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
 
-        VD_LOCAL = vehicleDao.get(VD_ROOT.getId(),VD_ROOT.getClientId());
-        assertThat(VD_LOCAL).isNotNull();
-        assertThat(VD_LOCAL.getId()).isEqualTo(VD_ROOT.getId());
-        assertThat(VD_LOCAL.getClientId()).isEqualTo(VD_ROOT.getClientId());
-        assertThat(VD_LOCAL.getKeyName()).isEqualTo(VD_ROOT.getKeyName());
-    }
-
-    @Test
-    public void testGetByKeyName() throws Exception {
 
     }
 
-    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
+    @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
     public void testGetByClientId() throws Exception {
 
-
-        List<ClientVehicles> cvList = vehicleDao.getByClientId(VD_ROOT.getClientId());
-        assertThat(cvList).isNotNull();
-        assertThat(cvList.size()).isGreaterThan(0);
-        assertThat(cvList.get(0).getClientId()).isEqualTo(VD_ROOT.getClientId());
-
+        ClientVehicleCollection result = vehicleDao.get(ROOT_CV.getClientId());
+        assertThat(result).isNotNull();
+        assertThat(result.getClientVehicles()).isNotNull();
+        assertThat(result.getClientVehicles().size()).isGreaterThan(0);
     }
 
-    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
-    public void testInsertVehicleImage() throws Exception {
-
-        VehicleImages vi = VehicleImages.builder()
-                .vehicleId(VD_ROOT.getId())
-                .imgName("test.png")
-                .imgCdnLoc("/cdn/test.png")
-                .imgSize(1024)
-                .imgOrder(0)
-                .imgSuffix(".png")
-                .imgType("main").build();
-
-        vi = vehicleDao.insertVehicleImage(vi);
-        assertThat(vi).isNotNull();
+    @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
+    public void testGetByClientIdAndVehicleId() throws Exception {
+        LOCAL_CV = vehicleDao.get(ROOT_CV.getClientId(), ROOT_CV.getVehicleId());
+        assertThat(LOCAL_CV).isNotNull();
+        assertThat(LOCAL_CV.getClientId()).isEqualTo(ROOT_CV.getClientId());
+        assertThat(LOCAL_CV.getVehicleId()).isEqualTo(ROOT_CV.getVehicleId());
+        assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
     }
 
-    @Test(dependsOnMethods = {"testInsertVehicleImage","testUpsertVehicleDetails"})
-    public void testGetVehicleImageList() throws Exception {
 
-        List<VehicleImages> imageList = vehicleDao.getVehicleImageList(VD_ROOT.getId());
-        assertThat(imageList).isNotNull();
-        assertThat(imageList.size()).isGreaterThan(0);
-        assertThat(imageList.get(0).getVehicleId()).isEqualTo(VD_ROOT.getId());
-    }
+    private ClientVehicle setRootCV() {
 
-    private void setRootVD(UUID vehicleId) {
+        DateTime createdDtm = DateTime.now();
+        UUID timeUuid = UUIDGen.getTimeUUID(createdDtm.getMillis());
 
-        VD_ROOT = VehicleDetails.builder()
-                .id(vehicleId)
-                .clientId(UUID.fromString("395b2f0c-8008-410c-8402-fb64a3a7a295"))
-                .keyName("micah").stockNum(1234)
-                .extColor("black").intColor("red")
-                .trim("na").price(new BigDecimal(15500.00))
-                .mileage("115,000").category("sedans")
-                .make("Honda").model("Accord")
-                .year(2003)
-                .bodyStyle("sedan")
-                .manufacture("Honda")
+        ROOT_CV = ClientVehicle.builder()
+                .clientId(clientId).vehicleId(UUID.randomUUID())
+                .stockNum(12345)
+                .shortDesc("Cool Car")
+                .price(13499)
+                .details(getVD()).createdBy("testUser")
                 .location(getLoc())
-                .createdBy("testUser")
-                .createdDtm(DateTime.now().toDate())
-                .modifiedBy("testUser")
-                .modifiedDtm(DateTime.now().toDate()).build();
+                .createdDtm(createdDtm)
+                .modifiedBy("testUser").modifiedDtm(DateTime.now()).build();
+
+        return ROOT_CV;
+
+
     }
 
+    private VehicleDetail getVD() {
+
+
+        return VehicleDetail.builder()
+                .bodyStyle("sedan").extColor("red")
+                .intColor("black").make("ford")
+                .model("focus").trim("stuff")
+                .year(2013).mileage(66389).build();
+
+
+    }
 }

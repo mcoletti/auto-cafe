@@ -1,5 +1,7 @@
 package com.saat.auto.cafe.data;
 
+import com.saat.auto.cafe.common.ApplicationProps;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
@@ -26,12 +28,12 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan(value = {"com.saat.auto.cafe.data.*"})
 @PropertySource("classpath:props/application.yml")
 @Import(
-       CassandraProps.class
+       ApplicationProps.class
 )
 public class DataBeans {
 
     @Autowired
-    CassandraProps cassandraProps;
+    ApplicationProps applicationProps;
 
 
 

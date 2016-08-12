@@ -7,7 +7,7 @@
   - include: tasks/dependencies.yml
   - include: tasks/repositories.yml
   - include: tasks/java-install.yml
-  - include: tasks/dsc22-install.yml
-  - include: tasks/start-cassandra.yml
-#  - include: tasks/dse-install.yml
-#  - include: tasks/start-dse.yml
+#  - include: tasks/dsc22-install.yml
+#  - include: tasks/start-cassandra.yml
+  - include: tasks/dse-install.yml
+  - include: tasks/start-dse.yml
