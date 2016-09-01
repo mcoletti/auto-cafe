@@ -2,8 +2,11 @@ package com.saat.auto.cafe.service;
 
 import com.saat.auto.cafe.common.interfaces.VehicleDao;
 import com.saat.auto.cafe.common.interfaces.VehicleService;
-import com.saat.auto.cafe.common.models.ClientVehiclesModel;
+import com.saat.auto.cafe.common.models.VehicleModelCollection;
+import com.saat.auto.cafe.common.models.VehicleModel;
+import com.saat.auto.cafe.common.models.VehicleDetailModel;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -32,17 +35,55 @@ public class VehicleServiceImplTest extends TestBase {
     }
 
     @Test
-    public void testUpsertClientVehicle() throws Exception {
+    public void testUpsertDealerVehicle() throws Exception {
 
-        setROOT_CVM();
-        ClientVehiclesModel result = vehicleService.upsertClientVehicle(ROOT_CVM);
+        setROOT_DVM();
+        VehicleModel vehicle = vehicleService.upsertDealerShipVehicle(ROOT_DVM);
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_DVM.getDealerId());
+        assertThat(vehicle.getStockNum()).isEqualTo(ROOT_DVM.getStockNum());
+
+
+
+        vehicle.setModifiedBy("micah");
+        vehicle.setModifiedDtm(DateTime.now().toString());
+
+        VehicleDetailModel detailModel = vehicle.getDetails();
+
+        detailModel.setMake("honda");
+        detailModel.setModel("accord");
+        detailModel.setYear(2016);
+
+        vehicle.setDetails(detailModel);
+
+
+
+        vehicle = vehicleService.upsertDealerShipVehicle(vehicle);
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getModifiedBy()).isEqualTo("micah");
+        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_DVM.getDealerId());
+        assertThat(vehicle.getStockNum()).isEqualTo(ROOT_DVM.getStockNum());
+
+
+
 
     }
 
-    @Test
-    public void testGetByClientId() throws Exception {
+    @Test(dependsOnMethods = {"testUpsertDealerVehicle"})
+    public void testGetByDealerId() throws Exception {
 
+        VehicleModelCollection dvmc = vehicleService.get(ROOT_DVM.getDealerId());
+        assertThat(dvmc).isNotNull();
+        assertThat(dvmc.getClientVehicles()).isNotNull();
+        assertThat(dvmc.getClientVehicles().size()).isGreaterThan(0);
+    }
 
+    @Test(dependsOnMethods = {"testUpsertDealerVehicle"})
+    public void testGetByDealerIdAndStockNum() throws Exception {
+        VehicleModel vehicle = vehicleService.get(ROOT_DVM.getDealerId(),ROOT_DVM.getStockNum());
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_DVM.getDealerId());
+        assertThat(vehicle.getStockNum()).isEqualTo(ROOT_DVM.getStockNum());
     }
 
     //    @Test
@@ -52,17 +93,17 @@ public class VehicleServiceImplTest extends TestBase {
 //        VehicleDetailModel vehicle = vehicleService.upsertVehicle(ROOT_VDM);
 //        assertThat(vehicle).isNotNull();
 //        assertThat(vehicle.getId()).isEqualTo(ROOT_VDM.getId());
-//        assertThat(vehicle.getClientId()).isEqualTo(ROOT_VDM.getClientId());
+//        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_VDM.getDealerId());
 //    }
 //
 //    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
 //    public void testGetVehicleDetailsModelWithCache() throws Exception {
 //
 //
-//        VehicleDetailModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(), ROOT_VDM.getClientId());
+//        VehicleDetailModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(), ROOT_VDM.getDealerId());
 //        assertThat(vehicle).isNotNull();
 //        assertThat(vehicle.getId()).isEqualTo(ROOT_VDM.getId());
-//        assertThat(vehicle.getClientId()).isEqualTo(ROOT_VDM.getClientId());
+//        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_VDM.getDealerId());
 //
 //    }
 //
@@ -70,19 +111,19 @@ public class VehicleServiceImplTest extends TestBase {
 //    public void testGetVehicleDetailsModelCacheReset() throws Exception {
 //
 //
-//        VehicleDetailModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(), ROOT_VDM.getClientId(), true);
+//        VehicleDetailModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(), ROOT_VDM.getDealerId(), true);
 //        assertThat(vehicle).isNotNull();
 //        assertThat(vehicle.getId()).isEqualTo(ROOT_VDM.getId());
-//        assertThat(vehicle.getClientId()).isEqualTo(ROOT_VDM.getClientId());
+//        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_VDM.getDealerId());
 //
 //    }
 //
 //    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
 //    public void testGetClientVehicles() throws Exception {
 //
-//        ClientVehicleCollectionModel collection = vehicleService.getClientVehicles(ROOT_VDM.getClientId());
+//        VehicleModelCollection collection = vehicleService.getVehicles(ROOT_VDM.getDealerId());
 //        assertThat(collection).isNotNull();
-//        assertThat(collection.getClientVehicles()).isNotNull();
+//        assertThat(collection.getVehicles()).isNotNull();
 //
 //
 //    }

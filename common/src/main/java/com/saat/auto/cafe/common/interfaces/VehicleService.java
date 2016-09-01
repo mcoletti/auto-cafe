@@ -1,8 +1,8 @@
 package com.saat.auto.cafe.common.interfaces;
 
 import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
-import com.saat.auto.cafe.common.models.ClientVehicleCollectionModel;
-import com.saat.auto.cafe.common.models.ClientVehiclesModel;
+import com.saat.auto.cafe.common.models.VehicleModelCollection;
+import com.saat.auto.cafe.common.models.VehicleModel;
 
 /**
  * Created by micahcoletti on 7/27/16.
@@ -12,19 +12,19 @@ public interface VehicleService {
 //    /**
 //     * Method to get an Instance of VehicleModel
 //     * @param vehicleId the vehicleId to get from the backend
-//     * @param clientId the clientId
+//     * @param dealerId the dealerId
 //     * @return an instance of the VehicleDetailModel
 //     */
-//    VehicleDetailModel getVehicleDetailsModel(String vehicleId, String clientId, boolean resetCache) throws VehicleServiceException;
+//    VehicleDetailModel getVehicleDetailsModel(String vehicleId, String dealerId, boolean resetCache) throws VehicleServiceException;
 //
 //    /**
 //     * Method that gets an instance of the Vehicle Model
 //     * @param vehicleId the vehicleId
-//     * @param clientId the clientId
+//     * @param dealerId the dealerId
 //     * @return a instance of the Vehicle Model
 //     * @throws VehicleServiceException is anything goes wrong
 //     */
-//    VehicleDetailModel getVehicleDetailsModel(String vehicleId, String clientId) throws VehicleServiceException;
+//    VehicleDetailModel getVehicleDetailsModel(String vehicleId, String dealerId) throws VehicleServiceException;
 //
 //    /**
 //     * Method to add of update a Vehicle
@@ -36,20 +36,20 @@ public interface VehicleService {
 //
 //    /**
 //     * Method that gets a list of client vehicles
-//     * @param clientId the client id
+//     * @param dealerId the client id
 //     * @return an array of client vehicles based off client id
 //     * @throws VehicleServiceException is anything goes wrong
 //     */
-//    ClientVehicleCollectionModel getClientVehicles(String clientId) throws VehicleServiceException;
+//    VehicleModelCollection getVehicles(String dealerId) throws VehicleServiceException;
 
 
-    ClientVehiclesModel upsertClientVehicle(ClientVehiclesModel cv) throws VehicleServiceException;
+    VehicleModel upsertDealerShipVehicle(VehicleModel cv) throws VehicleServiceException;
 
-    ClientVehicleCollectionModel get(String clientId) throws VehicleServiceException;
-    ClientVehicleCollectionModel get(String clientId, boolean resetCache) throws VehicleServiceException;
+    VehicleModelCollection get(String dealerId) throws VehicleServiceException;
+    VehicleModelCollection get(String dealerId, boolean resetCache) throws VehicleServiceException;
 
-    ClientVehiclesModel get(String clientId,String vehicleId) throws VehicleServiceException;
-    ClientVehiclesModel get(String clientId,String vehicleId, boolean resetCache) throws VehicleServiceException;
+    VehicleModel get(String dealerId, String stockNum) throws VehicleServiceException;
+    VehicleModel get(String dealerId, String stockNum, boolean resetCache) throws VehicleServiceException;
 
 
 }

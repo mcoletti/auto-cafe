@@ -22,18 +22,23 @@ public class VehicleDetailModel {
     private int year;
     private String trim;
 
+    /**
+     * Convert Model to Entity object
+     * @return
+     */
     public VehicleDetail toEntity(){
 
-        return null;
-//        return VehicleDetail.builder()
-//                .bodyStyle(bodyStyle)
-//                .extColor(extColor)
-//                .intColor(intColor)
-//                .mileage(mileage)
-//                .make(make)
-//                .model(model)
-//                .year(year)
-//                .trim(trim).build();
+        VehicleDetail vd = new VehicleDetail();
+        vd.setExtColor(extColor);
+        vd.setIntColor(intColor);
+        vd.setTrim(trim);
+        vd.setBodyStyle(bodyStyle);
+        vd.setYear(year);
+        vd.setMake(make);
+        vd.setModel(model);
+        vd.setMileage(mileage);
+        vd.setYear(year);
+        return vd;
     }
 
 

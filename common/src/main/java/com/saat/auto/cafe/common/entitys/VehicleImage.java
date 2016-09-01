@@ -16,7 +16,7 @@ import lombok.Data;
 @Table(name = "vehicle_images")
 @Builder
 @Data
-public class VehicleImages {
+public class VehicleImage {
 
 
     @PartitionKey

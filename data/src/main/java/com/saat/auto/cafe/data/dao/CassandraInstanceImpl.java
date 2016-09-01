@@ -10,7 +10,7 @@ import com.datastax.driver.mapping.MappingManager;
 import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.entitys.AddressCodec;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
-import com.saat.auto.cafe.common.ApplicationProps;
+import com.saat.auto.cafe.data.DbProperties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,11 +24,12 @@ public class CassandraInstanceImpl implements CassandraInstance {
 
     private final Cluster cluster;
     private final Session session;
-    private ApplicationProps config;
+    private final DbProperties config;
     private final MappingManager mappingManager;
 
     @Autowired
-    public CassandraInstanceImpl(ApplicationProps config) {
+    public CassandraInstanceImpl(DbProperties config) {
+        this.config = config;
         // Setup the Cluster
         String[] contactPoints = config.getContactPoints().split(",");
         Cluster.Builder builder = Cluster.builder();

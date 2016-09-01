@@ -34,18 +34,18 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
  * Created by mcoletti on 5/17/16.
  */
 @Table(
-        name = "clients",
+        name = "dealerships",
         readConsistency = AutoCafeConstants.READ_CONSITENCY,
         writeConsistency = AutoCafeConstants.WRITE_CONSITENCY
 )
 @NoArgsConstructor
 @Data
-public class Client {
+public class DealerShip {
 
     @PartitionKey
     private UUID id;
-    @Column(name = "client_name")
-    private String clientName;
+    @Column
+    private String name;
     @Frozen
     @Column(name = "locations")
     private Map<String,Location> locations;
@@ -58,25 +58,5 @@ public class Client {
     @Column(name = "modified_dtm")
     private Date modifiedDtm;
 
-
-
-    public Insert getInsertStatement(Cluster cluster) {
-//        Insert insert = QueryBuilder.insertInto("clients")
-//                .value("id",id).value("client_name",clientName)
-//                .value("created_by",createdBy).value("created_dtm",createdDtm.toDate())
-//                .value("modified_by",modifiedBy).value("modified_dtm",modifiedDtm.toDate())
-//                .value("location",location.toUdtValue(cluster));
-
-        return null;
-    }
-
-    public Statement getUpdateStatement(Cluster cluster){
-
-//        Statement update = QueryBuilder.update("clients")
-//                .with(set("location",location.toUdtValue(cluster))).and(set("modified_by",modifiedBy)).and(set("modified_dtm",modifiedDtm.toDate()))
-//                .where(eq("id",id)).and(eq("client_name",clientName));
-
-        return null;
-    }
 
 }

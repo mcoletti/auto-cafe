@@ -4,6 +4,7 @@ import com.saat.auto.cafe.common.entitys.Address;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -55,13 +56,20 @@ public class AddressModel {
     )
     private List<String> phones;
 
+    /**
+     * Convert Address Model to Entity Object
+     * @return
+     */
     public Address toEntity() {
-        return null; //  Address.builder()
-//                .street1(street1)
-//                .street2(street2)
-//                .city(city)
-//                .state(state)
-//                .zipCode(zipCode)
-//                .phones(new HashSet<>(phones)).build();
+
+       Address a = new Address();
+        a.setStreet1(street1);
+        a.setStreet2(street2);
+        a.setCity(city);
+        a.setState(state);
+
+        Set<String> phoneSet = phones != null ? new HashSet<>(phones) : null;
+        a.setPhones(phoneSet);
+        return a;
     }
 }

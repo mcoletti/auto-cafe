@@ -40,7 +40,7 @@ public class HazelCastCacheServiceImplTest extends TestBase {
 
 //    @Test
 //    public void testInsertCacheEntry() throws Exception {
-//        setROOT_CVM(UUID.randomUUID().toString());
+//        setROOT_DVM(UUID.randomUUID().toString());
 //        cacheService.insertCacheEntry(ROOT_VDM.getId(),ROOT_VDM, VehicleDetailModel.class);
 //
 //        VehicleDetailModel vd = cacheService.getCacheEntry(ROOT_VDM.getId(),VehicleDetailModel.class);

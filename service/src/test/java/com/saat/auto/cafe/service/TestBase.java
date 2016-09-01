@@ -1,11 +1,9 @@
 package com.saat.auto.cafe.service;
 
-import com.saat.auto.cafe.common.entitys.Address;
-import com.saat.auto.cafe.common.entitys.Location;
 import com.saat.auto.cafe.common.interfaces.CacheService;
 import com.saat.auto.cafe.common.interfaces.HazelCastService;
 import com.saat.auto.cafe.common.models.AddressModel;
-import com.saat.auto.cafe.common.models.ClientVehiclesModel;
+import com.saat.auto.cafe.common.models.VehicleModel;
 import com.saat.auto.cafe.common.models.LocationModel;
 import com.saat.auto.cafe.common.models.VehicleDetailModel;
 
@@ -14,9 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.saat.auto.cafe.data.DataBeans;
@@ -34,14 +31,13 @@ public class TestBase extends AbstractTestNGSpringContextTests {
     @Autowired
     CacheService cacheService;
 
-    public ClientVehiclesModel ROOT_CVM;
+    public VehicleModel ROOT_DVM;
 
 
-    public void setROOT_CVM() {
-
-        ROOT_CVM = ClientVehiclesModel.builder()
-                .clientId("")
-                .vehicleId(UUID.randomUUID().toString())
+    public void setROOT_DVM() {
+        ROOT_DVM = VehicleModel.builder()
+                .dealerId("ad44d405-8240-4035-98c9-2b9b528b2e86")
+                .stockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase())
                 .createdBy("testUser")
                 .createdDtm(DateTime.now().toString())
                 .modifiedBy("testUser")
@@ -50,7 +46,7 @@ public class TestBase extends AbstractTestNGSpringContextTests {
                 .location(getLocation())
                 .price(66500)
                 .shortDesc("Cool Car")
-                .stockNum(123456789)
+                .description("This is a really cool car")
                 .build();
     }
 
@@ -61,11 +57,14 @@ public class TestBase extends AbstractTestNGSpringContextTests {
     }
 
     private AddressModel getAddress() {
+        List<String> phonesList = new ArrayList<>();
+        phonesList.add("801.499.9683");
         return AddressModel.builder()
                 .street1("12345")
                 .street2("12345")
                 .city("provo")
                 .state("UT")
+                .phones(phonesList)
                 .zipCode(84604).build();
     }
 

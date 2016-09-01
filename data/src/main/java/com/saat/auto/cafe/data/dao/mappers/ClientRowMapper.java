@@ -2,7 +2,7 @@
 //
 //import com.datastax.driver.core.Row;
 //import com.datastax.driver.core.exceptions.DriverException;
-//import com.saat.auto.cafe.common.entitys.Client;
+//import com.saat.auto.cafe.common.entitys.DealerShip;
 //import com.saat.auto.cafe.common.entitys.Location;
 //
 //import org.joda.time.DateTime;
@@ -11,12 +11,12 @@
 ///**
 // * Created by mcoletti on 6/16/16.
 // */
-//public class ClientRowMapper implements RowMapper<Client> {
+//public class ClientRowMapper implements RowMapper<DealerShip> {
 //
 //    @Override
-//    public Client mapRow(Row row, int rowNum) throws DriverException {
+//    public DealerShip mapRow(Row row, int rowNum) throws DriverException {
 //
-//        return Client.builder()
+//        return DealerShip.builder()
 //                .id(row.getUUID("id"))
 //                .clientName(row.getString("client_name"))
 //                .createdBy(row.getString("created_by"))

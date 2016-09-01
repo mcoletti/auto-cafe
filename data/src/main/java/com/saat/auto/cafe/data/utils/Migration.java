@@ -3,7 +3,7 @@ package com.saat.auto.cafe.data.utils;
 import com.contrastsecurity.cassandra.migration.CassandraMigration;
 import com.contrastsecurity.cassandra.migration.config.Keyspace;
 import com.contrastsecurity.cassandra.migration.config.ScriptsLocations;
-import com.saat.auto.cafe.common.ApplicationProps;
+import com.saat.auto.cafe.data.DbProperties;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -17,15 +17,15 @@ import java.io.InputStream;
 
 public class Migration {
 
-    private static ApplicationProps props;
+    private static DbProperties props;
 
 
     public static void main(String[] args){
 //        Configuration config = null;
         try {
             Yaml yaml = new Yaml();
-            InputStream in = Migration.class.getClassLoader().getResourceAsStream("props/application.yml");
-            props = yaml.loadAs(in, ApplicationProps.class);
+            InputStream in = Migration.class.getClassLoader().getResourceAsStream("migrate.yml");
+            props = yaml.loadAs(in, DbProperties.class);
             Keyspace keyspace = new Keyspace();
             keyspace.setName(props.getKeySpace());
             String[] contactPoints = props.getContactPoints().split(",");

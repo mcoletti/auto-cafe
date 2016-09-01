@@ -1,6 +1,6 @@
 package com.saat.auto.cafe.common.models;
 
-import com.saat.auto.cafe.common.entitys.ClientVehicle;
+import com.saat.auto.cafe.common.entitys.Vehicle;
 
 import org.joda.time.DateTime;
 
@@ -16,27 +16,21 @@ import lombok.Data;
  */
 @Builder
 @Data
-@ApiModel(description = "The Client Vehicle Data Model")
-public class ClientVehiclesModel {
+@ApiModel(description = "The DealerShip Vehicle Data Model")
+public class VehicleModel {
 
     @ApiModelProperty(
             position = 1,
             required = true,
-            value = "The Client Id"
+            value = "The DealerShip Id"
     )
-    private String clientId;
-    @ApiModelProperty(
-            position = 2,
-            required = true,
-            value = "The Vehicle Id"
-    )
-    private String vehicleId;
+    private String dealerId;
     @ApiModelProperty(
             position = 3,
             required = true,
             value = "The stock number"
     )
-    private int stockNum;
+    private String stockNum;
     @ApiModelProperty(
             position = 4,
             required = true,
@@ -46,41 +40,47 @@ public class ClientVehiclesModel {
     @ApiModelProperty(
             position = 5,
             required = true,
+            value = "Detail Description of the Vehicle"
+    )
+    private String description;
+    @ApiModelProperty(
+            position = 6,
+            required = true,
             value = "Vehicle Price"
     )
     private double price;
     @ApiModelProperty(
-            position = 6,
+            position = 7,
             required = true,
             value = "Vehicle Detail"
     )
     private VehicleDetailModel details;
     @ApiModelProperty(
-            position = 7,
+            position = 8,
             required = true,
             value = "location"
     )
     private LocationModel location;
     @ApiModelProperty(
-            position = 8,
+            position = 9,
             required = true,
             value = "User who added the Vehicle to the System"
     )
     private String createdBy;
     @ApiModelProperty(
-            position = 9,
+            position = 10,
             required = true,
             value = "The created DateTime"
     )
     private String createdDtm;
     @ApiModelProperty(
-            position = 10,
+            position = 11,
             required = true,
             value ="User who modified the Vehicle to the System"
     )
     private String modifiedBy;
     @ApiModelProperty(
-            position = 11,
+            position = 12,
             required = true,
             value = "The modified DateTime"
     )
@@ -90,22 +90,21 @@ public class ClientVehiclesModel {
      * Method to covert the model object to the entity object
      * @return
      */
-    public ClientVehicle toEntity(){
+    public Vehicle toEntity(){
 
-        return null;
-
-//        return ClientVehicle.builder()
-//                .clientId(UUID.fromString(clientId))
-//                .vehicleId(UUID.fromString(vehicleId))
-//                .stockNum(stockNum)
-//                .shortDesc(shortDesc)
-//                .price(price)
-//                .details(details.toEntity())
-//                .location(location.toEntity())
-//                .createdBy(createdBy)
-//                .createdDtm(DateTime.parse(createdDtm))
-//                .modifiedBy(modifiedBy)
-//                .modifiedDtm(DateTime.parse(modifiedDtm)).build();
+        Vehicle cv = new Vehicle();
+        cv.setDealerId(UUID.fromString(dealerId));
+        cv.setStockNum(stockNum);
+        cv.setShortDesc(shortDesc);
+        cv.setDescription(description);
+        cv.setPrice(price);
+        cv.setDetails(details.toEntity());
+        cv.setLocation(location.toEntity());
+        cv.setCreatedBy(createdBy);
+        cv.setCreatedDtm(DateTime.parse(createdDtm).toDate());
+        cv.setModifiedBy(modifiedBy);
+        cv.setModifiedDtm(DateTime.parse(modifiedDtm).toDate());
+        return cv;
 
 
     }

@@ -12,15 +12,15 @@ import lombok.Data;
  */
 @Builder
 @Data
-@ApiModel(description = "Client Vehicles Collection Model")
-public class ClientVehicleCollectionModel {
+@ApiModel(description = "DealerShip Vehicles Collection Model")
+public class VehicleModelCollection {
 
     @ApiModelProperty(
             position = 1,
             required = true,
-            value = "An array of Client Vehicles"
+            value = "An array of DealerShip Vehicles"
     )
-    private List<ClientVehiclesModel> clientVehicles;
+    private List<VehicleModel> clientVehicles;
 
 
     public static String getCollectionCacheKey(String clientId){
@@ -28,4 +28,5 @@ public class ClientVehicleCollectionModel {
         return String.format("%s-collection",clientId);
 
     }
+
 }

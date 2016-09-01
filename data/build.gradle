@@ -23,15 +23,11 @@ task('migrate', dependsOn: 'classes', type: JavaExec) {
 }
 
 
-task('hello') <<
-        {
-            println "hello"
-        }
-
-dependencies {
-    compile group: 'org.springframework', name: 'spring-jdbc', version: '4.2.6.RELEASE'
-    compile group: 'org.assertj', name: 'assertj-core', version: '3.4.1'
-}
+//
+//dependencies {
+////    compile group: 'org.springframework', name: 'spring-jdbc', version: '4.2.6.RELEASE'
+////    compile group: 'org.assertj', name: 'assertj-core', version: '3.4.1'
+//}
 
 
 

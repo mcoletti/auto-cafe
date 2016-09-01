@@ -28,10 +28,15 @@ public class LocationModel {
     )
     private AddressModel address;
 
+    /**
+     * Covert Model to Entity object
+     * @return
+     */
     public Location toEntity() {
 
-        return null; // Location.builder()
-//                .name(name)
-//                .address(address.toEntity()).build();
+        Location l = new Location();
+        l.setName(name);
+        l.setAddress(address.toEntity());
+        return l;
     }
 }

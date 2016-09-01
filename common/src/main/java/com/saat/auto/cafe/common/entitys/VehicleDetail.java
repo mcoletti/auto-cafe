@@ -36,11 +36,15 @@ public class VehicleDetail {
     @Field
     private double mileage;
 
+    /**
+     * Convert Entity object to Model Object
+     * @return
+     */
     public VehicleDetailModel toModel(){
 
 
         return VehicleDetailModel.builder()
-                .bodyStyle(bodyStyle).intColor(intColor)
+                .bodyStyle(bodyStyle).intColor(intColor).extColor(extColor)
                 .trim(trim).year(year)
                 .make(make).model(model)
                 .mileage(mileage).build();

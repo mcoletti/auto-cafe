@@ -30,15 +30,5 @@ public class AutoCafeConstants {
                 public static final String VEHICLE_ID = "vehicle_id";
             }
         }
-
-        public static class ClientVehiclesTbl {
-            public static final String NAME = "client_vehicles";
-
-            public class Columns {
-
-                public static final String CLIENT_ID = "client_id";
-                public static final String VEHICLE_ID = "vehicle_id";
-            }
-        }
     }
 }

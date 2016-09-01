@@ -1,13 +1,14 @@
 package com.saat.auto.cafe.common.interfaces;
 
-import com.saat.auto.cafe.common.entitys.ClientVehicle;
-import com.saat.auto.cafe.common.entitys.ClientVehicleCollection;
+import com.saat.auto.cafe.common.entitys.Vehicle;
+import com.saat.auto.cafe.common.entitys.VehicleCollection;
+import com.saat.auto.cafe.common.entitys.VehicleImage;
 import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
-import com.saat.auto.cafe.common.entitys.VehicleImages;
-import com.saat.auto.cafe.common.models.ClientVehicleCollectionModel;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 
 /**
  * Created by mcoletti on 5/9/16.
@@ -29,7 +30,7 @@ public interface VehicleDao{
 //     * @return an instance of the VehicleDetailModel record
 //     * @throws ClientVehicleException is anything goes wrong
 //     */
-//    VehicleDetail get(UUID vehicleId, UUID clientId) throws ClientVehicleException;
+//    VehicleDetail get(UUID vehicleId, UUID dealerId) throws ClientVehicleException;
 
 //    /**
 //     * Method to get a Vehicle Inventory record based off keyName
@@ -39,50 +40,52 @@ public interface VehicleDao{
 //     */
 //    VehicleDetail get(String keyName) throws ClientVehicleException;
 //
-//    List<ClientVehicle> getByClientId(UUID clientId);
+//    List<Vehicle> qryByDealerId(UUID dealerId);
 
 
     /**
      * Method that add a New Vehicle image
-     * @param vi the VehicleImages object to add
+     * @param vi the VehicleImage object to add
      * @return the newly create Vehicle image Object
      */
-    VehicleImages insertVehicleImage(VehicleImages vi) throws ClientVehicleException;
+    VehicleImage insertVehicleImage(VehicleImage vi) throws ClientVehicleException;
 
     /**
      * Method to get a list of the Vehicle Images
      * @param vehicleId the Vehicle Id to get
-     * @return an array of VehicleImages for the given Vehicle Id
+     * @return an array of VehicleImage for the given Vehicle Id
      */
-    List<VehicleImages> getVehicleImageList(UUID vehicleId) throws ClientVehicleException;
+    List<VehicleImage> getVehicleImageList(UUID vehicleId) throws ClientVehicleException;
 
     /**
-     * Method that adds or updates a Client Vehicle into the DB
-     * @param cv the Client Vehicle Object to Add/Update
-     * @return the newly added or updated Client Vehicle oject
+     * Method that adds or updates a DealerShip Vehicle into the DB
+     * @param cv the DealerShip Vehicle Object to Add/Update
+     * @return the newly added or updated DealerShip Vehicle oject
      * @throws ClientVehicleException is anything goes wrong
      */
-    ClientVehicle upsetClientVehicle(ClientVehicle cv) throws ClientVehicleException;
+    Vehicle upsertClientVehicle(Vehicle cv) throws ClientVehicleException;
 
     /**
-     * Method to get a list of Client Vehicle by Client Id
-     * @param clientId the Client Id
-     * @return and Array of ClientVehicle
+     * Method to get a list of DealerShip Vehicle by DealerShip Id
+     * @param dealerId the DealerShip Id
+     * @return and Array of Vehicle
      * @throws ClientVehicleException if anything goes wrong
      */
-    ClientVehicleCollection get(UUID clientId) throws ClientVehicleException;
-//    List<ClientVehicle> get(UUID clientId) throws ClientVehicleException;
+    VehicleCollection get(UUID dealerId) throws ClientVehicleException;
+//    List<Vehicle> get(UUID dealerId) throws ClientVehicleException;
 
 
 
     /**
-     * Method to get a Client Vehicle from the DB based off clientId and vehicleId
-     * @param clientId the client UUID
-     * @param vehicleId the vehicle UUID
-     * @return an instance of the ClientVehicle object
+     * Method to get a DealerShip Vehicle from the DB based off dealerId and vehicleId
+     * @param dealerId the client UUID
+     * @param stockNum the vehicle StockNum
+     * @return an instance of the Vehicle object
      * @throws ClientVehicleException if anything goes wrong
      */
-    ClientVehicle get(UUID clientId, UUID vehicleId) throws ClientVehicleException;
+    Vehicle get(UUID dealerId, String stockNum) throws ClientVehicleException;
+
+
 
 
 }

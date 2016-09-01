@@ -282,7 +282,7 @@
       </index>
      </folder>
     </table>
-    <table id="TAB89" populated="true" UUID="52c49907-800f-42eb-b817-40497e88bfad" name="client" objectType="TABLE" physicalName="client" >
+    <table id="TAB89" populated="true" UUID="52c49907-800f-42eb-b817-40497e88bfad" name="dealerShip" objectType="TABLE" physicalName="dealerShip" >
      <remarks></remarks>
      <folder id="FOLTAB891" populated="true" name="Columns" physicalName="Columns" type="1">
       <column id="COL90" populated="true" UUID="22990a0d-239b-4d88-8623-c0d835c0554a" autoIncrement="false" defaultValue="" name="id" nullable="0" physicalName="id" precision="10" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="INT" type="4" >
@@ -655,7 +655,7 @@
     </index>
    </folder>
   </table>
-  <table id="TAB217" populated="true" UUID="7aa3e69f-fcc3-4224-b05c-f3a81d0726c5" name="client" objectType="TABLE" physicalName="client" >
+  <table id="TAB217" populated="true" UUID="7aa3e69f-fcc3-4224-b05c-f3a81d0726c5" name="dealerShip" objectType="TABLE" physicalName="dealerShip" >
    <remarks></remarks>
    <folder id="FOLTAB2171" populated="true" name="Columns" physicalName="Columns" type="1">
     <column id="COL218" populated="true" UUID="bc1c47af-3343-4c08-9ae2-9178e3585347" autoIncrement="true" autoIncrementSequenceName="client_id_seq" defaultValue="" name="id" nullable="0" physicalName="id" precision="0" primaryKeySeq="0" referenceCount="1" scale="0" sourceDataTypeName="UserDefinedSQLType" type="4" userDefinedTypeUUID="63b011c7-c81f-4c75-8271-632b3c87f727" >

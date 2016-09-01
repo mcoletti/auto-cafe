@@ -1,14 +1,15 @@
 package com.saat.auto.cafe.data;
 
-import com.saat.auto.cafe.common.ApplicationProps;
+import com.saat.auto.cafe.data.dao.CassandraInstanceImpl;
+import com.saat.auto.cafe.data.dao.impl.VehicleDaoImpl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastConfigResourceCondition;
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastInstanceFactory;
 import org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -26,15 +27,11 @@ import org.springframework.context.annotation.PropertySource;
         HazelcastInstanceFactory.class
 })
 @ComponentScan(value = {"com.saat.auto.cafe.data.*"})
-@PropertySource("classpath:props/application.yml")
-@Import(
-       ApplicationProps.class
-)
+@EnableConfigurationProperties(DbProperties.class)
 public class DataBeans {
 
-    @Autowired
-    ApplicationProps applicationProps;
-
+//    @Autowired
+//    DbProperties dbProperties;
 
 
 }

@@ -55,21 +55,9 @@ public class Address {
     }
 
     /**
-     * Static Helper Method that will convert from a UdtValue to an Address Object
+     * Convert Entity object to Model object
+     * @return
      */
-    public static Address fromUdtValue(UDTValue udtValue) {
-
-        return null;
-//        return Address.builder()
-//                .street1(udtValue.getString("street1"))
-//                .street2(udtValue.getString("street2"))
-//                .city(udtValue.getString("city"))
-//                .state(udtValue.getString("state"))
-//                .zipCode(udtValue.getInt("zip_code"))
-//                .phones(udtValue.getSet("phones",String.class)).build();
-    }
-
-
     public AddressModel toModel() {
         return AddressModel.builder()
                 .street1(street1)

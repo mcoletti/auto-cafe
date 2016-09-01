@@ -14,9 +14,12 @@ repositories {
     }
 }
 
+
+
 task copyProps {
     dependsOn 'copyPropsData'
     dependsOn 'copyPropsService'
+    dependsOn 'copyPropsApi'
 }
 
 task copyPropsData(type: Sync) {
@@ -28,6 +31,12 @@ task copyPropsService(type: Sync) {
 
     from 'common/properties/application.yml'
     into 'service/src/main/resources/props'
+}
+
+task copyPropsApi(type: Sync) {
+
+    from 'common/properties/application.yml'
+    into 'api/src/main/resources/props'
 }
 
 
@@ -53,6 +62,7 @@ subprojects {
         compile group: 'org.postgresql', name: 'postgresql', version: '9.4.1208'
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.3.5.RELEASE'
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.3.5.RELEASE'
+//        compile group: 'org.springframework.cloud', name: 'spring-cloud-config-server', version: '1.2.0.M1'
         compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.4.0'
         compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.4.0'
         compile group: 'io.swagger', name: 'swagger-jaxrs', version: '1.5.8'
@@ -136,6 +146,7 @@ project(':service') {
 
 dependencies {
     testCompile group: 'org.testng', name: 'testng', version: '6.9.10'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.4.1'
     compile "org.projectlombok:lombok:1.16.8"
 //    // tag::jetty[]
 //    compile("org.springframework.boot:spring-boot-starter-web") {

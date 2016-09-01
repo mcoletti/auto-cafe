@@ -2,31 +2,22 @@ package com.saat.auto.cafe.service.cache;
 
 import com.google.gson.Gson;
 
-import com.hazelcast.config.InMemoryFormat;
-import com.hazelcast.config.MapConfig;
-import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
 import com.hazelcast.monitor.LocalMapStats;
-import com.saat.auto.cafe.common.AutoCafeConstants;
+import com.saat.auto.cafe.service.HazelCastProperties;
 import com.saat.auto.cafe.common.interfaces.CacheService;
 import com.saat.auto.cafe.common.interfaces.HazelCastService;
 import com.saat.auto.cafe.common.models.CacheNode;
 import com.saat.auto.cafe.common.models.CacheStats;
-import com.saat.auto.cafe.service.HazelCastConfig;
 
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
@@ -48,7 +39,7 @@ public class HazelCastCacheServiceImpl implements CacheService {
      * Default Constructor
      */
     @Autowired
-    public HazelCastCacheServiceImpl(HazelCastService hazelCastService, HazelCastConfig config) {
+    public HazelCastCacheServiceImpl(HazelCastService hazelCastService, HazelCastProperties config) {
         this.hazelCastService = hazelCastService;
         this.gson = new Gson();
         this.CACHE_MAP = config.getCacheName();

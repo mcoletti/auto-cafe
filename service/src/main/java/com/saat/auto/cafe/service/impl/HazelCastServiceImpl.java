@@ -6,10 +6,10 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
 import com.hazelcast.monitor.LocalMapStats;
+import com.saat.auto.cafe.service.HazelCastProperties;
 import com.saat.auto.cafe.common.interfaces.HazelCastService;
 import com.saat.auto.cafe.common.models.HzCluster;
 import com.saat.auto.cafe.common.models.HzMember;
-import com.saat.auto.cafe.service.HazelCastConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +29,7 @@ public class HazelCastServiceImpl implements HazelCastService {
     private final HazelcastInstance hazelcastInstance;
 
     @Autowired
-    public HazelCastServiceImpl(HazelCastConfig config) {
+    public HazelCastServiceImpl(HazelCastProperties config) {
 
         this.hazelcastInstance = Hazelcast.newHazelcastInstance();
         MapConfig mapConfig = new MapConfig();
@@ -38,7 +38,6 @@ public class HazelCastServiceImpl implements HazelCastService {
         mapConfig.setName(config.getCacheName());
 //        mapConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
         hazelcastInstance.getConfig().addMapConfig(mapConfig);
-
     }
 
     @Override

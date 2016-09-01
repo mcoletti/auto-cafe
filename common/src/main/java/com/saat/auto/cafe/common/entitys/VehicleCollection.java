@@ -10,9 +10,9 @@ import lombok.Data;
  */
 @Builder
 @Data
-public class ClientVehicleCollection {
+public class VehicleCollection {
 
 
-    private List<ClientVehicle> clientVehicles;
+    private List<Vehicle> vehicles;
 
 }

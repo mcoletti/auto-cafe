@@ -1,7 +1,7 @@
 package com.saat.auto.cafe.data.dao.impl;
 
-import com.saat.auto.cafe.common.entitys.ClientVehicle;
-import com.saat.auto.cafe.common.entitys.ClientVehicleCollection;
+import com.saat.auto.cafe.common.entitys.Vehicle;
+import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.interfaces.VehicleDao;
 import com.saat.auto.cafe.common.entitys.VehicleDetail;
 import com.saat.auto.cafe.data.TestBase;
@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,29 +27,27 @@ public class VehicleDaoImplTest extends TestBase {
     private VehicleDetail VD_ROOT;
     private VehicleDetail VD_LOCAL;
 
-    private ClientVehicle ROOT_CV;
-    private ClientVehicle LOCAL_CV;
-    private UUID clientId;
+    private Vehicle ROOT_CV;
+    private Vehicle LOCAL_CV;
+    private UUID dealerId;
 
     @Autowired
     VehicleDao vehicleDao;
 
     @BeforeClass
     public void init() {
-        clientId = UUID.fromString("65026b3e-a833-4263-81a5-dedc2a6efed5");
+        dealerId = UUID.fromString("ad44d405-8240-4035-98c9-2b9b528b2e86");
     }
 
 
     @Test
     public void testUpsetClientVehicleNew() throws Exception {
         setRootCV();
-        LOCAL_CV = vehicleDao.upsetClientVehicle(ROOT_CV);
+        LOCAL_CV = vehicleDao.upsertClientVehicle(ROOT_CV);
         assertThat(LOCAL_CV).isNotNull();
-        assertThat(LOCAL_CV.getClientId()).isEqualTo(ROOT_CV.getClientId());
-        assertThat(LOCAL_CV.getVehicleId()).isEqualTo(ROOT_CV.getVehicleId());
+        assertThat(LOCAL_CV.getDealerId()).isEqualTo(ROOT_CV.getDealerId());
         assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
-//
-//
+
         String modifiedUser = "testUser2";
         LOCAL_CV.setModifiedBy(modifiedUser);
 
@@ -65,63 +63,49 @@ public class VehicleDaoImplTest extends TestBase {
 
         LOCAL_CV.setDetails(vehicleDetail);
 
-        LOCAL_CV = vehicleDao.upsetClientVehicle(LOCAL_CV);
+        LOCAL_CV = vehicleDao.upsertClientVehicle(LOCAL_CV);
         assertThat(LOCAL_CV).isNotNull();
 
         assertThat(LOCAL_CV.getModifiedBy()).isEqualTo(modifiedUser);
         assertThat(LOCAL_CV.getDetails().getMake()).isEqualTo("honda");
-        assertThat(LOCAL_CV.getClientId()).isEqualTo(ROOT_CV.getClientId());
-        assertThat(LOCAL_CV.getVehicleId()).isEqualTo(ROOT_CV.getVehicleId());
+        assertThat(LOCAL_CV.getDealerId()).isEqualTo(ROOT_CV.getDealerId());
         assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
 
     }
 
-    @Test
-    public void testUpsetClientVehicleUpdate() throws Exception {
-        setRootCV();
 
-        String updateUser = "testUser33";
-        ROOT_CV.setModifiedBy(updateUser);
-
-
-        LOCAL_CV = vehicleDao.upsetClientVehicle(ROOT_CV);
-        assertThat(LOCAL_CV).isNotNull();
-        assertThat(LOCAL_CV.getClientId()).isEqualTo(ROOT_CV.getClientId());
-        assertThat(LOCAL_CV.getVehicleId()).isEqualTo(ROOT_CV.getVehicleId());
-        assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
-
-
-    }
 
     @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
-    public void testGetByClientId() throws Exception {
+    public void testGetByDealerId() throws Exception {
 
-        ClientVehicleCollection result = vehicleDao.get(ROOT_CV.getClientId());
+        VehicleCollection result = vehicleDao.get(ROOT_CV.getDealerId());
         assertThat(result).isNotNull();
-        assertThat(result.getClientVehicles()).isNotNull();
-        assertThat(result.getClientVehicles().size()).isGreaterThan(0);
+        assertThat(result.getVehicles()).isNotNull();
+        assertThat(result.getVehicles().size()).isGreaterThan(0);
     }
 
     @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
-    public void testGetByClientIdAndVehicleId() throws Exception {
-        LOCAL_CV = vehicleDao.get(ROOT_CV.getClientId(), ROOT_CV.getVehicleId());
+    public void testGetByDealerIdAndVehicleId() throws Exception {
+        LOCAL_CV = vehicleDao.get(ROOT_CV.getDealerId(), ROOT_CV.getStockNum());
         assertThat(LOCAL_CV).isNotNull();
-        assertThat(LOCAL_CV.getClientId()).isEqualTo(ROOT_CV.getClientId());
-        assertThat(LOCAL_CV.getVehicleId()).isEqualTo(ROOT_CV.getVehicleId());
+        assertThat(LOCAL_CV.getDealerId()).isEqualTo(ROOT_CV.getDealerId());
         assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
     }
 
 
-    private ClientVehicle setRootCV() {
+    private Vehicle setRootCV() {
+
+        Random random=new Random();
+        int randomNumber=(random.nextInt(65536)-32768);
 
         DateTime createdDtm = DateTime.now();
         UUID timeUuid = UUIDGen.getTimeUUID(createdDtm.getMillis());
 
-        ROOT_CV = new ClientVehicle();
-        ROOT_CV.setClientId(clientId);
-        ROOT_CV.setVehicleId(UUID.randomUUID());
-        ROOT_CV.setStockNum(12345);
+        ROOT_CV = new Vehicle();
+        ROOT_CV.setDealerId(dealerId);
+        ROOT_CV.setStockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase());
         ROOT_CV.setShortDesc("coolCar");
+        ROOT_CV.setDescription("Has CD/DVD player and Sunroof and cool stuff");
         ROOT_CV.setPrice(13499);
         ROOT_CV.setDetails(getVD());
         ROOT_CV.setLocation(getLoc());
@@ -130,7 +114,7 @@ public class VehicleDaoImplTest extends TestBase {
         ROOT_CV.setModifiedBy("testUser");
         ROOT_CV.setModifiedDtm(DateTime.now().toDate());
 //
-//                .clientId(clientId).vehicleId(UUID.randomUUID())
+//                .dealerId(dealerId).vehicleId(UUID.randomUUID())
 //                .stockNum(12345)
 //                .shortDesc("Cool Car")
 //                .price(13499)
