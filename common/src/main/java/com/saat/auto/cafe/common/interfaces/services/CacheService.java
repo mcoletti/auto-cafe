@@ -1,4 +1,4 @@
-package com.saat.auto.cafe.common.interfaces;
+package com.saat.auto.cafe.common.interfaces.services;
 
 import com.google.gson.Gson;
 

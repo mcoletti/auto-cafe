@@ -1,4 +1,4 @@
-package com.saat.auto.cafe.common.interfaces;
+package com.saat.auto.cafe.common.accessors;
 
 import com.datastax.driver.mapping.Result;
 import com.datastax.driver.mapping.annotations.Accessor;
@@ -13,9 +13,9 @@ import java.util.UUID;
 @Accessor
 public interface VehicleAccessor {
 
-    @Query("select * from dealer_vehicles where dealer_id = ?")
-    Result<Vehicle> qryByDealerId(UUID clientId);
+    @Query("select * from vehicles where dealership_id = ?")
+    Result<Vehicle> qryByDealerShipId(UUID clientId);
 
-    @Query("select * from dealer_vehicles where dealer_id = ? and stock_num = ?")
-    Result<Vehicle> qryByDealerIdAndVehicleId(UUID clientId, String stockNum);
+    @Query("select * from vehicles where dealership_id = ? and stock_num = ?")
+    Result<Vehicle> qryByDealerShipIdAndVehicleId(UUID clientId, String stockNum);
 }

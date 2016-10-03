@@ -4,9 +4,9 @@ import com.saat.auto.cafe.common.entitys.Vehicle;
 import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
 import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
-import com.saat.auto.cafe.common.interfaces.CacheService;
-import com.saat.auto.cafe.common.interfaces.VehicleDao;
-import com.saat.auto.cafe.common.interfaces.VehicleService;
+import com.saat.auto.cafe.common.interfaces.services.CacheService;
+import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
+import com.saat.auto.cafe.common.interfaces.services.VehicleService;
 import com.saat.auto.cafe.common.models.VehicleModelCollection;
 import com.saat.auto.cafe.common.models.VehicleModel;
 
@@ -45,7 +45,7 @@ public class VehicleServiceImpl implements VehicleService {
 
 
         try {
-            Vehicle cv = vehicleDao.upsertClientVehicle(cvm.toEntity());
+            Vehicle cv = vehicleDao.upsert(cvm.toEntity());
             cvm = cv.toModel();
         } catch (ClientVehicleException e) {
             e.printStackTrace();

@@ -1,8 +1,8 @@
 package com.saat.auto.cafe.service.impl;
 
-import com.saat.auto.cafe.common.interfaces.CacheService;
-import com.saat.auto.cafe.common.interfaces.DealerShipDao;
-import com.saat.auto.cafe.common.interfaces.DealerShipService;
+import com.saat.auto.cafe.common.interfaces.services.CacheService;
+import com.saat.auto.cafe.common.interfaces.daos.DealerShipDao;
+import com.saat.auto.cafe.common.interfaces.services.DealerShipService;
 import com.saat.auto.cafe.common.models.DealerShipModel;
 
 import org.slf4j.Logger;

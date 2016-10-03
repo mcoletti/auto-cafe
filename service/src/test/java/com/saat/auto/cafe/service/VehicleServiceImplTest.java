@@ -1,15 +1,15 @@
 package com.saat.auto.cafe.service;
 
-import com.saat.auto.cafe.common.interfaces.VehicleDao;
-import com.saat.auto.cafe.common.interfaces.VehicleService;
-import com.saat.auto.cafe.common.models.VehicleModelCollection;
+import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
+import com.saat.auto.cafe.common.interfaces.services.VehicleService;
 import com.saat.auto.cafe.common.models.VehicleModel;
-import com.saat.auto.cafe.common.models.VehicleDetailModel;
+import com.saat.auto.cafe.common.models.VehicleModelCollection;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,44 +25,29 @@ public class VehicleServiceImplTest extends TestBase {
     @Autowired
     VehicleService vehicleService;
 
-
-    @BeforeClass
-    public void init() {
-
-//        CacheService cacheService = new HazelCastCacheServiceImpl(hazelCastService);
-//        vehicleService = new VehicleServiceImpl(cacheService, vehicleDao);
-
-    }
+    public VehicleModel vehicleRoot;
 
     @Test
     public void testUpsertDealerVehicle() throws Exception {
 
-        setROOT_DVM();
-        VehicleModel vehicle = vehicleService.upsertDealerShipVehicle(ROOT_DVM);
+        createVehicleRoot();
+        VehicleModel vehicle = vehicleService.upsertDealerShipVehicle(vehicleRoot);
         assertThat(vehicle).isNotNull();
-        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_DVM.getDealerId());
-        assertThat(vehicle.getStockNum()).isEqualTo(ROOT_DVM.getStockNum());
+        assertThat(vehicle.getDealerId()).isEqualTo(vehicleRoot.getDealerId());
+        assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
 
 
 
-        vehicle.setModifiedBy("micah");
+        vehicle.setModifiedUser("micah");
         vehicle.setModifiedDtm(DateTime.now().toString());
-
-        VehicleDetailModel detailModel = vehicle.getDetails();
-
-        detailModel.setMake("honda");
-        detailModel.setModel("accord");
-        detailModel.setYear(2016);
-
-        vehicle.setDetails(detailModel);
-
-
+        vehicle.setPrice(13500);
+        vehicle.setPrice(24500);
 
         vehicle = vehicleService.upsertDealerShipVehicle(vehicle);
         assertThat(vehicle).isNotNull();
-        assertThat(vehicle.getModifiedBy()).isEqualTo("micah");
-        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_DVM.getDealerId());
-        assertThat(vehicle.getStockNum()).isEqualTo(ROOT_DVM.getStockNum());
+        assertThat(vehicle.getModifiedUser()).isEqualTo("micah");
+        assertThat(vehicle.getDealerId()).isEqualTo(vehicleRoot.getDealerId());
+        assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
 
 
 
@@ -72,7 +57,7 @@ public class VehicleServiceImplTest extends TestBase {
     @Test(dependsOnMethods = {"testUpsertDealerVehicle"})
     public void testGetByDealerId() throws Exception {
 
-        VehicleModelCollection dvmc = vehicleService.get(ROOT_DVM.getDealerId());
+        VehicleModelCollection dvmc = vehicleService.get(vehicleRoot.getDealerId());
         assertThat(dvmc).isNotNull();
         assertThat(dvmc.getClientVehicles()).isNotNull();
         assertThat(dvmc.getClientVehicles().size()).isGreaterThan(0);
@@ -80,52 +65,32 @@ public class VehicleServiceImplTest extends TestBase {
 
     @Test(dependsOnMethods = {"testUpsertDealerVehicle"})
     public void testGetByDealerIdAndStockNum() throws Exception {
-        VehicleModel vehicle = vehicleService.get(ROOT_DVM.getDealerId(),ROOT_DVM.getStockNum());
+        VehicleModel vehicle = vehicleService.get(vehicleRoot.getDealerId(), vehicleRoot.getStockNum());
         assertThat(vehicle).isNotNull();
-        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_DVM.getDealerId());
-        assertThat(vehicle.getStockNum()).isEqualTo(ROOT_DVM.getStockNum());
+        assertThat(vehicle.getDealerId()).isEqualTo(vehicleRoot.getDealerId());
+        assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
     }
-
-    //    @Test
-//    public void testUpsertVehicleDetails() throws Exception {
-//
-//        setROOT_VDM(UUID.randomUUID().toString());
-//        VehicleDetailModel vehicle = vehicleService.upsertVehicle(ROOT_VDM);
-//        assertThat(vehicle).isNotNull();
-//        assertThat(vehicle.getId()).isEqualTo(ROOT_VDM.getId());
-//        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_VDM.getDealerId());
-//    }
-//
-//    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
-//    public void testGetVehicleDetailsModelWithCache() throws Exception {
-//
-//
-//        VehicleDetailModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(), ROOT_VDM.getDealerId());
-//        assertThat(vehicle).isNotNull();
-//        assertThat(vehicle.getId()).isEqualTo(ROOT_VDM.getId());
-//        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_VDM.getDealerId());
-//
-//    }
-//
-//    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
-//    public void testGetVehicleDetailsModelCacheReset() throws Exception {
-//
-//
-//        VehicleDetailModel vehicle = vehicleService.getVehicleDetailsModel(ROOT_VDM.getId(), ROOT_VDM.getDealerId(), true);
-//        assertThat(vehicle).isNotNull();
-//        assertThat(vehicle.getId()).isEqualTo(ROOT_VDM.getId());
-//        assertThat(vehicle.getDealerId()).isEqualTo(ROOT_VDM.getDealerId());
-//
-//    }
-//
-//    @Test(dependsOnMethods = {"testUpsertVehicleDetails"})
-//    public void testGetClientVehicles() throws Exception {
-//
-//        VehicleModelCollection collection = vehicleService.getVehicles(ROOT_VDM.getDealerId());
-//        assertThat(collection).isNotNull();
-//        assertThat(collection.getVehicles()).isNotNull();
-//
-//
-//    }
+    public void createVehicleRoot() {
+        vehicleRoot = VehicleModel.builder()
+                .dealerId("ad44d405-8240-4035-98c9-2b9b528b2e86")
+                .stockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase())
+                .vin("1C4AJWAG6EL295921")
+                .options("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System")
+                .price(12000)
+                .invoiceAmount(10000)
+                .extColor("Black Clearcoat")
+                .intColor("Black")
+                .trim("")
+                .bodyStyle("SPORT UTILITY 2-DR")
+                .year(2013)
+                .make("Honda")
+                .model("Accord")
+                .mileage(23000)
+                .lotLocation("logan Utah")
+                .createdUser("testUser")
+                .createdDtm(DateTime.now().toString())
+                .modifiedUser("testUser")
+                .modifiedDtm(DateTime.now().toString()).build();
+    }
 
 }

@@ -19,10 +19,10 @@
 //        return DealerShip.builder()
 //                .id(row.getUUID("id"))
 //                .clientName(row.getString("client_name"))
-//                .createdBy(row.getString("created_by"))
+//                .createdUser(row.getString("created_by"))
 //                .createdDtm(new DateTime(row.getDate("created_dtm")))
-//                .modifiedBy(row.getString("modified_by"))
-//                .modifiedDtm(new DateTime(row.getDate("modified_dtm"))).build();
-////                .location(Location.fromUdtValue(row.getUDTValue("location"))).build();
+//                .modifiedUser(row.getString("modified_by"))
+//                .modified(new DateTime(row.getDate("modified_dtm"))).build();
+////                .locations(Location.fromUdtValue(row.getUDTValue("locations"))).build();
 //    }
 //}

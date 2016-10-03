@@ -20,18 +20,14 @@ public class VehicleImage {
 
 
     @PartitionKey
-    @Column(name = "vehicle_id")
-    private UUID vehicleId;
+    @Column(name = "dealership_id")
+    private UUID dealershipId;
+    @Column(name = "stock_num")
+    private String stockNum;
+    @Column(name = "img_url")
+    private String imgypeUrl;
     @Column(name = "img_type")
     private String imgType;
-    @Column(name = "img_name")
-    private String imgName;
-    @Column(name = "img_cdn_loc")
-    private String imgCdnLoc;
-    @Column(name = "img_size")
-    private int imgSize;
-    @Column(name = "img_suffix")
-    private String imgSuffix;
     @Column(name = "img_order")
     private int imgOrder;
 

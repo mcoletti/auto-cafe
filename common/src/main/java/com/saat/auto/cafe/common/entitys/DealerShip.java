@@ -19,7 +19,9 @@ import org.joda.time.DateTime;
 //import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 //
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -44,19 +46,20 @@ public class DealerShip {
 
     @PartitionKey
     private UUID id;
+    @Column(name = "client_id")
+    private UUID clientId;
     @Column
     private String name;
-    @Frozen
-    @Column(name = "locations")
-    private Map<String,Location> locations;
-    @Column(name = "created_by")
-    private String createdBy;
-    @Column(name = "created_dtm")
-    private Date createdDtm;
-    @Column(name = "modified_by")
-    private String modifiedBy;
-    @Column(name = "modified_dtm")
-    private Date modifiedDtm;
+    @Column
+    private List<Contact> contacts;
+    @Column(name = "created_user")
+    private String createdUser;
+    @Column
+    private UUID created;
+    @Column(name = "modified_user")
+    private String modifiedUser;
+    @Column
+    private UUID     modified;
 
 
 }

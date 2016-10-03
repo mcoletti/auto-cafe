@@ -1,4 +1,4 @@
-package com.saat.auto.cafe.common.interfaces;
+package com.saat.auto.cafe.common.interfaces.daos;
 
 import com.saat.auto.cafe.common.entitys.DealerShip;
 import com.saat.auto.cafe.common.exceptions.DaoException;

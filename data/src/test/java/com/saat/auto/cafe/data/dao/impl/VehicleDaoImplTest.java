@@ -2,8 +2,7 @@ package com.saat.auto.cafe.data.dao.impl;
 
 import com.saat.auto.cafe.common.entitys.Vehicle;
 import com.saat.auto.cafe.common.entitys.VehicleCollection;
-import com.saat.auto.cafe.common.interfaces.VehicleDao;
-import com.saat.auto.cafe.common.entitys.VehicleDetail;
+import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.data.TestBase;
 
 import org.apache.cassandra.utils.UUIDGen;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.util.Random;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,12 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class VehicleDaoImplTest extends TestBase {
 
 
-    //    private VehicleDao vehicleDao;
-    private VehicleDetail VD_ROOT;
-    private VehicleDetail VD_LOCAL;
 
-    private Vehicle ROOT_CV;
-    private Vehicle LOCAL_CV;
+    private Vehicle vehicleRoot;
+    private Vehicle vehicle;
     private UUID dealerId;
 
     @Autowired
@@ -43,33 +38,23 @@ public class VehicleDaoImplTest extends TestBase {
     @Test
     public void testUpsetClientVehicleNew() throws Exception {
         setRootCV();
-        LOCAL_CV = vehicleDao.upsertClientVehicle(ROOT_CV);
-        assertThat(LOCAL_CV).isNotNull();
-        assertThat(LOCAL_CV.getDealerId()).isEqualTo(ROOT_CV.getDealerId());
-        assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
+        vehicle = vehicleDao.upsert(vehicleRoot);
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
+        assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
 
         String modifiedUser = "testUser2";
-        LOCAL_CV.setModifiedBy(modifiedUser);
+        vehicle.setModifiedUser(modifiedUser);
 
-        VehicleDetail vehicleDetail = new VehicleDetail();
-        vehicleDetail.setBodyStyle("sedan");
-        vehicleDetail.setExtColor("blue");
-        vehicleDetail.setIntColor("brown");
-        vehicleDetail.setMake("honda");
-        vehicleDetail.setModel("accord");
-        vehicleDetail.setTrim("stuff");
-        vehicleDetail.setMileage(60000);
-        vehicleDetail.setYear(2015);
 
-        LOCAL_CV.setDetails(vehicleDetail);
 
-        LOCAL_CV = vehicleDao.upsertClientVehicle(LOCAL_CV);
-        assertThat(LOCAL_CV).isNotNull();
 
-        assertThat(LOCAL_CV.getModifiedBy()).isEqualTo(modifiedUser);
-        assertThat(LOCAL_CV.getDetails().getMake()).isEqualTo("honda");
-        assertThat(LOCAL_CV.getDealerId()).isEqualTo(ROOT_CV.getDealerId());
-        assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
+        vehicle = vehicleDao.upsert(vehicle);
+        assertThat(vehicle).isNotNull();
+
+        assertThat(vehicle.getModifiedUser()).isEqualTo(modifiedUser);
+        assertThat(vehicle.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
+        assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
 
     }
 
@@ -78,7 +63,7 @@ public class VehicleDaoImplTest extends TestBase {
     @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
     public void testGetByDealerId() throws Exception {
 
-        VehicleCollection result = vehicleDao.get(ROOT_CV.getDealerId());
+        VehicleCollection result = vehicleDao.get(vehicleRoot.getDealershipId());
         assertThat(result).isNotNull();
         assertThat(result.getVehicles()).isNotNull();
         assertThat(result.getVehicles().size()).isGreaterThan(0);
@@ -86,61 +71,42 @@ public class VehicleDaoImplTest extends TestBase {
 
     @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
     public void testGetByDealerIdAndVehicleId() throws Exception {
-        LOCAL_CV = vehicleDao.get(ROOT_CV.getDealerId(), ROOT_CV.getStockNum());
-        assertThat(LOCAL_CV).isNotNull();
-        assertThat(LOCAL_CV.getDealerId()).isEqualTo(ROOT_CV.getDealerId());
-        assertThat(LOCAL_CV.getStockNum()).isEqualTo(ROOT_CV.getStockNum());
+        vehicle = vehicleDao.get(vehicleRoot.getDealershipId(), vehicleRoot.getStockNum());
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
+        assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
     }
 
 
     private Vehicle setRootCV() {
 
-        Random random=new Random();
-        int randomNumber=(random.nextInt(65536)-32768);
-
         DateTime createdDtm = DateTime.now();
         UUID timeUuid = UUIDGen.getTimeUUID(createdDtm.getMillis());
 
-        ROOT_CV = new Vehicle();
-        ROOT_CV.setDealerId(dealerId);
-        ROOT_CV.setStockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase());
-        ROOT_CV.setShortDesc("coolCar");
-        ROOT_CV.setDescription("Has CD/DVD player and Sunroof and cool stuff");
-        ROOT_CV.setPrice(13499);
-        ROOT_CV.setDetails(getVD());
-        ROOT_CV.setLocation(getLoc());
-        ROOT_CV.setCreatedBy("testUser");
-        ROOT_CV.setCreatedDtm(DateTime.now().toDate());
-        ROOT_CV.setModifiedBy("testUser");
-        ROOT_CV.setModifiedDtm(DateTime.now().toDate());
-//
-//                .dealerId(dealerId).vehicleId(UUID.randomUUID())
-//                .stockNum(12345)
-//                .shortDesc("Cool Car")
-//                .price(13499)
-//                .details(getVD()).createdBy("testUser")
-//                .location(getLoc())
-//                .createdDtm(createdDtm)
-//                .modifiedBy("testUser").modifiedDtm(DateTime.now()).build();
-
-        return ROOT_CV;
+        vehicleRoot = new Vehicle();
+        vehicleRoot.setDealershipId(dealerId);
+        vehicleRoot.setStockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase());
+        vehicleRoot.setVin("1C4AJWAG6EL295921");
+        vehicleRoot.setOptions("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System");
+        vehicleRoot.setPrice(13499);
+        vehicleRoot.setInvoiceAmount(10000);
+        vehicleRoot.setExtColor("red");
+        vehicleRoot.setIntColor("black");
+        vehicleRoot.setTrim("Sport 4WD");
+        vehicleRoot.setBodyStyle("SEDAN 4-DR");
+        vehicleRoot.setMake("honda");
+        vehicleRoot.setModel("honda");
+        vehicleRoot.setYear(2013);
+        vehicleRoot.setLotLocation("Logan Utah Lot");
+        vehicleRoot.setMileage(60000);
+        vehicleRoot.setCreatedUser("testUser");
+        vehicleRoot.setCreated(timeUuid);
+        vehicleRoot.setModifiedUser("testUser");
+        vehicleRoot.setModified(timeUuid);
+        return vehicleRoot;
 
 
     }
 
-    private VehicleDetail getVD() {
 
-        VehicleDetail vd = new VehicleDetail();
-        vd.setBodyStyle("sedan");
-        vd.setExtColor("red");
-        vd.setIntColor("black");
-        vd.setMake("ford");
-        vd.setModel("focus");
-        vd.setTrim("stuff");
-        vd.setMileage(60000);
-        vd.setYear(2013);
-        return vd;
-
-
-    }
 }

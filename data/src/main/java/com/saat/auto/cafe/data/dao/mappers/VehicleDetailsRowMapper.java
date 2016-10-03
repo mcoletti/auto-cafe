@@ -22,13 +22,13 @@
 ////                .id(row.getUUID("id")).clientId(row.getUUID("client_id"))
 ////                .bodyStyle(row.getString("body_style")).extColor(row.getString("ext_color"))
 ////                .intColor(row.getString("int_color")).keyName(row.getString("key_name"))
-////                .location(Location.fromUdtValue(row.getUDTValue("location")))
+////                .locations(Location.fromUdtValue(row.getUDTValue("locations")))
 ////                .manufacture(row.getString("manufacture")).mileage(row.getString("mileage"))
 ////                .make(row.getString("make")).model(row.getString("model"))
 ////                .price(row.getDecimal("price")).stockNum(row.getInt("stock_num"))
 ////                .trim(row.getString("trim"))
-////                .createdBy(row.getString("created_by")).createdDtm(new DateTime(row.getDate("created_dtm")).toDate())
-////                .modifiedBy(row.getString("modified_by")).modifiedDtm(new DateTime(row.getDate("modified_dtm")).toDate())
+////                .createdUser(row.getString("created_by")).createdDtm(new DateTime(row.getDate("created_dtm")).toDate())
+////                .modifiedUser(row.getString("modified_by")).modified(new DateTime(row.getDate("modified_dtm")).toDate())
 ////                .build();
 //    }
 //}

@@ -2,9 +2,9 @@ package com.saat.auto.cafe.api;
 
 import com.saat.auto.cafe.data.DbProperties;
 import com.saat.auto.cafe.service.HazelCastProperties;
-import com.saat.auto.cafe.common.interfaces.CacheService;
-import com.saat.auto.cafe.common.interfaces.HazelCastService;
-import com.saat.auto.cafe.common.interfaces.VehicleDao;
+import com.saat.auto.cafe.common.interfaces.services.CacheService;
+import com.saat.auto.cafe.common.interfaces.services.HazelCastService;
+import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;

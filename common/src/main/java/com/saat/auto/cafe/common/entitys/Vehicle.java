@@ -6,9 +6,9 @@ import com.datastax.driver.mapping.annotations.Table;
 import com.saat.auto.cafe.common.AutoCafeConstants;
 import com.saat.auto.cafe.common.models.VehicleModel;
 
+import org.apache.cassandra.utils.UUIDGen;
 import org.joda.time.DateTime;
 
-import java.util.Date;
 import java.util.UUID;
 
 import lombok.Data;
@@ -25,7 +25,7 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
  * Created by mcoletti on 6/17/16.
  */
 @Table(
-        name = "dealer_vehicles",
+        name = "vehicles",
         readConsistency = AutoCafeConstants.READ_CONSITENCY,
         writeConsistency = AutoCafeConstants.WRITE_CONSITENCY
 )
@@ -34,29 +34,44 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 public class Vehicle {
 
     @PartitionKey
-    @Column(name = "dealer_id")
-    private UUID dealerId;
-//    @Column(name = "created")
-//    private UUID created;
+    @Column(name = "dealership_id")
+    private UUID dealershipId;
     @Column(name = "stock_num")
     private String stockNum;
-    @Column(name = "short_desc")
-    private String shortDesc;
-    @Column(name = "description")
-    private String description;
+    @Column(name = "vin")
+    private String vin;
+    @Column(name = "options")
+    private String options;
     @Column(name = "price")
     private double price;
-    @Column(name = "details")
-    private VehicleDetail details;
-    private Location location;
-    @Column(name = "created_by")
-    private String createdBy;
-    @Column(name = "created_dtm")
-    private Date createdDtm;
-    @Column(name = "modified_by")
-    private String modifiedBy;
-    @Column(name = "modified_dtm")
-    private Date modifiedDtm;
+    @Column(name = "invoice_amount")
+    private double invoiceAmount;
+    @Column(name = "ext_color")
+    private String extColor;
+    @Column(name = "int_color")
+    private String intColor;
+    @Column
+    private String trim;
+    @Column(name = "body_style")
+    private String bodyStyle;
+    @Column
+    private int year;
+    @Column
+    private String make;
+    @Column
+    private String model;
+    @Column
+    private double mileage;
+    @Column(name = "lot_location")
+    private String lotLocation;
+    @Column(name = "created_user")
+    private String createdUser;
+    @Column
+    private UUID created;
+    @Column(name = "modified_user")
+    private String modifiedUser;
+    @Column
+    private UUID modified;
 
     /**
      * Method to covent the Entity object to the Model Object
@@ -64,21 +79,22 @@ public class Vehicle {
      */
     public VehicleModel toModel(){
         return VehicleModel.builder()
-                .dealerId(dealerId.toString())
+                .dealerId(dealershipId.toString())
                 .stockNum(stockNum)
-                .shortDesc(shortDesc)
-                .description(description)
+                .vin(vin)
+                .options(options)
+                .invoiceAmount(invoiceAmount)
                 .price(price)
-                .details(details.toModel())
-                .location(location.toModel())
-                .createdBy(createdBy)
-                .createdDtm(new DateTime(createdDtm.getTime()).toString())
-                .modifiedBy(modifiedBy)
-                .modifiedDtm(new DateTime(modifiedDtm.getTime()).toString()).build();
+                .extColor(extColor).intColor(intColor)
+                .bodyStyle(bodyStyle).mileage(mileage)
+                .make(make).model(model).year(year)
+                .trim(trim)
+                .lotLocation(lotLocation)
+                .createdUser(createdUser)
+                .createdDtm(new DateTime(UUIDGen.unixTimestamp(created)).toString())
+                .modifiedUser(modifiedUser)
+                .modifiedDtm(new DateTime(UUIDGen.unixTimestamp(modified)).toString()).build();
 
-//        return VehicleModel.builder()
-//                .dealerId(dealerId.toString()).vehicleId(vehicleId.toString())
-//                .keyName(keyName).createdDtm(new DateTime(createdDtm.getTime()).toString()).build();
     }
 
 }

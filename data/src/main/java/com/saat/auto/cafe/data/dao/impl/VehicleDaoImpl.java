@@ -11,8 +11,8 @@ import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.entitys.VehicleImage;
 import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
-import com.saat.auto.cafe.common.interfaces.VehicleAccessor;
-import com.saat.auto.cafe.common.interfaces.VehicleDao;
+import com.saat.auto.cafe.common.accessors.VehicleAccessor;
+import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +56,8 @@ public class VehicleDaoImpl implements VehicleDao {
     public VehicleImage insertVehicleImage(VehicleImage vi) throws ClientVehicleException {
 
         try {
-//            vi = ci.getCassandraTemplate().insert(vi);
+            Mapper<VehicleImage> viMapper = ci.mappingManager().mapper(VehicleImage.class);
+            viMapper.save(vi);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ClientVehicleException(e);
@@ -78,14 +79,14 @@ public class VehicleDaoImpl implements VehicleDao {
 //            imageList = ci.getCassandraTemplate().query(s, new VehicleImagesRowMapper());
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Error Getting the image List for vehicleId: {} - {}", vehicleId, e.getMessage());
+            log.error("Error Getting the image List for dealershipId: {} - {}", vehicleId, e.getMessage());
             throw new ClientVehicleException(e);
         }
         return imageList;
     }
 
     @Override
-    public Vehicle upsertClientVehicle(Vehicle cv) throws ClientVehicleException {
+    public Vehicle upsert(Vehicle cv) throws ClientVehicleException {
 
 
         try {
@@ -107,13 +108,13 @@ public class VehicleDaoImpl implements VehicleDao {
 
         try {
 
-            Result<Vehicle> vehicles = vehicleAccessor.qryByDealerId(dealerId);
+            Result<Vehicle> vehicles = vehicleAccessor.qryByDealerShipId(dealerId);
             vehicleList = vehicles.all();
         } catch (Exception e) {
             e.printStackTrace();
         }
         VehicleCollection cvc = VehicleCollection.builder()
-                .dealerVehicles(vehicleList).build();
+                .vehicles(vehicleList).build();
 
         return cvc;
     }
@@ -124,14 +125,14 @@ public class VehicleDaoImpl implements VehicleDao {
         Vehicle cv;
 
         try {
-            Result<Vehicle> clientVehicles = vehicleAccessor.qryByDealerIdAndVehicleId(dealerId,stockNum);
+            Result<Vehicle> clientVehicles = vehicleAccessor.qryByDealerShipIdAndVehicleId(dealerId, stockNum);
             cv = clientVehicles.one();
         } catch (Exception e) {
             if (e.getMessage().contains("0 rows")) {
                 cv = null;
             } else {
                 e.printStackTrace();
-                log.error("Error getting the DealerShip Vehicle for dealerId: {} and StockNum: {} - {}", dealerId, stockNum, e.getMessage());
+                log.error("Error getting the DealerShip Vehicle for dealershipId: {} and StockNum: {} - {}", dealerId, stockNum, e.getMessage());
                 throw new ClientVehicleException(e);
             }
         }

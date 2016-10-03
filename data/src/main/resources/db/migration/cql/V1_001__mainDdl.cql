@@ -10,12 +10,61 @@ CREATE TYPE IF NOT EXISTS autocafe.address (
   phones set<text>
 );
 
-CREATE TYPE IF NOT EXISTS autocafe.location (
-  name text,
-  address frozen<address>
+CREATE TYPE IF NOT EXISTS autocafe.location_detail(
+    name text,
+    address frozen<address>
 );
 
-CREATE TYPE IF NOT EXISTS autocafe.vehicle_detail (
+CREATE TYPE IF NOT EXISTS autocafe.contact(
+    first_name text,
+    last_name text,
+    address frozen<address>
+);
+
+-- **************** CREATE TABLE(S) SCRIPTS *****************************
+
+CREATE TABLE IF NOT EXISTS autocafe.clients (
+    id uuid,
+    name text,
+    location_detail frozen<location_detail>,
+    created timeuuid,
+    created_user text,
+    modified timeuuid,
+    modified_user text,
+    PRIMARY KEY (id,created)
+);
+
+CREATE INDEX client_name ON autocafe.clients (name);
+
+-- Dealership Table
+CREATE TABLE IF NOT EXISTS autocafe.dealerships (
+    id uuid,
+    client_id uuid,
+    name text,
+    contacts list<frozen<contact>>,
+    created_user text,
+    created timeuuid,
+    modified_user text,
+    modified timeuuid,
+    PRIMARY KEY ((client_id,id),created)
+);
+
+CREATE TABLE IF NOT EXISTS autocafe.dealership_lots (
+    dealership_id uuid,
+    lot_id double,
+    lot_location text,
+    created timeuuid,
+    PRIMARY KEY ((dealership_id,lot_id),created)
+);
+
+-- Client Vehicles
+CREATE TABLE IF NOT EXISTS autocafe.vehicles (
+    dealership_id uuid,
+    stock_num text,
+    vin text,
+    options text,
+    price double,
+    invoice_amount double,
     ext_color text,
     int_color text,
     trim text,
@@ -23,53 +72,26 @@ CREATE TYPE IF NOT EXISTS autocafe.vehicle_detail (
     year int,
     make text,
     model text,
-    mileage double
+    mileage double,
+    lot_location text,
+    created_user text,
+    created timeuuid,
+    modified_user text,
+    modified timeuuid,
+    PRIMARY KEY (dealership_id,stock_num,created)
 );
--- ***********************************************************
 
--- **************** CREATE TABLE(S) SCRIPTS *****************************
-
--- Client Table
-CREATE TABLE IF NOT EXISTS autocafe.dealerships (
-    id uuid,
-    name text,
-    locations Map<text,frozen<location>>,
-    created_by text,
-    created_dtm timestamp,
-    modified_by text,
-    modified_dtm timestamp,
-    PRIMARY KEY ((id,name),created_dtm)
-)
-WITH CLUSTERING ORDER BY (created_dtm ASC);
-
--- Client Vehicles
-CREATE TABLE IF NOT EXISTS autocafe.dealer_vehicles (
-    dealer_id uuid,
-    stock_num text,
-    short_desc text,
-    description text,
-    price double,
-    location frozen<location>,
-    details frozen<vehicle_detail>,
-    created_by text,
-    created_dtm timestamp,
-    modified_by text,
-    modified_dtm timestamp,
-    PRIMARY KEY (dealer_id,stock_num)
-);
+CREATE INDEX vehicle_vin ON autocafe.vehicles (vin);
 
 -- Vehicle Image Table
 CREATE TABLE IF NOT EXISTS autocafe.vehicle_images (
-    dealer_id uuid,
-    vehicle_id uuid,
-    img_name text,
-    main_img boolean,
-    img_cdn_loc text,
-    img_size int,
-    img_suffix text,
+    dealership_id uuid,
+    stock_num text,
+    img_url text,
     img_type text,
     img_order int,
-    PRIMARY KEY (dealer_id,vehicle_id)
+    created timeuuid,
+    PRIMARY KEY ((dealership_id,stock_num),created)
 );
 
 

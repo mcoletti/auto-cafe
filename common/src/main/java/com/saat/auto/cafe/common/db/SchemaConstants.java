@@ -37,7 +37,7 @@ public class SchemaConstants {
 
         public static class Columns {
             public static final String ClientId = "client_id";
-            public static final String Location = "location";
+            public static final String Location = "locations";
         }
 
     }
@@ -54,7 +54,7 @@ public class SchemaConstants {
             public static final String Trim = "trim";
             public static final String VehiclePrice = "price";
             public static final String VehicleMileage = "mileage";
-            public static final String Location = "location";
+            public static final String Location = "locations";
             public static final String Category = "category";
             public static final String ManufactureId = "manufacture";
             public static final String VehicleModelId = "model";

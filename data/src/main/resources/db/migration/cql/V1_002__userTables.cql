@@ -5,21 +5,23 @@ CREATE TABLE IF NOT EXISTS autocafe.users(
     user_name text,
     "password" text,
     last_login timestamp,
-    location frozen<location>,
-    created_by text,
-    created_dtm timestamp,
-    modified_by text,
-    modified_dtm timestamp,
-    PRIMARY KEY ((client_id,id),created_dtm)
+    address frozen<address>,
+    created_user text,
+    created timestamp,
+    modified_user text,
+    modified timestamp,
+    PRIMARY KEY ((client_id,id),created)
 )
-WITH CLUSTERING ORDER BY (created_dtm DESC);
+WITH CLUSTERING ORDER BY (created DESC);
 
 -- Client Users Table
 CREATE TABLE IF NOT EXISTS autocafe.client_users(
     client_id uuid,
-    user_id uuid,
+    id uuid,
     user_name text,
-    PRIMARY KEY (client_id)
+    created timeuuid,
+    created_user text,
+    PRIMARY KEY ((client_id,id),created)
 );
 
 -- User Sesions
@@ -30,4 +32,3 @@ CREATE TABLE IF NOT EXISTS autocafe.user_sessions(
     PRIMARY KEY (user_id,session_token)
 )
 WITH CLUSTERING ORDER BY (session_token DESC);
-

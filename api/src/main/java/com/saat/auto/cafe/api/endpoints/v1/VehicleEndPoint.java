@@ -3,7 +3,7 @@ package com.saat.auto.cafe.api.endpoints.v1;
 import com.saat.auto.cafe.api.ApiConstants;
 import com.saat.auto.cafe.api.WebHelper;
 import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
-import com.saat.auto.cafe.common.interfaces.VehicleService;
+import com.saat.auto.cafe.common.interfaces.services.VehicleService;
 import com.saat.auto.cafe.common.models.VehicleModelCollection;
 import com.saat.auto.cafe.common.models.VehicleModel;
 
@@ -63,7 +63,7 @@ public class VehicleEndPoint {
     @ApiOperation(value = "Get a Vehicle Model Object based of Stok Number and DealerId",
             response = VehicleModel.class,
             responseContainer = "VehicleModel")
-    public ResponseEntity getVehicle(@RequestParam(value = "stockNum") String stockNum, @RequestParam(value = "dealerId") String clientId) {
+    public ResponseEntity getVehicle(@RequestParam(value = "stockNum") String stockNum, @RequestParam(value = "dealershipId") String clientId) {
 
         try {
 

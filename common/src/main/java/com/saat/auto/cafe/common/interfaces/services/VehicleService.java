@@ -1,4 +1,4 @@
-package com.saat.auto.cafe.common.interfaces;
+package com.saat.auto.cafe.common.interfaces.services;
 
 import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
 import com.saat.auto.cafe.common.models.VehicleModelCollection;
@@ -11,20 +11,20 @@ public interface VehicleService {
 
 //    /**
 //     * Method to get an Instance of VehicleModel
-//     * @param vehicleId the vehicleId to get from the backend
-//     * @param dealerId the dealerId
+//     * @param dealershipId the dealershipId to get from the backend
+//     * @param dealershipId the dealershipId
 //     * @return an instance of the VehicleDetailModel
 //     */
-//    VehicleDetailModel getVehicleDetailsModel(String vehicleId, String dealerId, boolean resetCache) throws VehicleServiceException;
+//    VehicleDetailModel getVehicleDetailsModel(String dealershipId, String dealerId, boolean resetCache) throws VehicleServiceException;
 //
 //    /**
 //     * Method that gets an instance of the Vehicle Model
-//     * @param vehicleId the vehicleId
-//     * @param dealerId the dealerId
+//     * @param dealershipId the dealershipId
+//     * @param dealershipId the dealershipId
 //     * @return a instance of the Vehicle Model
 //     * @throws VehicleServiceException is anything goes wrong
 //     */
-//    VehicleDetailModel getVehicleDetailsModel(String vehicleId, String dealerId) throws VehicleServiceException;
+//    VehicleDetailModel getVehicleDetailsModel(String dealershipId, String dealerId) throws VehicleServiceException;
 //
 //    /**
 //     * Method to add of update a Vehicle

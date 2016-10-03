@@ -3,16 +3,13 @@ package com.saat.auto.cafe.service;
 import com.google.gson.Gson;
 
 import com.saat.auto.cafe.common.AutoCafeConstants;
-import com.saat.auto.cafe.common.interfaces.CacheService;
-import com.saat.auto.cafe.common.interfaces.HazelCastService;
+import com.saat.auto.cafe.common.interfaces.services.CacheService;
+import com.saat.auto.cafe.common.interfaces.services.HazelCastService;
 import com.saat.auto.cafe.common.models.VehicleDetailModel;
 import com.saat.auto.cafe.service.cache.HazelCastCacheServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
-
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,7 +37,7 @@ public class HazelCastCacheServiceImplTest extends TestBase {
 
 //    @Test
 //    public void testInsertCacheEntry() throws Exception {
-//        setROOT_DVM(UUID.randomUUID().toString());
+//        createVehicleRoot(UUID.randomUUID().toString());
 //        cacheService.insertCacheEntry(ROOT_VDM.getId(),ROOT_VDM, VehicleDetailModel.class);
 //
 //        VehicleDetailModel vd = cacheService.getCacheEntry(ROOT_VDM.getId(),VehicleDetailModel.class);

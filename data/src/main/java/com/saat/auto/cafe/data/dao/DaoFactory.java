@@ -1,7 +1,7 @@
 package com.saat.auto.cafe.data.dao;
 
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
-import com.saat.auto.cafe.common.interfaces.VehicleDao;
+import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.data.dao.impl.VehicleDaoImpl;
 
 /**

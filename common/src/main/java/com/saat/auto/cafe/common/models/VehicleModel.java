@@ -2,6 +2,7 @@ package com.saat.auto.cafe.common.models;
 
 import com.saat.auto.cafe.common.entitys.Vehicle;
 
+import org.apache.cassandra.utils.UUIDGen;
 import org.joda.time.DateTime;
 
 import java.util.UUID;
@@ -34,15 +35,15 @@ public class VehicleModel {
     @ApiModelProperty(
             position = 4,
             required = true,
-            value = "Short Description of the Vehicle"
+            value = "VIN"
     )
-    private String shortDesc;
+    private String vin;
     @ApiModelProperty(
-            position = 5,
+            position = 4,
             required = true,
-            value = "Detail Description of the Vehicle"
+            value = "Options"
     )
-    private String description;
+    private String options;
     @ApiModelProperty(
             position = 6,
             required = true,
@@ -50,23 +51,31 @@ public class VehicleModel {
     )
     private double price;
     @ApiModelProperty(
-            position = 7,
+            position = 6,
             required = true,
-            value = "Vehicle Detail"
+            value = "Invoice Amount"
     )
-    private VehicleDetailModel details;
+    private double invoiceAmount;
+    private String bodyStyle;
+    private String extColor;
+    private String intColor;
+    private double mileage;
+    private String make;
+    private String model;
+    private int year;
+    private String trim;
     @ApiModelProperty(
             position = 8,
             required = true,
-            value = "location"
+            value = "locations"
     )
-    private LocationModel location;
+    private String lotLocation;
     @ApiModelProperty(
             position = 9,
             required = true,
             value = "User who added the Vehicle to the System"
     )
-    private String createdBy;
+    private String createdUser;
     @ApiModelProperty(
             position = 10,
             required = true,
@@ -78,13 +87,14 @@ public class VehicleModel {
             required = true,
             value ="User who modified the Vehicle to the System"
     )
-    private String modifiedBy;
+    private String modifiedUser;
     @ApiModelProperty(
             position = 12,
             required = true,
             value = "The modified DateTime"
     )
     private String modifiedDtm;
+
 
     /**
      * Method to covert the model object to the entity object
@@ -93,17 +103,25 @@ public class VehicleModel {
     public Vehicle toEntity(){
 
         Vehicle cv = new Vehicle();
-        cv.setDealerId(UUID.fromString(dealerId));
+        cv.setDealershipId(UUID.fromString(dealerId));
         cv.setStockNum(stockNum);
-        cv.setShortDesc(shortDesc);
-        cv.setDescription(description);
+        cv.setOptions(options);
+        cv.setVin(vin);
+        cv.setInvoiceAmount(invoiceAmount);
         cv.setPrice(price);
-        cv.setDetails(details.toEntity());
-        cv.setLocation(location.toEntity());
-        cv.setCreatedBy(createdBy);
-        cv.setCreatedDtm(DateTime.parse(createdDtm).toDate());
-        cv.setModifiedBy(modifiedBy);
-        cv.setModifiedDtm(DateTime.parse(modifiedDtm).toDate());
+        cv.setExtColor(extColor);
+        cv.setIntColor(intColor);
+        cv.setBodyStyle(bodyStyle);
+        cv.setMileage(mileage);
+        cv.setMake(make);
+        cv.setModel(model);
+        cv.setYear(year);
+        cv.setTrim(trim);
+        cv.setLotLocation(lotLocation);
+        cv.setCreatedUser(createdUser);
+        cv.setCreated(UUIDGen.getTimeUUID(DateTime.parse(createdDtm).getMillis()));
+        cv.setModifiedUser(modifiedUser);
+        cv.setModified(UUIDGen.getTimeUUID(DateTime.parse(modifiedDtm).getMillis()));
         return cv;
 
 

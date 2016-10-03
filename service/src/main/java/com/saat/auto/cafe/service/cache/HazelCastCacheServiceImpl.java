@@ -5,8 +5,8 @@ import com.google.gson.Gson;
 import com.hazelcast.core.Member;
 import com.hazelcast.monitor.LocalMapStats;
 import com.saat.auto.cafe.service.HazelCastProperties;
-import com.saat.auto.cafe.common.interfaces.CacheService;
-import com.saat.auto.cafe.common.interfaces.HazelCastService;
+import com.saat.auto.cafe.common.interfaces.services.CacheService;
+import com.saat.auto.cafe.common.interfaces.services.HazelCastService;
 import com.saat.auto.cafe.common.models.CacheNode;
 import com.saat.auto.cafe.common.models.CacheStats;
 

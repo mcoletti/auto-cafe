@@ -1,3 +1,10 @@
+- name: adding datastax repo
+  apt_repository: repo='deb http://datastaxrepo_gmail.com:utJVKEg4lKeaWTX@debian.datastax.com/enterprise stable main' filename='datastax.sources.list'
+
+- name: adding repo key
+  apt_key: url=https://debian.datastax.com/debian/repo_key state=present validate_certs=no
+
+
 - name: installing datastax enterprise
   apt: pkg=dse-full state=installed update-cache=yes
   register: dse

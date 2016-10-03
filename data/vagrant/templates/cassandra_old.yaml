@@ -692,7 +692,7 @@ cross_node_timeout: false
 #   correlated failures. It does this by grouping machines into
 #   "datacenters" and "racks."  Cassandra will do its best not to have
 #   more than one replica on the same "rack" (which may not actually
-#   be a physical location)
+#   be a physical locations)
 #
 # IF YOU CHANGE THE SNITCH AFTER DATA IS INSERTED INTO THE CLUSTER,
 # YOU MUST RUN A FULL REPAIR, SINCE THE SNITCH AFFECTS WHERE REPLICAS

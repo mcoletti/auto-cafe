@@ -7,7 +7,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Member;
 import com.hazelcast.monitor.LocalMapStats;
 import com.saat.auto.cafe.service.HazelCastProperties;
-import com.saat.auto.cafe.common.interfaces.HazelCastService;
+import com.saat.auto.cafe.common.interfaces.services.HazelCastService;
 import com.saat.auto.cafe.common.models.HzCluster;
 import com.saat.auto.cafe.common.models.HzMember;
 

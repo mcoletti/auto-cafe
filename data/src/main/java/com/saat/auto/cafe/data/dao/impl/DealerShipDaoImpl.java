@@ -4,7 +4,7 @@ import com.datastax.driver.mapping.Mapper;
 import com.saat.auto.cafe.common.entitys.DealerShip;
 import com.saat.auto.cafe.common.exceptions.DaoException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
-import com.saat.auto.cafe.common.interfaces.DealerShipDao;
+import com.saat.auto.cafe.common.interfaces.daos.DealerShipDao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

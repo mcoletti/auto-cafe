@@ -1,13 +1,7 @@
 package com.saat.auto.cafe.common.models;
 
-import com.datastax.driver.mapping.annotations.Column;
-import com.datastax.driver.mapping.annotations.Frozen;
-import com.datastax.driver.mapping.annotations.PartitionKey;
-import com.saat.auto.cafe.common.entitys.Location;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import com.saat.auto.cafe.common.entitys.LocationDetail;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,6 +24,7 @@ public class DealerShipModel {
             value = "The DealerShip Id"
     )
     private String id;
+    private String clientId;
     @ApiModelProperty(
             position = 2,
             required = true,
@@ -41,7 +36,7 @@ public class DealerShipModel {
             required = true,
             value = "The DealerShip Locations"
     )
-    private Map<String,Location> locations;
+    private LocationDetail locationDetail;
     @ApiModelProperty(
             position = 4,
             required = true,
