@@ -11,7 +11,7 @@ import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.entitys.VehicleImage;
 import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
-import com.saat.auto.cafe.common.accessors.VehicleAccessor;
+import com.saat.auto.cafe.data.dao.accessors.VehicleAccessor;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 
 import org.slf4j.Logger;
@@ -69,20 +69,18 @@ public class VehicleDaoImpl implements VehicleDao {
      * {@inheritDoc}
      */
     @Override
-    public List<VehicleImage> getVehicleImageList(UUID vehicleId) throws ClientVehicleException {
+    public VehicleImage getVehicleImage(UUID dealershipId,String stockNum) throws ClientVehicleException {
 
-        List<VehicleImage> imageList = null;
+       VehicleImage vi;
         try {
-            Select s = QueryBuilder.select().from(VehicleImagesTbl.NAME);
-            s.where(eq(VehicleImagesTbl.Columns.VEHICLE_ID, vehicleId));
-
-//            imageList = ci.getCassandraTemplate().query(s, new VehicleImagesRowMapper());
+            Result<VehicleImage> imageResult = vehicleAccessor.qryForImageList(dealershipId,stockNum);
+            vi = imageResult.one();
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("Error Getting the image List for dealershipId: {} - {}", vehicleId, e.getMessage());
+            log.error("Error Getting the image List for dealershipId: {} - {}", dealershipId, e.getMessage());
             throw new ClientVehicleException(e);
         }
-        return imageList;
+        return vi;
     }
 
     @Override

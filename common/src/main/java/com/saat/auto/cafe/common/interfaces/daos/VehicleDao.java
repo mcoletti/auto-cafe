@@ -24,10 +24,11 @@ public interface VehicleDao{
 
     /**
      * Method to get a list of the Vehicle Images
-     * @param vehicleId the Vehicle Id to get
+     * @param dealershipId the dealership
+     * @param stockNum the stock number
      * @return an array of VehicleImage for the given Vehicle Id
      */
-    List<VehicleImage> getVehicleImageList(UUID vehicleId) throws ClientVehicleException;
+    VehicleImage getVehicleImage(UUID dealershipId,String stockNum) throws ClientVehicleException;
 
     /**
      * Method that adds or updates a DealerShip Vehicle into the DB

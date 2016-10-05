@@ -2,6 +2,7 @@ package com.saat.auto.cafe.data.dao.impl;
 
 import com.saat.auto.cafe.common.entitys.Vehicle;
 import com.saat.auto.cafe.common.entitys.VehicleCollection;
+import com.saat.auto.cafe.common.entitys.VehicleImage;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.data.TestBase;
 
@@ -19,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Created by micahcoletti on 7/18/16.
  */
 public class VehicleDaoImplTest extends TestBase {
-
 
 
     private Vehicle vehicleRoot;
@@ -45,8 +45,6 @@ public class VehicleDaoImplTest extends TestBase {
 
         String modifiedUser = "testUser2";
         vehicle.setModifiedUser(modifiedUser);
-
-
 
 
         vehicle = vehicleDao.upsert(vehicle);
@@ -76,12 +74,39 @@ public class VehicleDaoImplTest extends TestBase {
         assertThat(vehicle.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
         assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
     }
+    @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
+    public void testInsertVehicleImage() throws Exception {
+
+        VehicleImage vi = new VehicleImage();
+
+        vi.setDealershipId(vehicleRoot.getDealershipId());
+        vi.setStockNum(vehicleRoot.getStockNum());
+        vi.setImgOrder(0);
+        vi.setImgType("main");
+        vi.setImgypeUrl("http://test/test/myImge.jpg");
+        vi.setCreated(UUIDGen.getTimeUUID());
+
+        vi = vehicleDao.insertVehicleImage(vi);
+        assertThat(vi).isNotNull();
+        assertThat(vi.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
+        assertThat(vi.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
+    }
+
+    @Test(dependsOnMethods = {"testInsertVehicleImage","testUpsetClientVehicleNew"})
+    public void testGetVehicleImage() throws Exception {
+
+        VehicleImage vi = vehicleDao.getVehicleImage(vehicleRoot.getDealershipId(),vehicleRoot.getStockNum());
+        assertThat(vi).isNotNull();
+        assertThat(vi.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
+        assertThat(vi.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
+
+
+    }
 
 
     private Vehicle setRootCV() {
 
-        DateTime createdDtm = DateTime.now();
-        UUID timeUuid = UUIDGen.getTimeUUID(createdDtm.getMillis());
+        UUID timeUuid = UUIDGen.getTimeUUID();
 
         vehicleRoot = new Vehicle();
         vehicleRoot.setDealershipId(dealerId);

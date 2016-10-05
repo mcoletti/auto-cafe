@@ -1,5 +1,6 @@
 package com.saat.auto.cafe.common.entitys;
 
+import com.datastax.driver.mapping.annotations.ClusteringColumn;
 import com.datastax.driver.mapping.annotations.Column;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
@@ -9,12 +10,13 @@ import java.util.UUID;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by micahcoletti on 7/18/16.
  */
 @Table(name = "vehicle_images")
-@Builder
+@NoArgsConstructor
 @Data
 public class VehicleImage {
 
@@ -30,6 +32,8 @@ public class VehicleImage {
     private String imgType;
     @Column(name = "img_order")
     private int imgOrder;
+    @ClusteringColumn
+    private UUID created;
 
 
 
