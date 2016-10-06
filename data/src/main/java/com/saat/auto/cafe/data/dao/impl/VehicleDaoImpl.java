@@ -134,8 +134,6 @@ public class VehicleDaoImpl implements VehicleDao {
                 throw new ClientVehicleException(e);
             }
         }
-
-
         return cv;
     }
 }

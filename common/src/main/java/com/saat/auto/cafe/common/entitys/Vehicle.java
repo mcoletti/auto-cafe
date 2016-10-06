@@ -64,6 +64,8 @@ public class Vehicle {
     private double mileage;
     @Column(name = "lot_location")
     private String lotLocation;
+    @Column(name = "img_url")
+    private String imgUrl;
     @Column(name = "created_user")
     private String createdUser;
     @Column

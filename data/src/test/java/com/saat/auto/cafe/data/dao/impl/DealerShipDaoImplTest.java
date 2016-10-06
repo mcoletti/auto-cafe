@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DealerShipDaoImplTest extends TestBase {
 
 
+
     private UUID dealerId;
     @Autowired
     private DealerShipDao dealerShipDao;
@@ -46,7 +47,7 @@ public class DealerShipDaoImplTest extends TestBase {
 
         String user = "testUser";
         String dealerName = "testDealer";
-        UUID clientId = UUID.fromString("bd2dbb1e-88ca-11e6-ae22-56b6b6499611");
+        UUID clientId = UUID.fromString("0a944635-f6dc-47e6-b570-8b59af2917b4");
         dealerId = UUID.randomUUID();
         UUID timeUuid = UUIDGen.getTimeUUID();
 
@@ -85,7 +86,9 @@ public class DealerShipDaoImplTest extends TestBase {
 //                .locations(locationMap).build();
 
 
-        dealerShip = dealerShipDao.upsert(dealerShip);
+        dealerShipDao.upsert(dealerShip);
+        dealerShip = dealerShipDao.get(dealerShip.getId());
+
         assertThat(dealerShip).isNotNull();
         assertThat(dealerShip.getId()).isEqualTo(dealerId);
 
@@ -94,19 +97,29 @@ public class DealerShipDaoImplTest extends TestBase {
         DateTime updateDtm = DateTime.now();
         dealerShip.setModifiedUser(user);
         dealerShip.setModified(UUIDGen.getTimeUUID());
+        contact = new Contact();
+        contact.setFirstName("Matt");
+        contact.setLastName("Steed");
+        contact.setAddress(address);
+        contacts = dealerShip.getContacts();
+        contacts.add(contact);
 
 
-        dealerShip = dealerShipDao.upsert(dealerShip);
+
+        dealerShipDao.upsert(dealerShip);
+        dealerShip = dealerShipDao.get(dealerShip.getId());
         assertThat(dealerShip).isNotNull();
         assertThat(dealerShip.getModifiedUser()).isEqualTo(user);
     }
 
-    @Test(dependsOnMethods = {"testUpsert"})
-    public void testGetDealerId() throws Exception {
 
-        DealerShip cl = dealerShipDao.get(dealerId);
-        assertThat(cl).isNotNull();
-        assertThat(cl.getId()).isEqualTo(dealerId);
+    @Test(dependsOnMethods = {"testUpsert"})
+    public void testGetDealerships() throws Exception {
+        UUID clientId = UUID.fromString("0a944635-f6dc-47e6-b570-8b59af2917b4");
+        List<DealerShip> dealerShips = dealerShipDao.getDealerships(clientId);
+
+        assertThat(dealerShips).isNotNull();
+        assertThat(dealerShips.size()).isGreaterThan(0);
 
     }
 

@@ -44,10 +44,12 @@ import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
 @Data
 public class DealerShip {
 
+
     @PartitionKey
-    private UUID id;
     @Column(name = "client_id")
     private UUID clientId;
+    @Column
+    private UUID id;
     @Column
     private String name;
     @Column

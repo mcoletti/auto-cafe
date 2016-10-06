@@ -38,16 +38,18 @@ CREATE INDEX client_name ON autocafe.clients (name);
 
 -- Dealership Table
 CREATE TABLE IF NOT EXISTS autocafe.dealerships (
-    id uuid,
     client_id uuid,
+    id uuid,
     name text,
     contacts list<frozen<contact>>,
     created_user text,
     created timeuuid,
     modified_user text,
     modified timeuuid,
-    PRIMARY KEY ((client_id,id),created)
+    PRIMARY KEY (client_id,created)
 );
+
+CREATE INDEX dealership_id ON autocafe.dealerships (id);
 
 CREATE TABLE IF NOT EXISTS autocafe.dealership_lots (
     dealership_id uuid,
@@ -74,6 +76,7 @@ CREATE TABLE IF NOT EXISTS autocafe.vehicles (
     model text,
     mileage double,
     lot_location text,
+    img_url text,
     created_user text,
     created timeuuid,
     modified_user text,

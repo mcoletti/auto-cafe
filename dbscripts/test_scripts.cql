@@ -5,7 +5,7 @@ select * from cassandra_migration_version;
 select * from cassandra_migration_version_counts;
 
 delete from client_vehicles where client_id = 65026b3e-a833-4263-81a5-dedc2a6efed5 and vehicle_id = 037b81b0-ea03-497c-a16e-c95a4655bbac;
-select * from vehicles;
+select * from vehicles where stock_num = '3908C' ALLOW FILTERING;
 select * from dealership_lots;
 select * from dealerships where id = 8618c620-2b50-4605-ade9-1744a90a1fd9;
 select * from dealer_vehicles;

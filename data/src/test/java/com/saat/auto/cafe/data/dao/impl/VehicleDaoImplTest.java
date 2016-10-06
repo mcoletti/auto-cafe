@@ -1,13 +1,14 @@
 package com.saat.auto.cafe.data.dao.impl;
 
+import com.saat.auto.cafe.common.ImmType;
 import com.saat.auto.cafe.common.entitys.Vehicle;
 import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.entitys.VehicleImage;
+import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.data.TestBase;
 
 import org.apache.cassandra.utils.UUIDGen;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -57,16 +58,6 @@ public class VehicleDaoImplTest extends TestBase {
     }
 
 
-
-    @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
-    public void testGetByDealerId() throws Exception {
-
-        VehicleCollection result = vehicleDao.get(vehicleRoot.getDealershipId());
-        assertThat(result).isNotNull();
-        assertThat(result.getVehicles()).isNotNull();
-        assertThat(result.getVehicles().size()).isGreaterThan(0);
-    }
-
     @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
     public void testGetByDealerIdAndVehicleId() throws Exception {
         vehicle = vehicleDao.get(vehicleRoot.getDealershipId(), vehicleRoot.getStockNum());
@@ -82,7 +73,7 @@ public class VehicleDaoImplTest extends TestBase {
         vi.setDealershipId(vehicleRoot.getDealershipId());
         vi.setStockNum(vehicleRoot.getStockNum());
         vi.setImgOrder(0);
-        vi.setImgType("main");
+        vi.setImgType(ImmType.Header.name());
         vi.setImgypeUrl("http://test/test/myImge.jpg");
         vi.setCreated(UUIDGen.getTimeUUID());
 
@@ -90,6 +81,35 @@ public class VehicleDaoImplTest extends TestBase {
         assertThat(vi).isNotNull();
         assertThat(vi.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
         assertThat(vi.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
+    }
+
+
+    @Test(dependsOnMethods = {"testUpsetClientVehicleNew","testInsertVehicleImage"})
+    public void testGetByDealerId() throws Exception {
+
+        VehicleCollection result = vehicleDao.get(vehicleRoot.getDealershipId());
+        assertThat(result).isNotNull();
+        assertThat(result.getVehicles()).isNotNull();
+        assertThat(result.getVehicles().size()).isGreaterThan(0);
+
+        result.getVehicles().forEach(v -> {
+            try {
+                VehicleImage vi = vehicleDao.getVehicleImage(v.getDealershipId(),v.getStockNum());
+
+                if(vi.getImgType().equals(ImmType.Header.name())){
+                    vi.setImgypeUrl(vi.getImgypeUrl());
+                    vehicleDao.upsert(v);
+                }
+
+            } catch (ClientVehicleException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+
+
+
     }
 
     @Test(dependsOnMethods = {"testInsertVehicleImage","testUpsetClientVehicleNew"})
