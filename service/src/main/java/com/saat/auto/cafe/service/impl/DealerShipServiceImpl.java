@@ -37,50 +37,60 @@ public class DealerShipServiceImpl implements DealerShipService {
     @Override
     public DealerShipModel upsertDealserShip(DealerShipModel dealerShipModel) throws DealershipServiceException {
 
+        log.debug("Adding/Updating a dealership {}", dealerShipModel.getName());
         DealerShipModel model;
         UUID dealershipId = dealerShipModel.getId() == null ? UUID.randomUUID() : UUID.fromString(dealerShipModel.getId());
         try {
             dealerShipDao.upsert(dealerShipModel.toEntity());
 
-            String cacheKey = String.format("%s",dealershipId.toString());
+            String cacheKey = String.format("%s", dealershipId.toString());
 
-            model = cacheService.getCacheEntry(cacheKey,DealerShipModel.class);
+            model = cacheService.getCacheEntry(cacheKey, DealerShipModel.class);
 
-            if(model != null){
+            if (model != null) {
+                log.debug("Remove Dealership {} from Cache", dealerShipModel.getName());
                 cacheService.removeEntry(cacheKey);
             }
 
             DealerShip dealerShip = dealerShipDao.get(dealershipId);
             model = dealerShip.toModel();
-            cacheService.insertCacheEntry(cacheKey,model,DealerShipModel.class);
+
+            log.debug("Adding dealership {} to Cache", dealerShipModel.getName());
+            cacheService.insertCacheEntry(cacheKey, model, DealerShipModel.class);
 
         } catch (DaoException e) {
             e.printStackTrace();
-            log.debug("Error adding or updating the dealership entity for Dealership {} - {}",dealerShipModel.getName(),e.getMessage());
+            log.debug("Error adding or updating the dealership entity for Dealership {} - {}", dealerShipModel.getName(), e.getMessage());
             throw new DealershipServiceException(e);
         }
 
-
+        log.debug("dealership added/updated for {}", dealerShipModel.getName());
         return model;
     }
 
     @Override
     public DealerShipModel get(String dealerId) {
 
+        log.debug("Getting dealership for Id {}", dealerId);
         DealerShipModel model = null;
         try {
 
-            model = cacheService.getCacheEntry(dealerId,DealerShipModel.class);
-            if(model == null){
+            log.debug("Seeing if with have the dealership in Cache for Id {}",dealerId);
+            model = cacheService.getCacheEntry(dealerId, DealerShipModel.class);
+            if (model == null) {
+
+                log.debug("dealership for Id {} was not found in Cache",dealerId);
                 DealerShip dealerShip = dealerShipDao.get(UUID.fromString(dealerId));
                 model = dealerShip.toModel();
-                cacheService.insertCacheEntry(dealerId,model,DealerShipModel.class);
+                log.debug("adding dealership {} into Cache",model.getName());
+                cacheService.insertCacheEntry(dealerId, model, DealerShipModel.class);
             }
         } catch (DaoException e) {
             e.printStackTrace();
-            log.error("Error getting dealerShip by Id {} - {}",dealerId,e.getMessage());
+            log.error("Error getting dealerShip by Id {} - {}", dealerId, e.getMessage());
         }
 
+        log.debug("done getting dealership {}",model.getName());
         return model;
     }
 
