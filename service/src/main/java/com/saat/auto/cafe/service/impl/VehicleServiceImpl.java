@@ -14,15 +14,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by micahcoletti on 7/27/16.
  */
-@Component
+@Service
 public class VehicleServiceImpl implements VehicleService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -67,38 +69,37 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public VehicleModelCollection get(String dealerId) throws VehicleServiceException {
+    public List<VehicleModel> get(String dealerId) throws VehicleServiceException {
 
         return get(dealerId, false);
     }
 
     @Override
-    public VehicleModelCollection get(String dealerId, boolean resetCache) throws VehicleServiceException {
+    public List<VehicleModel> get(String dealerId, boolean resetCache) throws VehicleServiceException {
         VehicleModelCollection cvmc = null;
-        String cacheKey = VehicleModelCollection.getCollectionCacheKey(dealerId);
+        String cacheKey = String.format("vehicle-list-%s",dealerId);
+        VehicleModel[] vehicleModels = null;
         try {
 
             if (resetCache) {
                 cacheService.removeEntry(cacheKey);
             } else {
-                cvmc = cacheService.getCacheEntry(cacheKey, VehicleModelCollection.class);
+                vehicleModels = cacheService.getCacheEntry(cacheKey, VehicleModel[].class);
             }
-            if (cvmc == null) {
-                VehicleCollection cvl = vehicleDao.get(UUID.fromString(dealerId));
-                List<VehicleModel> cvList = new ArrayList<>();
+            if (vehicleModels == null) {
+                List<Vehicle> vehicles = vehicleDao.get(UUID.fromString(dealerId));
+                List<VehicleModel> modelList = new ArrayList<>();
+                vehicles.forEach(vehicle -> modelList.add(vehicle.toModel()));
+                vehicleModels = new VehicleModel[modelList.size()];
+                vehicleModels = modelList.toArray(vehicleModels);
 
-                cvl.getVehicles().forEach(clientVehicle -> {
-                    cvList.add(clientVehicle.toModel());
-                });
-                cvmc = VehicleModelCollection.builder().clientVehicles(cvList).build();
-
-                cacheService.insertCacheEntry(cacheKey, cvmc, VehicleModelCollection.class);
+                cacheService.insertCacheEntry(cacheKey, vehicleModels, VehicleModel[].class);
             }
         } catch (ClientVehicleException e) {
             e.printStackTrace();
             throw new VehicleServiceException(e);
         }
-        return cvmc;
+        return Arrays.asList(vehicleModels);
     }
 
     @Override

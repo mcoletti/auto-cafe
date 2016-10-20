@@ -9,6 +9,7 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,8 +21,6 @@ public class VehicleServiceImplTest extends TestBase {
 
 
 
-    @Autowired
-    VehicleDao vehicleDao;
     @Autowired
     VehicleService vehicleService;
 
@@ -59,10 +58,9 @@ public class VehicleServiceImplTest extends TestBase {
     @Test(dependsOnMethods = {"testUpsertDealerVehicle"})
     public void testGetByDealerId() throws Exception {
 
-        VehicleModelCollection dvmc = vehicleService.get(vehicleRoot.getDealerId());
-        assertThat(dvmc).isNotNull();
-        assertThat(dvmc.getClientVehicles()).isNotNull();
-        assertThat(dvmc.getClientVehicles().size()).isGreaterThan(0);
+        List<VehicleModel> vehicleModels = vehicleService.get(vehicleRoot.getDealerId());
+        assertThat(vehicleModels).isNotNull();
+        assertThat(vehicleModels.size()).isGreaterThan(0);
     }
 
     @Test(dependsOnMethods = {"testUpsertDealerVehicle"})

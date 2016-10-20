@@ -24,5 +24,5 @@ import org.springframework.context.annotation.Configuration;
 //@ComponentScan(value = {"com.saat.auto.cafe.service.*","com.saat.auto.cafe.data.*"})
 @ComponentScan(value = {"com.saat.auto.cafe.service.*"})
 @EnableConfigurationProperties(HazelCastProperties.class)
-public class ServiceBeans {
+public class ServiceConfiguration {
 }

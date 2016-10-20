@@ -11,4 +11,5 @@ public class ApiConstants {
 //    @Value("${vechicleMp}")
     public static final String VEHICLE_MP = "/vehicles";
     public static final String CROSS_ORIGINS = "http://localhost:4200"  ;
+    public static final String DEALERSHIP_MP = "/dealership";
 }

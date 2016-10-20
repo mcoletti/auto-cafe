@@ -59,12 +59,15 @@ public class Address {
      * @return
      */
     public AddressModel toModel() {
-        return AddressModel.builder()
-                .street1(street1)
-                .street2(street2)
-                .city(city)
-                .state(state)
-                .zipCode(zipCode)
-                .phones(new ArrayList<>(phones)).build();
+
+        AddressModel address = new AddressModel();
+        address.setStreet1(street1);
+        address.setStreet2(street2);
+        address.setCity(city);
+        address.setState(state);
+        address.setZipCode(zipCode);
+        address.setPhones(new ArrayList<>(phones));
+
+        return address;
     }
 }

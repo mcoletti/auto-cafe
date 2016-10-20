@@ -80,6 +80,7 @@ subprojects {
         compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: '3.1.0'
 //        compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: '2.1.7.1'
         compile group: 'org.apache.cassandra', name: 'cassandra-all', version: '3.7'
+        compile group: 'org.springframework.data', name: 'spring-data-commons', version: '1.12.4.RELEASE'
 //        compile ('com.datastax.cassandra:cassandra-driver-mapping:3.1.0'){
 //            exclude module: 'com.datastax.cassandra:cassandra-driver-core'
 //        }

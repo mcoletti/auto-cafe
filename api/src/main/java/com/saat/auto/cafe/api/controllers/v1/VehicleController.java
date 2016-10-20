@@ -1,10 +1,9 @@
-package com.saat.auto.cafe.api.endpoints.v1;
+package com.saat.auto.cafe.api.controllers.v1;
 
 import com.saat.auto.cafe.api.ApiConstants;
 import com.saat.auto.cafe.api.WebHelper;
 import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
 import com.saat.auto.cafe.common.interfaces.services.VehicleService;
-import com.saat.auto.cafe.common.models.VehicleModelCollection;
 import com.saat.auto.cafe.common.models.VehicleModel;
 
 import org.slf4j.Logger;
@@ -14,11 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 import javax.xml.ws.WebServiceException;
 
@@ -50,7 +50,7 @@ public class VehicleController {
      * Endpoint that get a Vehicle Model based off Id and ClientId
      *
      * @param stockNum the Stock Number
-     * @param clientId  the client Id
+     * @param dealerShipId  the client Id
      * @return a JSON object representing the Vehicle Model Object
      */
 
@@ -63,20 +63,20 @@ public class VehicleController {
     @ApiOperation(value = "Get a Vehicle Model Object based of Stok Number and DealerId",
             response = VehicleModel.class,
             responseContainer = "VehicleModel")
-    public ResponseEntity getVehicle(@RequestParam(value = "stockNum") String stockNum, @RequestParam(value = "dealershipId") String clientId) {
+    public ResponseEntity getVehicle(@RequestParam(value = "stockNum") String stockNum, @RequestParam(value = "dealershipId") String dealerShipId) {
 
         try {
 
             if (stockNum != null) {
-                log.debug("Getting Vehicle Model for ID: {} and DealerShip Id: {}", stockNum, clientId);
-                VehicleModel model = vehicleService.get(clientId,stockNum);
+                log.debug("Getting Vehicle Model StockNum {} and DealerShip Id {}", stockNum, dealerShipId);
+                VehicleModel model = vehicleService.get(dealerShipId,stockNum);
 
                 if (model != null) {
                     return ResponseEntity.ok(model);
                 }
             }
         } catch (VehicleServiceException e) {
-            log.error("Error Getting the Vehicle for VehicleId: {} and ClientId: {}", stockNum, clientId);
+            log.error("Error Getting the Vehicle for StockNum {} for dealershipId {}", stockNum, dealerShipId);
             throw new WebServiceException(e);
         }
 
@@ -89,21 +89,21 @@ public class VehicleController {
      */
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(
-            value = "/dealer/{dealerId}",
+            value = "/dealer",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     @ApiOperation(value = "Get an Array of the DealerShip Vehicles",
-            response = VehicleModelCollection.class,
-            responseContainer = "VehicleModelCollection")
-    public ResponseEntity getDealerVehicles(@PathVariable(value = "dealerId") String dealerId) {
+            response = VehicleModel.class,
+            responseContainer = "VehicleModel")
+    public ResponseEntity getDealerShipVehicles(@RequestParam(value = "dealerId") String dealerId) {
         log.debug("Getting the Vehicle Collection for DealerShip Id: {}", dealerId);
         try {
             if (dealerId != null) {
-                VehicleModelCollection clientVehiclesCollection = vehicleService.get(dealerId);
+                List<VehicleModel> vehicles = vehicleService.get(dealerId);
 
-                if (clientVehiclesCollection != null) {
-                    return ResponseEntity.ok(clientVehiclesCollection);
+                if (vehicles != null) {
+                    return ResponseEntity.ok(vehicles);
                 }
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
             }

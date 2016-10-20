@@ -1,10 +1,12 @@
 package com.saat.auto.cafe.api;
 
+import com.saat.auto.cafe.data.DataConfiguration;
 import com.saat.auto.cafe.data.DbProperties;
 import com.saat.auto.cafe.service.HazelCastProperties;
 import com.saat.auto.cafe.common.interfaces.services.CacheService;
 import com.saat.auto.cafe.common.interfaces.services.HazelCastService;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
+import com.saat.auto.cafe.service.ServiceConfiguration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
@@ -16,27 +18,14 @@ import org.springframework.context.annotation.PropertySource;
  * Created by mcoletti on 6/1/16.
  */
 @Configuration
-@ComponentScan(value = {"com.saat.auto.cafe.*"})
-@PropertySource("classpath:props/application.yml")
-@Import(
-        {HazelCastProperties.class, DbProperties.class}
-)
-public class Beans {
+@ComponentScan(value = {"com.saat.auto.cafe.api.*"})
+@PropertySource("classpath:application.yml")
+@Import({
+        DataConfiguration.class,
+        ServiceConfiguration.class
+})
+public class ApiConfiguration {
 
-    @Autowired
-    HazelCastProperties hazelCastProperties;
-
-    @Autowired
-    DbProperties dbProperties;
-
-    @Autowired
-    HazelCastService hazelCastService;
-
-    @Autowired
-    CacheService cacheService;
-
-    @Autowired
-    VehicleDao vehicleDao;
 
 //    @Bean
 //    HazelCastService hazelCastService(){

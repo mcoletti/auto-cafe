@@ -15,7 +15,6 @@ import lombok.Data;
  * Created by micahcoletti on 8/8/16.
  */
 @Data
-@Builder
 @ApiModel(description = "The Address Data Model")
 public class AddressModel {
 
@@ -58,13 +57,13 @@ public class AddressModel {
 
     /**
      * Convert Address Model to Entity Object
-     * @return
      */
     public Address toEntity() {
 
-       Address a = new Address();
+        String s2 = street2.length() != 0 ? street2 : "na";
+        Address a = new Address();
         a.setStreet1(street1);
-        a.setStreet2(street2);
+        a.setStreet2(s2);
         a.setCity(city);
         a.setState(state);
 

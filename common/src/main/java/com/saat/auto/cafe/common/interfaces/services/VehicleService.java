@@ -4,6 +4,8 @@ import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
 import com.saat.auto.cafe.common.models.VehicleModelCollection;
 import com.saat.auto.cafe.common.models.VehicleModel;
 
+import java.util.List;
+
 /**
  * Created by micahcoletti on 7/27/16.
  */
@@ -45,8 +47,8 @@ public interface VehicleService {
 
     VehicleModel upsertDealerShipVehicle(VehicleModel cv) throws VehicleServiceException;
 
-    VehicleModelCollection get(String dealerId) throws VehicleServiceException;
-    VehicleModelCollection get(String dealerId, boolean resetCache) throws VehicleServiceException;
+    List<VehicleModel> get(String dealerId) throws VehicleServiceException;
+    List<VehicleModel> get(String dealerId, boolean resetCache) throws VehicleServiceException;
 
     VehicleModel get(String dealerId, String stockNum) throws VehicleServiceException;
     VehicleModel get(String dealerId, String stockNum, boolean resetCache) throws VehicleServiceException;

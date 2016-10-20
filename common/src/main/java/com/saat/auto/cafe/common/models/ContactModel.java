@@ -10,7 +10,6 @@ import lombok.Data;
 /**
  * Created by micahcoletti on 10/11/16.
  */
-@Builder
 @Data
 @ApiModel(description = "The Contact Data Model")
 public class ContactModel {
