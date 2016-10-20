@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by mcoletti on 6/1/16.
  */
-@ContextConfiguration(classes = DataBeans.class)
+@ContextConfiguration(classes = DataConfiguration.class)
 public class TestBase extends AbstractTestNGSpringContextTests {
 
 

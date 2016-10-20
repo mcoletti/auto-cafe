@@ -28,7 +28,7 @@ import org.springframework.context.annotation.PropertySource;
 })
 @ComponentScan(value = {"com.saat.auto.cafe.data.*"})
 @EnableConfigurationProperties(DbProperties.class)
-public class DataBeans {
+public class DataConfiguration {
 
 //    @Autowired
 //    DbProperties dbProperties;

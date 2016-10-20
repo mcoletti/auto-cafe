@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by micahcoletti on 7/22/16.
  */
-@Component
+@Service
 public class HazelCastCacheServiceImpl implements CacheService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());

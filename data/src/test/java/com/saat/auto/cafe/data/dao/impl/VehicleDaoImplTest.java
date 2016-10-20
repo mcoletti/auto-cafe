@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -87,12 +88,11 @@ public class VehicleDaoImplTest extends TestBase {
     @Test(dependsOnMethods = {"testUpsetClientVehicleNew","testInsertVehicleImage"})
     public void testGetByDealerId() throws Exception {
 
-        VehicleCollection result = vehicleDao.get(vehicleRoot.getDealershipId());
-        assertThat(result).isNotNull();
-        assertThat(result.getVehicles()).isNotNull();
-        assertThat(result.getVehicles().size()).isGreaterThan(0);
+        List<Vehicle> vehicles = vehicleDao.get(vehicleRoot.getDealershipId());
+        assertThat(vehicles).isNotNull();
+        assertThat(vehicles.size()).isGreaterThan(0);
 
-        result.getVehicles().forEach(v -> {
+        vehicles.forEach(v -> {
             try {
                 VehicleImage vi = vehicleDao.getVehicleImage(v.getDealershipId(),v.getStockNum());
 
@@ -105,11 +105,6 @@ public class VehicleDaoImplTest extends TestBase {
                 e.printStackTrace();
             }
         });
-
-
-
-
-
     }
 
     @Test(dependsOnMethods = {"testInsertVehicleImage","testUpsetClientVehicleNew"})

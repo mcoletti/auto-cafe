@@ -27,9 +27,10 @@ public class Contact {
 
     public ContactModel toModel() {
 
-        return ContactModel.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .address(address.toModel()).build();
+        ContactModel contact = new ContactModel();
+        contact.setFirstName(firstName);
+        contact.setLastName(lastName);
+        contact.setAddress(address.toModel());
+        return contact;
     }
 }

@@ -74,24 +74,23 @@ public class DealerShip {
     public DealerShipModel toModel() {
 
         List<ContactModel> contactList = new ArrayList<>();
-        contacts.forEach(contact -> {
-            contactList.add(contact.toModel());
-        });
-
+        contacts.forEach(contact -> contactList.add(contact.toModel()));
 
         long timestampCreated = UUIDGen.getAdjustedTimestamp(created);
         DateTime createDtm = new DateTime(timestampCreated);
-        long timestampModified = UUIDGen.getAdjustedTimestamp(modified);
+        long timestampModified = modified != null ? UUIDGen.getAdjustedTimestamp(modified) : 0L;
         DateTime modifiedDtm = new DateTime(timestampModified);
 
-        return DealerShipModel.builder()
-                .clientId(clientId.toString())
-                .id(id.toString())
-                .name(name)
-                .contacts(contactList)
-                .createdUser(createdUser)
-                .createdDtm(createDtm.toString())
-                .modifiedBy(modifiedUser)
-                .modifiedDtm(modifiedDtm.toString()).build();
+        DealerShipModel model = new DealerShipModel();
+        model.setId(id.toString());
+        model.setClientId(clientId.toString());
+        model.setName(name);
+        model.setContacts(contactList);
+        model.setCreatedUser(createdUser);
+        model.setCreatedDtm(createDtm.toString());
+        model.setModifiedBy(modifiedUser);
+        model.setModifiedDtm(modifiedDtm.toString());
+
+        return model;
     }
 }

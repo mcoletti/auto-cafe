@@ -13,6 +13,7 @@ import com.saat.auto.cafe.common.models.HzMember;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by micahcoletti on 7/26/16.
  */
-@Component
+@Service
 public class HazelCastServiceImpl implements HazelCastService {
 
 

@@ -44,7 +44,7 @@ public interface VehicleDao{
      * @return and Array of Vehicle
      * @throws ClientVehicleException if anything goes wrong
      */
-    VehicleCollection get(UUID dealerId) throws ClientVehicleException;
+    List<Vehicle> get(UUID dealerId) throws ClientVehicleException;
 //    List<Vehicle> get(UUID dealerId) throws ClientVehicleException;
 
 
