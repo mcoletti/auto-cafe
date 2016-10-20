@@ -31,8 +31,8 @@ import io.swagger.annotations.ApiOperation;
 @Api("Vehicle Endpoint(s)")
 @RestController
 @CrossOrigin
-@RequestMapping(VehicleEndPoint.PATH)
-public class VehicleEndPoint {
+@RequestMapping(VehicleController.PATH)
+public class VehicleController {
 
     public static final String PATH = WebHelper.API_V1_PATH + ApiConstants.VEHICLE_MP;
 
@@ -42,7 +42,7 @@ public class VehicleEndPoint {
     private VehicleService vehicleService;
 
     @Autowired
-    public VehicleEndPoint(VehicleService vehicleService) {
+    public VehicleController(VehicleService vehicleService) {
         this.vehicleService = vehicleService;
     }
 
