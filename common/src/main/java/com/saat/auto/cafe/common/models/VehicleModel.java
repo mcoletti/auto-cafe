@@ -71,6 +71,12 @@ public class VehicleModel {
     )
     private String lotLocation;
     @ApiModelProperty(
+            position = 8,
+            required = true,
+            value = "The Header Image Url"
+    )
+    private String imgUrl;
+    @ApiModelProperty(
             position = 9,
             required = true,
             value = "User who added the Vehicle to the System"
@@ -118,6 +124,7 @@ public class VehicleModel {
         cv.setYear(year);
         cv.setTrim(trim);
         cv.setLotLocation(lotLocation);
+        cv.setImgUrl(imgUrl);
         cv.setCreatedUser(createdUser);
         cv.setCreated(UUIDGen.getTimeUUID(DateTime.parse(createdDtm).getMillis()));
         cv.setModifiedUser(modifiedUser);

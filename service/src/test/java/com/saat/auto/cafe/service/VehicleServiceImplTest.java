@@ -31,7 +31,8 @@ public class VehicleServiceImplTest extends TestBase {
     public void testUpsertDealerVehicle() throws Exception {
 
         createVehicleRoot();
-        VehicleModel vehicle = vehicleService.upsertDealerShipVehicle(vehicleRoot);
+        vehicleService.upsertDealerShipVehicle(vehicleRoot);
+        VehicleModel vehicle = vehicleService.get(vehicleRoot.getDealerId(),vehicleRoot.getStockNum(),true);
         assertThat(vehicle).isNotNull();
         assertThat(vehicle.getDealerId()).isEqualTo(vehicleRoot.getDealerId());
         assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
@@ -43,7 +44,8 @@ public class VehicleServiceImplTest extends TestBase {
         vehicle.setPrice(13500);
         vehicle.setPrice(24500);
 
-        vehicle = vehicleService.upsertDealerShipVehicle(vehicle);
+        vehicleService.upsertDealerShipVehicle(vehicle);
+        vehicle = vehicleService.get(vehicle.getDealerId(),vehicle.getStockNum());
         assertThat(vehicle).isNotNull();
         assertThat(vehicle.getModifiedUser()).isEqualTo("micah");
         assertThat(vehicle.getDealerId()).isEqualTo(vehicleRoot.getDealerId());
@@ -72,7 +74,7 @@ public class VehicleServiceImplTest extends TestBase {
     }
     public void createVehicleRoot() {
         vehicleRoot = VehicleModel.builder()
-                .dealerId("ad44d405-8240-4035-98c9-2b9b528b2e86")
+                .dealerId("e9c6dfea-cc89-41ea-89f0-5ba5e2a0b816")
                 .stockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase())
                 .vin("1C4AJWAG6EL295921")
                 .options("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System")

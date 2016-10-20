@@ -102,17 +102,19 @@ public class VehicleDaoImpl implements VehicleDao {
     @Override
     public VehicleCollection get(UUID dealerId) throws ClientVehicleException {
 
-        List<Vehicle> vehicleList = null;
-
+        VehicleCollection cvc;
         try {
 
             Result<Vehicle> vehicles = vehicleAccessor.qryByDealerShipId(dealerId);
-            vehicleList = vehicles.all();
+            List<Vehicle> vehicleList = vehicles.all();
+            cvc = VehicleCollection.builder()
+                    .vehicles(vehicleList).build();
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("Error getting the list of Vehicles for dealershipId: {} - {}", dealerId, e.getMessage());
+            throw new ClientVehicleException(e);
         }
-        VehicleCollection cvc = VehicleCollection.builder()
-                .vehicles(vehicleList).build();
+
 
         return cvc;
     }

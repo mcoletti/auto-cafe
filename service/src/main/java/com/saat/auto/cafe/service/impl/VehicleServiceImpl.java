@@ -41,20 +41,29 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public VehicleModel upsertDealerShipVehicle(VehicleModel cvm) throws VehicleServiceException {
+    public VehicleModel upsertDealerShipVehicle(VehicleModel vehicleModel) throws VehicleServiceException {
 
 
         try {
-            Vehicle cv = vehicleDao.upsert(cvm.toEntity());
-            cvm = cv.toModel();
+            Vehicle vehicle = vehicleDao.upsert(vehicleModel.toEntity());
+            vehicleModel = vehicle.toModel();
+
+            String cacheKey = String.format("%s-%s", vehicleModel.getDealerId(), vehicleModel.getStockNum());
+            VehicleModel cacheEntry = cacheService.getCacheEntry(cacheKey, VehicleModel.class);
+
+            if (cacheEntry != null) {
+                cacheService.removeEntry(cacheKey);
+            }
+            cacheService.insertCacheEntry(cacheKey, vehicleModel, VehicleModel.class);
+
         } catch (ClientVehicleException e) {
             e.printStackTrace();
             log.error("Error on Add/Update of Vehicle - {}", e.getMessage());
-            cvm = null;
+            vehicleModel = null;
         }
 
 
-        return cvm;
+        return vehicleModel;
     }
 
     @Override
@@ -69,12 +78,12 @@ public class VehicleServiceImpl implements VehicleService {
         String cacheKey = VehicleModelCollection.getCollectionCacheKey(dealerId);
         try {
 
-            if(resetCache){
+            if (resetCache) {
                 cacheService.removeEntry(cacheKey);
-            }else{
+            } else {
                 cvmc = cacheService.getCacheEntry(cacheKey, VehicleModelCollection.class);
             }
-            if (cvmc == null){
+            if (cvmc == null) {
                 VehicleCollection cvl = vehicleDao.get(UUID.fromString(dealerId));
                 List<VehicleModel> cvList = new ArrayList<>();
 
@@ -109,7 +118,7 @@ public class VehicleServiceImpl implements VehicleService {
             } else {
                 cvm = cacheService.getCacheEntry(cacheKey, VehicleModel.class);
             }
-            if(cvm == null){
+            if (cvm == null) {
                 Vehicle cv = vehicleDao.get(UUID.fromString(dealerId), stockNum);
                 cvm = cv.toModel();
                 cacheService.insertCacheEntry(cacheKey, cvm, VehicleModel.class);

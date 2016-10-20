@@ -3,6 +3,7 @@ package com.saat.auto.cafe.common.entitys;
 import com.datastax.driver.mapping.annotations.Field;
 import com.datastax.driver.mapping.annotations.Frozen;
 import com.datastax.driver.mapping.annotations.UDT;
+import com.saat.auto.cafe.common.models.ContactModel;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,12 @@ public class Contact {
     @Frozen
     private Address address;
 
+
+    public ContactModel toModel() {
+
+        return ContactModel.builder()
+                .firstName(firstName)
+                .lastName(lastName)
+                .address(address.toModel()).build();
+    }
 }

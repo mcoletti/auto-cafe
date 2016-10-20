@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.saat.auto.cafe.common.AutoCafeConstants;
 import com.saat.auto.cafe.common.interfaces.services.CacheService;
 import com.saat.auto.cafe.common.interfaces.services.HazelCastService;
-import com.saat.auto.cafe.common.models.VehicleDetailModel;
 import com.saat.auto.cafe.service.cache.HazelCastCacheServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
