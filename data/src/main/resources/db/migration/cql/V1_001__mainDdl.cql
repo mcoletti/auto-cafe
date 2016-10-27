@@ -53,11 +53,13 @@ CREATE INDEX dealership_id ON autocafe.dealerships (id);
 
 CREATE TABLE IF NOT EXISTS autocafe.dealership_lots (
     dealership_id uuid,
-    lot_id double,
+    lot_id bigint,
     lot_location text,
     created timeuuid,
-    PRIMARY KEY ((dealership_id,lot_id),created)
+    PRIMARY KEY (dealership_id,created)
 );
+
+CREATE INDEX dealership_lots_id ON autocafe.dealership_lots (lot_id);
 
 -- Client Vehicles
 CREATE TABLE IF NOT EXISTS autocafe.vehicles (
@@ -75,6 +77,7 @@ CREATE TABLE IF NOT EXISTS autocafe.vehicles (
     make text,
     model text,
     mileage double,
+    lot_id bigint,
     lot_location text,
     img_url text,
     created_user text,

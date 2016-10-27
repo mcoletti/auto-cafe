@@ -33,7 +33,7 @@ public class VehicleDaoImplTest extends TestBase {
 
     @BeforeClass
     public void init() {
-        dealerId = UUID.fromString("ad44d405-8240-4035-98c9-2b9b528b2e86");
+        dealerId = UUID.fromString("c1ee6433-e002-4563-9c7a-604c75eeef86");
     }
 
 
@@ -137,6 +137,7 @@ public class VehicleDaoImplTest extends TestBase {
         vehicleRoot.setMake("honda");
         vehicleRoot.setModel("honda");
         vehicleRoot.setYear(2013);
+        vehicleRoot.setLotId(12345);
         vehicleRoot.setLotLocation("Logan Utah Lot");
         vehicleRoot.setMileage(60000);
         vehicleRoot.setCreatedUser("testUser");

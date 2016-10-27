@@ -3,6 +3,7 @@ package com.saat.auto.cafe.data.dao.impl;
 import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.entitys.Contact;
 import com.saat.auto.cafe.common.entitys.DealerShip;
+import com.saat.auto.cafe.common.entitys.DealershipLot;
 import com.saat.auto.cafe.common.interfaces.daos.DealerShipDao;
 import com.saat.auto.cafe.data.TestBase;
 
@@ -47,7 +48,7 @@ public class DealerShipDaoImplTest extends TestBase {
 
         String user = "testUser";
         String dealerName = "testDealer";
-        UUID clientId = UUID.fromString("0a944635-f6dc-47e6-b570-8b59af2917b4");
+        UUID clientId = UUID.fromString("1daa3920-c111-43bc-9dc3-a412e133688f");
         dealerId = UUID.randomUUID();
         UUID timeUuid = UUIDGen.getTimeUUID();
 
@@ -123,6 +124,19 @@ public class DealerShipDaoImplTest extends TestBase {
 
     }
 
+    @Test
+    public void testUpsertDealerShipLot() throws Exception {
+
+    }
+
+    @Test
+    public void testGetDealershipLots() throws Exception {
+
+
+        List<DealershipLot> dealershipLots = dealerShipDao.getDealershipLots(UUID.fromString("c1ee6433-e002-4563-9c7a-604c75eeef86"));
+        assertThat(dealershipLots).isNotNull();
+
+    }
 
 
 

@@ -62,6 +62,8 @@ public class Vehicle {
     private String model;
     @Column
     private double mileage;
+    @Column(name = "lot_id")
+    private long lotId;
     @Column(name = "lot_location")
     private String lotLocation;
     @Column(name = "img_url")
@@ -77,25 +79,31 @@ public class Vehicle {
 
     /**
      * Method to covent the Entity object to the Model Object
-     * @return
      */
-    public VehicleModel toModel(){
-        return VehicleModel.builder()
-                .dealerId(dealershipId.toString())
-                .stockNum(stockNum)
-                .vin(vin)
-                .options(options)
-                .invoiceAmount(invoiceAmount)
-                .price(price)
-                .extColor(extColor).intColor(intColor)
-                .bodyStyle(bodyStyle).mileage(mileage)
-                .make(make).model(model).year(year)
-                .trim(trim)
-                .lotLocation(lotLocation)
-                .createdUser(createdUser)
-                .createdDtm(new DateTime(UUIDGen.unixTimestamp(created)).toString())
-                .modifiedUser(modifiedUser)
-                .modifiedDtm(new DateTime(UUIDGen.unixTimestamp(modified)).toString()).build();
+    public VehicleModel toModel() {
+
+        VehicleModel vm = new VehicleModel();
+        vm.setDealerId(dealershipId.toString());
+        vm.setStockNum(stockNum);
+        vm.setVin(vin);
+        vm.setOptions(options);
+        vm.setInvoiceAmount(invoiceAmount);
+        vm.setPrice(price);
+        vm.setExtColor(extColor);
+        vm.setIntColor(intColor);
+        vm.setBodyStyle(bodyStyle);
+        vm.setMileage(mileage);
+        vm.setMake(make);
+        vm.setModel(model);
+        vm.setYear(year);
+        vm.setTrim(trim);
+        vm.setLotId(lotId);
+        vm.setLotLocation(lotLocation);
+        vm.setCreatedUser(createdUser);
+        vm.setCreatedDtm(new DateTime(UUIDGen.unixTimestamp(created)).toString());
+        vm.setModifiedUser(modifiedUser);
+        vm.setModifiedDtm(new DateTime(UUIDGen.unixTimestamp(modified)).toString());
+        return vm;
 
     }
 

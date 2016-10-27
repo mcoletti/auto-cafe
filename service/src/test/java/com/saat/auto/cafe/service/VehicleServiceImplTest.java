@@ -86,6 +86,7 @@ public class VehicleServiceImplTest extends TestBase {
                 .make("Honda")
                 .model("Accord")
                 .mileage(23000)
+                .lotId(12345)
                 .lotLocation("logan Utah")
                 .createdUser("testUser")
                 .createdDtm(DateTime.now().toString())

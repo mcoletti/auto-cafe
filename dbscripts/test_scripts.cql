@@ -7,10 +7,11 @@ select * from clients where id = 0a944635-f6dc-47e6-b570-8b59af2917b4;
 delete from client_vehicles where client_id = 65026b3e-a833-4263-81a5-dedc2a6efed5 and vehicle_id = 037b81b0-ea03-497c-a16e-c95a4655bbac;
 select * from vehicles where stock_num = '3908C' ALLOW FILTERING;
 select * from dealership_lots;
-select * from dealerships where id = e9c6dfea-cc89-41ea-89f0-5ba5e2a0b816;
+select * from dealerships;
+delete from dealerships where client_id = 0a944635-f6dc-47e6-b570-8b59af2917b4 and created = 390d2f10-96d3-11e6-b3ae-45e004073552;
 select * from dealer_vehicles;
 
-select * from vehicles where stock_num = 'E630A' ALLOW FILTERING;
+select * from vehicles;
 select * from client_vehicles where client_id = 395b2f0c-8008-410c-8402-fb64a3a7a295;
 select * from vehicle_images;
 

@@ -15,7 +15,6 @@ import lombok.Data;
 /**
  * Created by micahcoletti on 8/3/16.
  */
-@Builder
 @Data
 @ApiModel(description = "The DealerShip Vehicle Data Model")
 public class VehicleModel {
@@ -67,7 +66,13 @@ public class VehicleModel {
     @ApiModelProperty(
             position = 8,
             required = true,
-            value = "locations"
+            value = "Lot Id"
+    )
+    private long lotId;
+    @ApiModelProperty(
+            position = 8,
+            required = true,
+            value = "Lot Location"
     )
     private String lotLocation;
     @ApiModelProperty(
@@ -123,6 +128,7 @@ public class VehicleModel {
         cv.setModel(model);
         cv.setYear(year);
         cv.setTrim(trim);
+        cv.setLotId(lotId);
         cv.setLotLocation(lotLocation);
         cv.setImgUrl(imgUrl);
         cv.setCreatedUser(createdUser);

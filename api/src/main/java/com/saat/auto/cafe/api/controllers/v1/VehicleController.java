@@ -55,7 +55,7 @@ public class VehicleController {
      */
 
     @RequestMapping(
-            value = "/vehicle",
+            // value = "/vehicle",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
 
@@ -89,7 +89,7 @@ public class VehicleController {
      */
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(
-            value = "/dealer",
+            value = "/list",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE
     )

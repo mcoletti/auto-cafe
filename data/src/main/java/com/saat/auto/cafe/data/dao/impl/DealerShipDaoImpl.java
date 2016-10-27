@@ -4,6 +4,7 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
 import com.saat.auto.cafe.common.entitys.DealerShip;
+import com.saat.auto.cafe.common.entitys.DealershipLot;
 import com.saat.auto.cafe.common.exceptions.DaoException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.interfaces.daos.DealerShipDao;
@@ -28,6 +29,7 @@ public class DealerShipDaoImpl implements DealerShipDao {
 
     private final CassandraInstance ci;
     private Mapper<DealerShip> clientMapper;
+    private Mapper<DealershipLot> dealershipLotMapper;
     private final DealershipAccessor dealershipAccessor;
 
     @Autowired
@@ -88,5 +90,33 @@ public class DealerShipDaoImpl implements DealerShipDao {
 
 
         return dealerShips;
+    }
+
+    @Override
+    public void upsertDealerShipLot(DealershipLot dealershipLot) throws DaoException {
+
+        try {
+            dealershipLotMapper = ci.mappingManager().mapper(DealershipLot.class);
+            dealershipLotMapper.save(dealershipLot);
+        } catch (Exception e) {
+            log.error("Error adding/updating new dealershipLot - {}", e.getMessage());
+            throw new DaoException(e);
+        }
+    }
+
+    @Override
+    public List<DealershipLot> getDealershipLots(UUID dealerShipId) throws DaoException {
+
+        List<DealershipLot> dealershipLots = null;
+        try {
+            Result<DealershipLot> dealershipLotResult = dealershipAccessor.qryForDealerShipLots(dealerShipId);
+            dealershipLots = dealershipLotResult.all();
+        } catch (Exception e) {
+            log.error("Error getting list of lots for dealerShipId {} - {}", dealerShipId, e.getMessage());
+            throw new DaoException(e);
+        }
+
+
+        return dealershipLots;
     }
 }
