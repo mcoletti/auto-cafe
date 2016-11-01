@@ -45,6 +45,7 @@ public class DealerShipDaoImpl implements DealerShipDao {
         try {
             log.debug("Inserting/Updating new DealerShipModel - DealerShipModel Name: {} and id: {}", dealerShip.getName(), dealerShip.getId());
             clientMapper = ci.mappingManager().mapper(DealerShip.class);
+            // Save/Update the dealership record in the db
             clientMapper.save(dealerShip);
         } catch (Exception e) {
             log.error("Error updating or inserting DealerShipModel Record - {}", e.getMessage());

@@ -1,9 +1,11 @@
 package com.saat.auto.cafe.data.dao.impl;
 
+import com.beust.jcommander.internal.Lists;
 import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.entitys.Contact;
 import com.saat.auto.cafe.common.entitys.DealerShip;
 import com.saat.auto.cafe.common.entitys.DealershipLot;
+import com.saat.auto.cafe.common.entitys.LocationDetail;
 import com.saat.auto.cafe.common.interfaces.daos.DealerShipDao;
 import com.saat.auto.cafe.data.TestBase;
 
@@ -78,6 +80,24 @@ public class DealerShipDaoImplTest extends TestBase {
         dealerShip.setModifiedUser(user);
         dealerShip.setModified(timeUuid);
         dealerShip.setContacts(contacts);
+        dealerShip.setPageTitleHeader("Automatic Care Credit of Ogden");
+        dealerShip.setImgHeaderLogos(Lists.newArrayList("image1","image2"));
+        // Set the Location Detail
+        LocationDetail ld = new LocationDetail();
+        ld.setName("Ogden DealerShip");
+        address = new Address();
+        address.setStreet1("362 Wall Ave");
+        address.setStreet2("");
+        address.setCity("Ogden");
+        address.setZipCode(84405);
+        address.setState("UT");
+        phones = new HashSet<>();
+        phones.add("(801) 392-0039");
+        address.setPhones(phones);
+        ld.setAddress(address);
+        // Add the Location Detail
+        dealerShip.setLocationDetail(ld);
+
 //                .id(dealershipId)
 //                .createdUser(user)
 //                .created(DateTime.now().toDate())

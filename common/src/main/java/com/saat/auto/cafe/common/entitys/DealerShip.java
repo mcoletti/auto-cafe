@@ -58,6 +58,12 @@ public class DealerShip {
     private String name;
     @Column
     private List<Contact> contacts;
+    @Column(name = "page_title_header")
+    private String pageTitleHeader;
+    @Column(name = "img_header_logos")
+    private List<String> imgHeaderLogos;
+    @Column(name = "location_detail")
+    private LocationDetail locationDetail;
     @Column(name = "created_user")
     private String createdUser;
     @Column
@@ -86,6 +92,9 @@ public class DealerShip {
         model.setClientId(clientId.toString());
         model.setName(name);
         model.setContacts(contactList);
+        model.setPageTitleHeader(pageTitleHeader);
+        model.setImgHeaderLogos(imgHeaderLogos);
+        model.setLocationDetail(locationDetail.toModel());
         model.setCreatedUser(createdUser);
         model.setCreatedDtm(createDtm.toString());
         model.setModifiedBy(modifiedUser);

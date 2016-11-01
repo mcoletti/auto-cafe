@@ -3,6 +3,7 @@ package com.saat.auto.cafe.common.models;
 
 import com.saat.auto.cafe.common.entitys.Contact;
 import com.saat.auto.cafe.common.entitys.DealerShip;
+import com.saat.auto.cafe.common.entitys.LocationDetail;
 
 import org.apache.cassandra.utils.UUIDGen;
 import org.joda.time.DateTime;
@@ -49,6 +50,25 @@ public class DealerShipModel {
     )
     private List<ContactModel> contacts;
     @ApiModelProperty(
+            position = 4,
+            required = true,
+            value = "The Web Page Header Title"
+    )
+    private String pageTitleHeader;
+    @ApiModelProperty(
+            position = 4,
+            required = true,
+            value = "The Header Logos"
+    )
+    private List<String> imgHeaderLogos;
+    @ApiModelProperty(
+            position = 4,
+            required = true,
+            value = "The location information, Address etc.."
+    )
+    private LocationDetailModel locationDetail;
+
+    @ApiModelProperty(
             position = 5,
             required = true,
             value = "Who Created the Record in the DB"
@@ -88,6 +108,9 @@ public class DealerShipModel {
         List<Contact> contactList = new ArrayList<>();
         contacts.forEach(contact -> contactList.add(contact.toEntity()));
         dealerShip.setContacts(contactList);
+        dealerShip.setPageTitleHeader(pageTitleHeader);
+        dealerShip.setImgHeaderLogos(imgHeaderLogos);
+        dealerShip.setLocationDetail(locationDetail.toEntity());
         dealerShip.setCreatedUser(createdUser);
         DateTime created = DateTime.parse(createdDtm);
         dealerShip.setCreated(UUIDGen.getTimeUUID(created.getMillis()));

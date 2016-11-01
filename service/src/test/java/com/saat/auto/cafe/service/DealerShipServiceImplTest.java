@@ -1,16 +1,21 @@
 package com.saat.auto.cafe.service;
 
+import com.beust.jcommander.internal.Lists;
+import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.interfaces.services.DealerShipService;
 import com.saat.auto.cafe.common.models.AddressModel;
 import com.saat.auto.cafe.common.models.ContactModel;
 import com.saat.auto.cafe.common.models.DealerShipModel;
+import com.saat.auto.cafe.common.models.LocationDetailModel;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,29 +41,47 @@ public class DealerShipServiceImplTest extends TestBase {
         String created = DateTime.now().toString();
         String modified = DateTime.now().toString();
 
-        List<ContactModel> contacts = new ArrayList<>();
 
-        List<String> phones = new ArrayList<>();
+
+        AddressModel address = new AddressModel();
+        address.setStreet1("12345");
+        address.setStreet2("");
+        address.setZipCode(84604);
+        address.setState("UT");
+        Set<String> phones = new HashSet<>();
         phones.add("801.652.9154");
-        AddressModel address = AddressModel.builder()
-                .street1("12345").street2("12345")
-                .city("Ogden").state("UT")
-                .phones(phones).zipCode(84604).build();
+        address.setPhones(phones);
 
-        ContactModel contact = ContactModel.builder()
-                .firstName("Ryan").lastName("Steed")
-                .address(address).build();
-        contacts.add(contact);
+        ContactModel contact = new ContactModel();
+        contact.setFirstName("Ryan");
+        contact.setLastName("Steed");
+        contact.setAddress(address);
 
-        contact = ContactModel.builder()
-                .firstName("Matt").lastName("Steed")
-                .address(address).build();
+        List<ContactModel> contacts = new ArrayList<>();
         contacts.add(contact);
 
         DealerShipModel dealerShip = new DealerShipModel();
         dealerShip.setId(dealerId);
         dealerShip.setClientId(clientId);
         dealerShip.setName("AUtomatic Car Credit");
+        dealerShip.setContacts(contacts);
+        dealerShip.setPageTitleHeader("Automatic Care Credit of Ogden");
+        dealerShip.setImgHeaderLogos(Lists.newArrayList("image1","image2"));
+        // setup location detail
+        LocationDetailModel ldm = new LocationDetailModel();
+        ldm.setName("Ogden DealerShip");
+        address = new AddressModel();
+        address.setStreet1("362 Wall Ave");
+        address.setStreet2("");
+        address.setCity("Ogden");
+        address.setZipCode(84405);
+        address.setState("UT");
+        phones = new HashSet<>();
+        phones.add("(801) 392-0039");
+        address.setPhones(phones);
+        ldm.setAddress(address);
+
+        dealerShip.setLocationDetail(ldm);
         dealerShip.setCreatedUser("mcoletti");
         dealerShip.setCreatedDtm(created);
         dealerShip.setModifiedBy("mcoletti");
@@ -73,11 +96,11 @@ public class DealerShipServiceImplTest extends TestBase {
         assertThat(dealerShip.getCreatedDtm()).isEqualTo(created);
         assertThat(dealerShip.getModifiedDtm()).isEqualTo(modified);
 
-
-
-        contact = ContactModel.builder()
-                .firstName("Bob").lastName("Steed")
-                .address(address).build();
+        // Update some data
+        contact = new ContactModel();
+        contact.setFirstName("Bob");
+        contact.setLastName("Steed");
+        contact.setAddress(address);
 
         dealerShip.getContacts().add(contact);
         modified = DateTime.now().toString();
@@ -88,7 +111,7 @@ public class DealerShipServiceImplTest extends TestBase {
         assertThat(dealerShip).isNotNull();
         assertThat(dealerShip.getId()).isEqualTo(dealerId);
         assertThat(dealerShip.getClientId()).isEqualTo(clientId);
-        assertThat(dealerShip.getContacts().size()).isEqualTo(3);
+        assertThat(dealerShip.getContacts().size()).isEqualTo(2);
         assertThat(dealerShip.getCreatedDtm()).isEqualTo(created);
         assertThat(dealerShip.getModifiedDtm()).isEqualTo(modified);
     }

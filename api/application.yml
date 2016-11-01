@@ -1,0 +1,13 @@
+cassandra:
+  db:
+    contactPoints: 192.168.56.11,192.168.56.12
+    keySpace: autocafe
+    port: 9042
+    userName: admin
+    password: admin
+    consistencyLevel: quorum
+
+hazelcast:
+  maxIdleSecs: 3600
+  ttl: 28800
+  cacheName: autoCafeCache

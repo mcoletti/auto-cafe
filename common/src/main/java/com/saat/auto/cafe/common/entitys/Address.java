@@ -66,7 +66,7 @@ public class Address {
         address.setCity(city);
         address.setState(state);
         address.setZipCode(zipCode);
-        address.setPhones(new ArrayList<>(phones));
+        address.setPhones(phones);
 
         return address;
     }

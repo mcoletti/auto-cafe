@@ -1,5 +1,7 @@
 package com.saat.auto.cafe.common.models;
 
+import com.saat.auto.cafe.common.entitys.LocationDetail;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,4 +25,15 @@ public class LocationDetailModel {
             value = "Location Address"
     )
     private AddressModel address;
+
+    /**
+     * Convert to entity object
+     * @return
+     */
+    public LocationDetail toEntity() {
+        LocationDetail ld = new LocationDetail();
+        ld.setAddress(address.toEntity());
+        ld.setName(name);
+        return ld;
+    }
 }

@@ -3,9 +3,9 @@ CREATE KEYSPACE IF NOT EXISTS autocafe WITH replication = {'class': 'SimpleStrat
 
 select * from cassandra_migration_version;
 select * from cassandra_migration_version_counts;
-select * from clients where id = 0a944635-f6dc-47e6-b570-8b59af2917b4;
+select * from clients;
 delete from client_vehicles where client_id = 65026b3e-a833-4263-81a5-dedc2a6efed5 and vehicle_id = 037b81b0-ea03-497c-a16e-c95a4655bbac;
-select * from vehicles where stock_num = '3908C' ALLOW FILTERING;
+select * from vehicles;
 select * from dealership_lots;
 select * from dealerships;
 delete from dealerships where client_id = 0a944635-f6dc-47e6-b570-8b59af2917b4 and created = 390d2f10-96d3-11e6-b3ae-45e004073552;
@@ -33,18 +33,30 @@ CREATE TABLE IF NOT EXISTS autocafe.dealer_vehicles (
 INSERT INTO dealerships (client_id,id,created,created_user,lotLocation,modified,modified_user,name)
 VALUES (590ead73-1c84-44af-9a36-3cafdd8ce700,b898c2a0-0639-4237-9a4f-05a228b465ca,50554d6e-29bb-11e5-b345-feff819cdc9f,'testUser','cool location23',50554d6e-29bb-11e5-b345-feff819cdc9f,'testUser','client1');
 
-CREATE TABLE IF NOT EXISTS autocafe.dealerships (
-    client_id uuid,
-    id uuid,
-    name text,
-    contacts list<frozen<contact>>,
+CREATE TABLE IF NOT EXISTS autocafe.vehicles (
+    dealership_id uuid,
+    stock_num text,
+    vin text,
+    options text,
+    price double,
+    invoice_amount double,
+    ext_color text,
+    int_color text,
+    trim text,
+    body_style text,
+    year int,
+    make text,
+    model text,
+    mileage double,
+    lot_id bigint,
+    lot_location text,
+    img_url text,
     created_user text,
     created timeuuid,
     modified_user text,
     modified timeuuid,
-    PRIMARY KEY (client_id,created)
+    PRIMARY KEY (dealership_id,stock_num,created)
 );
 
-
-CREATE INDEX dealership_id ON autocafe.dealerships (id);
+CREATE INDEX vehicle_vin ON autocafe.vehicles (vin);
 

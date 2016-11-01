@@ -1,5 +1,6 @@
 package com.saat.auto.cafe.service;
 
+import com.saat.auto.cafe.common.entitys.Vehicle;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.common.interfaces.services.VehicleService;
 import com.saat.auto.cafe.common.models.VehicleModel;
@@ -71,27 +72,28 @@ public class VehicleServiceImplTest extends TestBase {
         assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
     }
     public void createVehicleRoot() {
-        vehicleRoot = VehicleModel.builder()
-                .dealerId("e9c6dfea-cc89-41ea-89f0-5ba5e2a0b816")
-                .stockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase())
-                .vin("1C4AJWAG6EL295921")
-                .options("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System")
-                .price(12000)
-                .invoiceAmount(10000)
-                .extColor("Black Clearcoat")
-                .intColor("Black")
-                .trim("")
-                .bodyStyle("SPORT UTILITY 2-DR")
-                .year(2013)
-                .make("Honda")
-                .model("Accord")
-                .mileage(23000)
-                .lotId(12345)
-                .lotLocation("logan Utah")
-                .createdUser("testUser")
-                .createdDtm(DateTime.now().toString())
-                .modifiedUser("testUser")
-                .modifiedDtm(DateTime.now().toString()).build();
+        vehicleRoot = new VehicleModel();
+        vehicleRoot.setDealerId("e9c6dfea-cc89-41ea-89f0-5ba5e2a0b816");
+        vehicleRoot.setStockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase());
+        vehicleRoot.setVin("1C4AJWAG6EL295921");
+        vehicleRoot.setOptions("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System");
+        vehicleRoot.setPrice(13499);
+        vehicleRoot.setInvoiceAmount(10000);
+        vehicleRoot.setExtColor("red");
+        vehicleRoot.setIntColor("black");
+        vehicleRoot.setTrim("Sport 4WD");
+        vehicleRoot.setBodyStyle("SEDAN 4-DR");
+        vehicleRoot.setMake("honda");
+        vehicleRoot.setModel("honda");
+        vehicleRoot.setYear(2013);
+        vehicleRoot.setLotId(12345);
+        vehicleRoot.setLotLocation("Logan Utah Lot");
+        vehicleRoot.setMileage(60000);
+        vehicleRoot.setCreatedUser("testUser");
+        vehicleRoot.setCreatedDtm(DateTime.now().toString());
+        vehicleRoot.setModifiedUser("testUser");
+        vehicleRoot.setModifiedDtm(DateTime.now().toString());
+
     }
 
 }

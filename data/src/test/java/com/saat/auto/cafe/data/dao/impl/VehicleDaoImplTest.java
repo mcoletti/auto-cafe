@@ -33,7 +33,7 @@ public class VehicleDaoImplTest extends TestBase {
 
     @BeforeClass
     public void init() {
-        dealerId = UUID.fromString("c1ee6433-e002-4563-9c7a-604c75eeef86");
+        dealerId = UUID.fromString("1dbcec8a-4dcd-49ce-af21-b4ed904ee416");
     }
 
 
@@ -126,6 +126,7 @@ public class VehicleDaoImplTest extends TestBase {
         vehicleRoot = new Vehicle();
         vehicleRoot.setDealershipId(dealerId);
         vehicleRoot.setStockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase());
+        vehicleRoot.setShortDescription("2001 Acura TL");
         vehicleRoot.setVin("1C4AJWAG6EL295921");
         vehicleRoot.setOptions("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System");
         vehicleRoot.setPrice(13499);

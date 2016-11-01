@@ -32,6 +32,12 @@ public class VehicleModel {
     )
     private String stockNum;
     @ApiModelProperty(
+            position = 3,
+            required = true,
+            value = "The Short Description of the vehicle"
+    )
+    private String shortDescription;
+    @ApiModelProperty(
             position = 4,
             required = true,
             value = "VIN"
@@ -113,29 +119,30 @@ public class VehicleModel {
      */
     public Vehicle toEntity(){
 
-        Vehicle cv = new Vehicle();
-        cv.setDealershipId(UUID.fromString(dealerId));
-        cv.setStockNum(stockNum);
-        cv.setOptions(options);
-        cv.setVin(vin);
-        cv.setInvoiceAmount(invoiceAmount);
-        cv.setPrice(price);
-        cv.setExtColor(extColor);
-        cv.setIntColor(intColor);
-        cv.setBodyStyle(bodyStyle);
-        cv.setMileage(mileage);
-        cv.setMake(make);
-        cv.setModel(model);
-        cv.setYear(year);
-        cv.setTrim(trim);
-        cv.setLotId(lotId);
-        cv.setLotLocation(lotLocation);
-        cv.setImgUrl(imgUrl);
-        cv.setCreatedUser(createdUser);
-        cv.setCreated(UUIDGen.getTimeUUID(DateTime.parse(createdDtm).getMillis()));
-        cv.setModifiedUser(modifiedUser);
-        cv.setModified(UUIDGen.getTimeUUID(DateTime.parse(modifiedDtm).getMillis()));
-        return cv;
+        Vehicle vehicle = new Vehicle();
+        vehicle.setDealershipId(UUID.fromString(dealerId));
+        vehicle.setStockNum(stockNum);
+        vehicle.setShortDescription(shortDescription);
+        vehicle.setOptions(options);
+        vehicle.setVin(vin);
+        vehicle.setInvoiceAmount(invoiceAmount);
+        vehicle.setPrice(price);
+        vehicle.setExtColor(extColor);
+        vehicle.setIntColor(intColor);
+        vehicle.setBodyStyle(bodyStyle);
+        vehicle.setMileage(mileage);
+        vehicle.setMake(make);
+        vehicle.setModel(model);
+        vehicle.setYear(year);
+        vehicle.setTrim(trim);
+        vehicle.setLotId(lotId);
+        vehicle.setLotLocation(lotLocation);
+        vehicle.setImgUrl(imgUrl);
+        vehicle.setCreatedUser(createdUser);
+        vehicle.setCreated(UUIDGen.getTimeUUID(DateTime.parse(createdDtm).getMillis()));
+        vehicle.setModifiedUser(modifiedUser);
+        vehicle.setModified(UUIDGen.getTimeUUID(DateTime.parse(modifiedDtm).getMillis()));
+        return vehicle;
 
 
     }

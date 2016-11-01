@@ -38,6 +38,8 @@ public class Vehicle {
     private UUID dealershipId;
     @Column(name = "stock_num")
     private String stockNum;
+    @Column(name = "short_description")
+    private String shortDescription;
     @Column(name = "vin")
     private String vin;
     @Column(name = "options")
@@ -85,6 +87,7 @@ public class Vehicle {
         VehicleModel vm = new VehicleModel();
         vm.setDealerId(dealershipId.toString());
         vm.setStockNum(stockNum);
+        vm.setShortDescription(shortDescription);
         vm.setVin(vin);
         vm.setOptions(options);
         vm.setInvoiceAmount(invoiceAmount);

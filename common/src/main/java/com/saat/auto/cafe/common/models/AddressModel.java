@@ -3,12 +3,10 @@ package com.saat.auto.cafe.common.models;
 import com.saat.auto.cafe.common.entitys.Address;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -53,7 +51,7 @@ public class AddressModel {
             required = true,
             value = "List of Phone Numbers"
     )
-    private List<String> phones;
+    private Set<String> phones;
 
     /**
      * Convert Address Model to Entity Object
