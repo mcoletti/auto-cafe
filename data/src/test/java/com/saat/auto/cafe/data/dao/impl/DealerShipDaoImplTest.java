@@ -6,6 +6,7 @@ import com.saat.auto.cafe.common.entitys.Contact;
 import com.saat.auto.cafe.common.entitys.DealerShip;
 import com.saat.auto.cafe.common.entitys.DealershipLot;
 import com.saat.auto.cafe.common.entitys.LocationDetail;
+import com.saat.auto.cafe.common.entitys.MakeVehicleTotal;
 import com.saat.auto.cafe.common.interfaces.daos.DealerShipDao;
 import com.saat.auto.cafe.data.TestBase;
 
@@ -16,8 +17,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -49,8 +52,8 @@ public class DealerShipDaoImplTest extends TestBase {
         // Test Add New
 
         String user = "testUser";
-        String dealerName = "testDealer";
-        UUID clientId = UUID.fromString("1daa3920-c111-43bc-9dc3-a412e133688f");
+        String dealerName = "ACC Logan";
+        UUID clientId = UUID.fromString("de4e3638-7ab5-4b82-9200-178b7cd91148");
         dealerId = UUID.randomUUID();
         UUID timeUuid = UUIDGen.getTimeUUID();
 
@@ -80,8 +83,22 @@ public class DealerShipDaoImplTest extends TestBase {
         dealerShip.setModifiedUser(user);
         dealerShip.setModified(timeUuid);
         dealerShip.setContacts(contacts);
-        dealerShip.setPageTitleHeader("Automatic Care Credit of Ogden");
-        dealerShip.setImgHeaderLogos(Lists.newArrayList("image1","image2"));
+        dealerShip.setHeaderTitle("Automatic Care Credit of Logan");
+        dealerShip.setHomeWelcomeMessage("Auto Car Credit of Ogden is dedicated to providing the ultimate automobile buying experience. Auto Car Credit of Ogden is your #1 source for buying " +
+                "a quality pre-owned vehicle at wholesale price. We have extensive relationships in the dealer community allowing us to purchase a wide variety of " +
+                "lease returns and new car trades at exceptional values. This enables Auto Car Credit of Ogden to pass along huge savings on the highest quality vehicles of your choice\n" +
+                "In Addition , we offer a full array of financing options to meet your needs. At our website, you can take advantage of several Internet technologies in the comfort of your home. " +
+                "Remember, if you need to talk to us, we are only a phone call away. Our departments (Sales, Services, and the Business office) are available to help you with all your automobile needs. " +
+                "Feel free to come by the store at any time to meet us in person. We invite you to take a tour of our facility and enjoy a pressure free car buying experience.");
+        dealerShip.setHeaderImgUrl("/img001.jpg");
+
+        // Setup the MakeVehicle Totals
+        Map<String,Integer> makeVehicleTotals = new HashMap<>();
+        makeVehicleTotals.put("Acura",10);
+        makeVehicleTotals.put("Honda",10);
+        makeVehicleTotals.put("BMW",10);
+        dealerShip.setMakeVehicleTotals(makeVehicleTotals);
+
         // Set the Location Detail
         LocationDetail ld = new LocationDetail();
         ld.setName("Ogden DealerShip");

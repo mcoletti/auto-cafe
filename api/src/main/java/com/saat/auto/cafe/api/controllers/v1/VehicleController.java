@@ -5,6 +5,7 @@ import com.saat.auto.cafe.api.WebHelper;
 import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
 import com.saat.auto.cafe.common.interfaces.services.VehicleService;
 import com.saat.auto.cafe.common.models.VehicleModel;
+import com.saat.auto.cafe.service.impl.VehicleServiceUtility;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ public class VehicleController {
 
 
     private VehicleService vehicleService;
+    private VehicleServiceUtility vehicleServiceUtility;
 
     @Autowired
     public VehicleController(VehicleService vehicleService) {
@@ -49,8 +51,8 @@ public class VehicleController {
     /**
      * Endpoint that get a Vehicle Model based off Id and ClientId
      *
-     * @param stockNum the Stock Number
-     * @param dealerShipId  the client Id
+     * @param stockNum     the Stock Number
+     * @param dealerShipId the client Id
      * @return a JSON object representing the Vehicle Model Object
      */
 
@@ -69,7 +71,7 @@ public class VehicleController {
 
             if (stockNum != null) {
                 log.debug("Getting Vehicle Model StockNum {} and DealerShip Id {}", stockNum, dealerShipId);
-                VehicleModel model = vehicleService.get(dealerShipId,stockNum);
+                VehicleModel model = vehicleService.get(dealerShipId, stockNum);
 
                 if (model != null) {
                     return ResponseEntity.ok(model);
@@ -87,7 +89,7 @@ public class VehicleController {
     /**
      * Endpoint that returns a Vehicle Collection based off DealerShip Id
      */
-    @CrossOrigin(origins = "http://localhost:4200")
+
     @RequestMapping(
             value = "/list",
             method = RequestMethod.GET,
@@ -113,6 +115,37 @@ public class VehicleController {
 
         } catch (VehicleServiceException e) {
             log.error("Error Getting the Vehicles Collection for ClientId: {}", dealerId);
+            throw new WebServiceException(e);
+        }
+    }
+
+    /**
+     * Endpoint that reset the vehicle make totals for a given dealership
+     * @param dealerId the dealership to process
+     * @return
+     */
+    @RequestMapping(
+            value = "/reset/vehicleMakeTotals",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ApiOperation(value = "Resets the Vehicle Make Totals for a given dealerShip",
+            response = String.class,
+            responseContainer = "String")
+    public ResponseEntity resetVehicleMakeTotals(@RequestParam(value = "dealerId") String dealerId) {
+        log.debug("Resetting the Vehicle Make Totals for DealerShip Id: {}", dealerId);
+        try {
+            if (dealerId != null) {
+
+                vehicleServiceUtility.updateVehicleMakeTotals(dealerId);
+                return ResponseEntity.ok("Reset Vehicle Make Totals");
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The DealerShip Id was not Provided");
+
+
+        } catch (VehicleServiceException e) {
+            log.error("Error Resetting the Vehicle Make Totals for dealership: {}", dealerId);
             throw new WebServiceException(e);
         }
     }

@@ -23,10 +23,12 @@ CREATE TYPE IF NOT EXISTS autocafe.contact(
 
 -- **************** CREATE TABLE(S) SCRIPTS *****************************
 
+-- clients table
 CREATE TABLE IF NOT EXISTS autocafe.clients (
     id uuid,
     name text,
     location_detail frozen<location_detail>,
+    home_page_text text,
     created timeuuid,
     created_user text,
     modified timeuuid,
@@ -36,24 +38,30 @@ CREATE TABLE IF NOT EXISTS autocafe.clients (
 
 CREATE INDEX client_name ON autocafe.clients (name);
 
+-- Make Vehicle Total data type
+
 -- Dealership Table
 CREATE TABLE IF NOT EXISTS autocafe.dealerships (
     client_id uuid,
     id uuid,
     name text,
     contacts list<frozen<contact>>,
-    page_title_header text,
-    img_header_logos list<text>,
+    header_title text,
+    header_img_url text,
+    home_welcome_message text,
+    make_vehicle_totals map<text,int>,
     location_detail frozen<location_detail>,
     created_user text,
     created timeuuid,
     modified_user text,
     modified timeuuid,
-    PRIMARY KEY (client_id,created)
+    PRIMARY KEY ((client_id,id),created)
 );
 
 CREATE INDEX dealership_id ON autocafe.dealerships (id);
+CREATE INDEX client_id ON autocafe.dealerships (client_id);
 
+-- dealership lots
 CREATE TABLE IF NOT EXISTS autocafe.dealership_lots (
     dealership_id uuid,
     lot_id bigint,
@@ -103,6 +111,8 @@ CREATE TABLE IF NOT EXISTS autocafe.vehicle_images (
     created timeuuid,
     PRIMARY KEY ((dealership_id,stock_num),created)
 );
+
+
 
 
 

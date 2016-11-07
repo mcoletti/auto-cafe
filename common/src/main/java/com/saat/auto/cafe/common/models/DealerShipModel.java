@@ -3,13 +3,13 @@ package com.saat.auto.cafe.common.models;
 
 import com.saat.auto.cafe.common.entitys.Contact;
 import com.saat.auto.cafe.common.entitys.DealerShip;
-import com.saat.auto.cafe.common.entitys.LocationDetail;
 
 import org.apache.cassandra.utils.UUIDGen;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import io.swagger.annotations.ApiModel;
@@ -54,13 +54,25 @@ public class DealerShipModel {
             required = true,
             value = "The Web Page Header Title"
     )
-    private String pageTitleHeader;
+    private String headerTitle;
     @ApiModelProperty(
             position = 4,
             required = true,
-            value = "The Header Logos"
+            value = "The Header Image Url"
     )
-    private List<String> imgHeaderLogos;
+    private String headerImgUrl;
+    @ApiModelProperty(
+            position = 4,
+            required = true,
+            value = "The Main Welcome Message"
+    )
+    private String homeWelcomeMessage;
+    @ApiModelProperty(
+            position = 4,
+            required = true,
+            value = "The Main Welcome Message"
+    )
+    private Map<String,Integer> makeVehicleTotals;
     @ApiModelProperty(
             position = 4,
             required = true,
@@ -108,8 +120,10 @@ public class DealerShipModel {
         List<Contact> contactList = new ArrayList<>();
         contacts.forEach(contact -> contactList.add(contact.toEntity()));
         dealerShip.setContacts(contactList);
-        dealerShip.setPageTitleHeader(pageTitleHeader);
-        dealerShip.setImgHeaderLogos(imgHeaderLogos);
+        dealerShip.setHeaderTitle(headerTitle);
+        dealerShip.setHeaderImgUrl(headerImgUrl);
+        dealerShip.setHomeWelcomeMessage(homeWelcomeMessage);
+        dealerShip.setMakeVehicleTotals(makeVehicleTotals);
         dealerShip.setLocationDetail(locationDetail.toEntity());
         dealerShip.setCreatedUser(createdUser);
         DateTime created = DateTime.parse(createdDtm);

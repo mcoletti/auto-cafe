@@ -302,7 +302,7 @@ seed_provider:
 # For workloads with more data than can fit in memory, Cassandra's
 # bottleneck will be reads that need to fetch data from
 # disk. "concurrent_reads" should be set to (16 * number_of_drives) in
-# order to allow the operations to enqueue low enough in the stack
+# seq to allow the operations to enqueue low enough in the stack
 # that the OS and drives can reorder them. Same applies to
 # "concurrent_counter_writes", since counter writes read the current
 # values before incrementing and writing them back.
@@ -366,7 +366,7 @@ memtable_allocation_type: heap_buffers
 # A fixed memory pool size in MB for for SSTable index summaries. If left
 # empty, this will default to 5% of the heap size. If the memory usage of
 # all index summaries exceeds this limit, SSTables with low read rates will
-# shrink their index summaries in order to meet this limit.  However, this
+# shrink their index summaries in seq to meet this limit.  However, this
 # is a best-effort process. In extreme conditions Cassandra may need to use
 # more than this amount of memory.
 index_summary_capacity_in_mb:
@@ -378,7 +378,7 @@ index_summary_capacity_in_mb:
 index_summary_resize_interval_in_minutes: 60
 
 # Whether to, when doing sequential writing, fsync() at intervals in
-# order to force the operating system to flush the dirty
+# seq to force the operating system to flush the dirty
 # buffers. Enable this to avoid sudden dirty buffer flushing from
 # impacting read latencies. Almost always a good idea on SSDs; not
 # necessarily on platters.
@@ -615,7 +615,7 @@ unlogged_batch_across_partitions_warn_threshold: 10
 
 # Throttles compaction to the given total throughput across the entire
 # system. The faster you insert data, the faster you need to compact in
-# order to keep the sstable count down, but in general, setting this to
+# seq to keep the sstable count down, but in general, setting this to
 # 16 to 32 times the rate you are inserting data is more than sufficient.
 # Setting this to 0 disables throttling. Note that this account for all types
 # of compaction, including validation compaction.
@@ -703,7 +703,7 @@ cross_node_timeout: false
 #
 # Out of the box, Cassandra provides
 #  - SimpleSnitch:
-#    Treats Strategy order as proximity. This can improve cache
+#    Treats Strategy seq as proximity. This can improve cache
 #    locality when disabling read repair.  Only appropriate for
 #    single-datacenter deployments.
 #  - GossipingPropertyFileSnitch
@@ -747,7 +747,7 @@ dynamic_snitch_update_interval_in_ms: 100
 dynamic_snitch_reset_interval_in_ms: 600000
 
 # if set greater than zero and read_repair_chance is < 1.0, this will allow
-# 'pinning' of replicas to hosts in order to increase cache capacity.
+# 'pinning' of replicas to hosts in seq to increase cache capacity.
 # The badness threshold will control how much worse the pinned host has to be
 # before the dynamic snitch will prefer other replicas over it.  This is
 # expressed as a double which represents a percentage.  Thus, a value of

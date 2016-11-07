@@ -19,7 +19,7 @@ public interface DealershipAccessor {
     Result<DealerShip> qryById(UUID id);
 
     @Query("select * from dealerships where client_id = ?")
-    Result<DealerShip> qryByClientId(UUID id);
+    Result<DealerShip> qryByClientId(UUID clientId);
 
     @Query("select * from dealership_lots where dealership_id = ?")
     Result<DealershipLot> qryForDealerShipLots(UUID dealerShipId);

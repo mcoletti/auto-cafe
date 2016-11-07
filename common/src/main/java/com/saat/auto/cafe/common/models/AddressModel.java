@@ -58,12 +58,13 @@ public class AddressModel {
      */
     public Address toEntity() {
 
-        String s2 = street2.length() != 0 ? street2 : "na";
+        String s2 = street2 != null ? street2 : "na";
         Address a = new Address();
         a.setStreet1(street1);
         a.setStreet2(s2);
         a.setCity(city);
         a.setState(state);
+        a.setZipCode(zipCode);
 
         Set<String> phoneSet = phones != null ? new HashSet<>(phones) : null;
         a.setPhones(phoneSet);

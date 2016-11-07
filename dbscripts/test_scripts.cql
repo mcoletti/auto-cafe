@@ -5,9 +5,17 @@ select * from cassandra_migration_version;
 select * from cassandra_migration_version_counts;
 select * from clients;
 delete from client_vehicles where client_id = 65026b3e-a833-4263-81a5-dedc2a6efed5 and vehicle_id = 037b81b0-ea03-497c-a16e-c95a4655bbac;
+update vehicles 
+set short_description = 'cool car' 
+where dealership_id = ef3395f0-4bfe-4fe6-953f-866735b60474 and stock_num = 'P1000' and created = d7ac83e0-8982-11e6-9ccf-599b436bc329;
+
 select * from vehicles;
-select * from dealership_lots;
 select * from dealerships;
+select * from dealership_lots;
+update dealerships set header_title = 'ACC Ogden' where client_id = 1daa3920-c111-43bc-9dc3-a412e133688f and created = b9d37410-a105-11e6-8a86-2d11b24b31a7;
+delete from dealerships where client_id = 0a944635-f6dc-47e6-b570-8b59af2917b4;
+
+select * from dealerships where id =ef3395f0-4bfe-4fe6-953f-866735b60474;
 delete from dealerships where client_id = 0a944635-f6dc-47e6-b570-8b59af2917b4 and created = 390d2f10-96d3-11e6-b3ae-45e004073552;
 select * from dealer_vehicles;
 
@@ -15,48 +23,26 @@ select * from vehicles;
 select * from client_vehicles where client_id = 395b2f0c-8008-410c-8402-fb64a3a7a295;
 select * from vehicle_images;
 
-CREATE TABLE IF NOT EXISTS autocafe.dealer_vehicles (
-    dealer_id uuid,
-    stock_num text,
-    short_desc text,
-    description text,
-    price double,
-    lotLocation frozen<lotLocation>,
-    details frozen<vehicle_detail>,
-    created_by text,
-    created_dtm timestamp,
-    modified_by text,
-    modified_dtm timestamp,
-    PRIMARY KEY (dealer_id,stock_num)
+CREATE TYPE IF NOT EXISTS autocafe.make_vehicle_total (
+    seq int,
+    make text,
+    vehicle_total int
 );
 
-INSERT INTO dealerships (client_id,id,created,created_user,lotLocation,modified,modified_user,name)
-VALUES (590ead73-1c84-44af-9a36-3cafdd8ce700,b898c2a0-0639-4237-9a4f-05a228b465ca,50554d6e-29bb-11e5-b345-feff819cdc9f,'testUser','cool location23',50554d6e-29bb-11e5-b345-feff819cdc9f,'testUser','client1');
 
-CREATE TABLE IF NOT EXISTS autocafe.vehicles (
-    dealership_id uuid,
-    stock_num text,
-    vin text,
-    options text,
-    price double,
-    invoice_amount double,
-    ext_color text,
-    int_color text,
-    trim text,
-    body_style text,
-    year int,
-    make text,
-    model text,
-    mileage double,
-    lot_id bigint,
-    lot_location text,
-    img_url text,
+CREATE TABLE IF NOT EXISTS autocafe.dealerships (
+    client_id uuid,
+    id uuid,
+    name text,
+    contacts list<frozen<contact>>,
+    page_title_header text,
+    img_header_logos list<text>,
+    location_detail frozen<location_detail>,
     created_user text,
     created timeuuid,
     modified_user text,
     modified timeuuid,
-    PRIMARY KEY (dealership_id,stock_num,created)
+    PRIMARY KEY (client_id,created)
 );
 
-CREATE INDEX vehicle_vin ON autocafe.vehicles (vin);
-
+CREATE INDEX dealership_id ON autocafe.dealerships (id);

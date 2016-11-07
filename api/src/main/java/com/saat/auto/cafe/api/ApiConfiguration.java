@@ -1,14 +1,8 @@
 package com.saat.auto.cafe.api;
 
 import com.saat.auto.cafe.data.DataConfiguration;
-import com.saat.auto.cafe.data.DbProperties;
-import com.saat.auto.cafe.service.HazelCastProperties;
-import com.saat.auto.cafe.common.interfaces.services.CacheService;
-import com.saat.auto.cafe.common.interfaces.services.HazelCastService;
-import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.service.ServiceConfiguration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -25,75 +19,5 @@ import org.springframework.context.annotation.PropertySource;
         ServiceConfiguration.class
 })
 public class ApiConfiguration {
-
-
-//    @Bean
-//    HazelCastService hazelCastService(){
-//
-//        return new HazelCastServiceImpl(null);
-//
-//    }
-
-//
-//    @Autowired
-//    VehicleDao vehicleDao;
-//
-//
-//    @Bean
-//    HazelCastService hazelCastService(){
-//
-//        return new HazelCastServiceImpl(Hazelcast.newHazelcastInstance());
-//    }
-//
-//
-//    @Bean
-//    CacheService cacheService(){
-//        return new HazelCastCacheServiceImpl(hazelCastService());
-//    }
-//
-//    @Bean
-//    VehicleService vehicleService(){
-//        return new VehicleServiceImpl(cacheService(),vehicleDao);
-//    }
-//
-//    @Autowired
-//    HazelCastService hazelCastService;
-//
-////    @Bean
-////    VehicleDao vehicleDao(){
-////        return new VehicleDaoImpl(cassandraInstance());
-////    }
-//
-//
-//
-//    /**
-//     * Bean for initializing a local hazelcast instance
-//     * @return
-//     */
-//    @Bean
-//    public HazelcastInstance hazelcastInstance(){
-//        return Hazelcast.newHazelcastInstance();
-//    }
-//
-////    /**
-////     * Bean for initializing the HazelCast Service
-////     * @return
-////     */
-////    @Bean
-////    public HazelCastService getHazelCastService(){
-////        return new HazelCastServiceImpl(hazelcastInstance());
-////    }
-//
-//    @Bean
-//    CacheService cacheService(){
-//        return new HazelCastCacheServiceImpl("autoCafeCache",new Gson());
-//    }
-//
-//    // Initialize services
-//
-//    @Bean
-//    VehicleService vehicleService(){
-//        return new VehicleServiceImpl(cacheService(),vehicleDao);
-//    }
 
 }

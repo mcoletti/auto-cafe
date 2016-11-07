@@ -1,6 +1,7 @@
 package com.saat.auto.cafe.data;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -10,10 +11,10 @@ import lombok.Data;
 /**
  * Created by micahcoletti on 7/28/16.
  */
-@Component
-@ConfigurationProperties(locations = "classpath:application.yml",prefix = "cassandra.db")
+// @Component
+// @ConfigurationProperties(locations = "classpath:application.yml")
 @Data
-public class DbProperties {
+public class MigrateProperties {
 
 //    @Value("${contactPoints}")
     private String contactPoints;

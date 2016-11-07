@@ -1,7 +1,5 @@
 package com.saat.auto.cafe.service;
 
-import com.beust.jcommander.internal.Lists;
-import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.interfaces.services.DealerShipService;
 import com.saat.auto.cafe.common.models.AddressModel;
 import com.saat.auto.cafe.common.models.ContactModel;
@@ -13,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -30,7 +30,7 @@ public class DealerShipServiceImplTest extends TestBase {
     @Autowired
     DealerShipService dealerShipService;
 
-    private String clientId = "0a944635-f6dc-47e6-b570-8b59af2917b4";
+    private String clientId = "1daa3920-c111-43bc-9dc3-a412e133688f";
 
 
     @Test
@@ -65,8 +65,20 @@ public class DealerShipServiceImplTest extends TestBase {
         dealerShip.setClientId(clientId);
         dealerShip.setName("AUtomatic Car Credit");
         dealerShip.setContacts(contacts);
-        dealerShip.setPageTitleHeader("Automatic Care Credit of Ogden");
-        dealerShip.setImgHeaderLogos(Lists.newArrayList("image1","image2"));
+        dealerShip.setHeaderTitle("Automatic Care Credit of Logan");
+        dealerShip.setHeaderImgUrl("/image2.jpg");
+        dealerShip.setHomeWelcomeMessage("Auto Car Credit of Ogden is dedicated to providing the ultimate automobile buying experience. Auto Car Credit of Ogden is your #1 source for buying " +
+                "a quality pre-owned vehicle at wholesale price. We have extensive relationships in the dealer community allowing us to purchase a wide variety of " +
+                "lease returns and new car trades at exceptional values. This enables Auto Car Credit of Ogden to pass along huge savings on the highest quality vehicles of your choice\n" +
+                "In Addition , we offer a full array of financing options to meet your needs. At our website, you can take advantage of several Internet technologies in the comfort of your home. " +
+                "Remember, if you need to talk to us, we are only a phone call away. Our departments (Sales, Services, and the Business office) are available to help you with all your automobile needs. " +
+                "Feel free to come by the store at any time to meet us in person. We invite you to take a tour of our facility and enjoy a pressure free car buying experience.");
+        Map<String,Integer> makeVehicleTotals = new HashMap<>();
+        makeVehicleTotals.put("Acura",10);
+        makeVehicleTotals.put("Honda",10);
+        makeVehicleTotals.put("BMW",10);
+        dealerShip.setMakeVehicleTotals(makeVehicleTotals);
+
         // setup location detail
         LocationDetailModel ldm = new LocationDetailModel();
         ldm.setName("Ogden DealerShip");
@@ -114,6 +126,37 @@ public class DealerShipServiceImplTest extends TestBase {
         assertThat(dealerShip.getContacts().size()).isEqualTo(2);
         assertThat(dealerShip.getCreatedDtm()).isEqualTo(created);
         assertThat(dealerShip.getModifiedDtm()).isEqualTo(modified);
+
+
+        List<DealerShipModel> dealerShipModels = dealerShipService.getDealerShips(clientId);
+        int currentSize = dealerShipModels.size();
+
+        dealerId = UUID.randomUUID().toString();
+        created = DateTime.now().toString();
+        modified = DateTime.now().toString();
+
+        dealerShip.setId(dealerId);
+        dealerShip.setCreatedDtm(created);
+        dealerShip.setModifiedDtm(modified);
+        dealerShipService.upsertDealserShip(dealerShip);
+        dealerShip = dealerShipService.get(dealerId);
+        assertThat(dealerShip).isNotNull();
+        assertThat(dealerShip.getId()).isEqualTo(dealerId);
+        assertThat(dealerShip.getClientId()).isEqualTo(clientId);
+        assertThat(dealerShip.getContacts().size()).isEqualTo(2);
+        assertThat(dealerShip.getCreatedDtm()).isEqualTo(created);
+        assertThat(dealerShip.getModifiedDtm()).isEqualTo(modified);
+
+        dealerShipModels = dealerShipService.getDealerShips(clientId);
+        int newSize = dealerShipModels.size();
+        assertThat(dealerShipModels).isNotNull();
+        assertThat(newSize).isGreaterThan(currentSize);
+
+        dealerShipModels = dealerShipService.getDealerShips(clientId);
+        assertThat(dealerShipModels).isNotNull();
+        assertThat(dealerShipModels.size()).isEqualTo(newSize);
+
+
     }
     @Test
     public void testGetDealerShips() throws Exception {

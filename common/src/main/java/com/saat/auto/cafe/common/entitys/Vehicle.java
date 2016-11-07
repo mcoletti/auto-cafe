@@ -9,6 +9,8 @@ import com.saat.auto.cafe.common.models.VehicleModel;
 import org.apache.cassandra.utils.UUIDGen;
 import org.joda.time.DateTime;
 
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.UUID;
 
 import lombok.Data;
@@ -92,6 +94,12 @@ public class Vehicle {
         vm.setOptions(options);
         vm.setInvoiceAmount(invoiceAmount);
         vm.setPrice(price);
+
+        // Format the Price to a currency value
+        Locale locale = new Locale("en", "US");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+        vm.setPriceFormatted(currencyFormatter.format(price));
+
         vm.setExtColor(extColor);
         vm.setIntColor(intColor);
         vm.setBodyStyle(bodyStyle);

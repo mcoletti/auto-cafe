@@ -29,8 +29,8 @@ public class HazelCastCacheServiceImplTest extends TestBase {
 
 
 
-        gson = new Gson();
-        cacheService = new HazelCastCacheServiceImpl(AutoCafeConstants.Caches.VEHICLE_CACHE,gson);
+        // gson = new Gson();
+        // cacheService = new HazelCastCacheServiceImpl(AutoCafeConstants.Caches.VEHICLE_CACHE,gson);
     }
 
 

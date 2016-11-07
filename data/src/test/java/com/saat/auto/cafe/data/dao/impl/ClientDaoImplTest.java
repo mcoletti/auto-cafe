@@ -13,7 +13,6 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.testng.Assert.*;
 
 /**
  * Created by micahcoletti on 10/6/16.
@@ -44,11 +43,13 @@ public class ClientDaoImplTest extends TestBase {
         client = new Client();
         client.setId(UUID.randomUUID());
         client.setName(name);
-        client.setLocationDetail(ld);
+        client.setLocationDetails(ld);
+        client.setHomePageText("");
         client.setCreatedUser("mcoletti");
         client.setCreated(timeUuid);
         client.setModifiedUser("mcoletti");
         client.setModified(timeUuid);
+        client.setHomePageText("This is a Test");
 
 
         clientDao.upsert(client);
@@ -60,7 +61,7 @@ public class ClientDaoImplTest extends TestBase {
 
 
         // Update the Client Data
-        ld = client.getLocationDetail();
+        ld = client.getLocationDetails();
         ld.setName("main Office 2");
         address = new Address();
         address.setStreet1("9876");
@@ -69,19 +70,19 @@ public class ClientDaoImplTest extends TestBase {
         address.setState("UT");
         address.setZipCode(86654);
         ld.setAddress(address);
-        client.setLocationDetail(ld);
+        client.setLocationDetails(ld);
 
         timeUuid = UUIDGen.getTimeUUID();
         client.setModified(timeUuid);
         client.setCreatedUser("acoletti");
-        client.setLocationDetail(ld);
+        client.setLocationDetails(ld);
 
         clientDao.upsert(client);
         client = clientDao.get(client.getId());
         assertThat(client).isNotNull();
         assertThat(client.getName()).isEqualTo(name);
         assertThat(client.getModified()).isEqualTo(timeUuid);
-        assertThat(client.getLocationDetail().getName()).isEqualTo(ld.getName());
+        assertThat(client.getLocationDetails().getName()).isEqualTo(ld.getName());
 
 
     }

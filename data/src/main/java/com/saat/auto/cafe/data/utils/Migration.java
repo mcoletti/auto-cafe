@@ -3,8 +3,9 @@ package com.saat.auto.cafe.data.utils;
 import com.contrastsecurity.cassandra.migration.CassandraMigration;
 import com.contrastsecurity.cassandra.migration.config.Keyspace;
 import com.contrastsecurity.cassandra.migration.config.ScriptsLocations;
-import com.saat.auto.cafe.data.DbProperties;
+import com.saat.auto.cafe.data.MigrateProperties;
 
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
@@ -17,7 +18,7 @@ import java.io.InputStream;
 
 public class Migration {
 
-    private static DbProperties props;
+    private static MigrateProperties props;
 
 
     public static void main(String[] args){
@@ -25,7 +26,7 @@ public class Migration {
         try {
             Yaml yaml = new Yaml();
             InputStream in = Migration.class.getClassLoader().getResourceAsStream("migrate.yml");
-            props = yaml.loadAs(in, DbProperties.class);
+            props = yaml.loadAs(in, MigrateProperties.class);
             Keyspace keyspace = new Keyspace();
             keyspace.setName(props.getKeySpace());
             String[] contactPoints = props.getContactPoints().split(",");

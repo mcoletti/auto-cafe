@@ -5,11 +5,24 @@ import com.saat.auto.cafe.common.entitys.Vehicle;
 import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.entitys.VehicleImage;
 import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
+import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
+import com.saat.auto.cafe.data.DataConfiguration;
 import com.saat.auto.cafe.data.TestBase;
+import com.saat.auto.cafe.data.dao.CassandraInstanceImpl;
 
 import org.apache.cassandra.utils.UUIDGen;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.SpringApplicationContextLoader;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -21,18 +34,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Created by micahcoletti on 7/18/16.
  */
-public class VehicleDaoImplTest extends TestBase {
+@ContextConfiguration(classes = DataConfiguration.class, loader = SpringApplicationContextLoader.class)
+@ActiveProfiles("dev")
+public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
 
 
     private Vehicle vehicleRoot;
     private Vehicle vehicle;
     private UUID dealerId;
 
+    // @Autowired
+    // CassandraProperties cassandraProperties;
+    // @Autowired
+    // CassandraInstance cassandraInstance;
     @Autowired
     VehicleDao vehicleDao;
 
     @BeforeClass
     public void init() {
+        //
+        // cassandraInstance = new CassandraInstanceImpl(cassandraProperties);
+        // vehicleDao = new VehicleDaoImpl(cassandraInstance);
+        //
         dealerId = UUID.fromString("1dbcec8a-4dcd-49ce-af21-b4ed904ee416");
     }
 
@@ -66,6 +89,7 @@ public class VehicleDaoImplTest extends TestBase {
         assertThat(vehicle.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
         assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
     }
+
     @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
     public void testInsertVehicleImage() throws Exception {
 
@@ -85,7 +109,7 @@ public class VehicleDaoImplTest extends TestBase {
     }
 
 
-    @Test(dependsOnMethods = {"testUpsetClientVehicleNew","testInsertVehicleImage"})
+    @Test(dependsOnMethods = {"testUpsetClientVehicleNew", "testInsertVehicleImage"})
     public void testGetByDealerId() throws Exception {
 
         List<Vehicle> vehicles = vehicleDao.get(vehicleRoot.getDealershipId());
@@ -94,9 +118,9 @@ public class VehicleDaoImplTest extends TestBase {
 
         vehicles.forEach(v -> {
             try {
-                VehicleImage vi = vehicleDao.getVehicleImage(v.getDealershipId(),v.getStockNum());
+                VehicleImage vi = vehicleDao.getVehicleImage(v.getDealershipId(), v.getStockNum());
 
-                if(vi.getImgType().equals(ImmType.Header.name())){
+                if (vi.getImgType().equals(ImmType.Header.name())) {
                     vi.setImgypeUrl(vi.getImgypeUrl());
                     vehicleDao.upsert(v);
                 }
@@ -107,10 +131,10 @@ public class VehicleDaoImplTest extends TestBase {
         });
     }
 
-    @Test(dependsOnMethods = {"testInsertVehicleImage","testUpsetClientVehicleNew"})
+    @Test(dependsOnMethods = {"testInsertVehicleImage", "testUpsetClientVehicleNew"})
     public void testGetVehicleImage() throws Exception {
 
-        VehicleImage vi = vehicleDao.getVehicleImage(vehicleRoot.getDealershipId(),vehicleRoot.getStockNum());
+        VehicleImage vi = vehicleDao.getVehicleImage(vehicleRoot.getDealershipId(), vehicleRoot.getStockNum());
         assertThat(vi).isNotNull();
         assertThat(vi.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
         assertThat(vi.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
@@ -125,7 +149,7 @@ public class VehicleDaoImplTest extends TestBase {
 
         vehicleRoot = new Vehicle();
         vehicleRoot.setDealershipId(dealerId);
-        vehicleRoot.setStockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase());
+        vehicleRoot.setStockNum(UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase());
         vehicleRoot.setShortDescription("2001 Acura TL");
         vehicleRoot.setVin("1C4AJWAG6EL295921");
         vehicleRoot.setOptions("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System");

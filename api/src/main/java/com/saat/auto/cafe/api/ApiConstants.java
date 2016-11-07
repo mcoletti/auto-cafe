@@ -12,4 +12,5 @@ public class ApiConstants {
     public static final String VEHICLE_MP = "/vehicle";
     public static final String CROSS_ORIGINS = "http://localhost:4200"  ;
     public static final String DEALERSHIP_MP = "/dealership";
+    public static final String CLIENT_MP = "/client";
 }

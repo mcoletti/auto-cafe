@@ -73,7 +73,7 @@ public class VehicleServiceImplTest extends TestBase {
     }
     public void createVehicleRoot() {
         vehicleRoot = new VehicleModel();
-        vehicleRoot.setDealerId("e9c6dfea-cc89-41ea-89f0-5ba5e2a0b816");
+        vehicleRoot.setDealerId("216b8863-8247-4e5c-a0ab-7bea34fae324");
         vehicleRoot.setStockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase());
         vehicleRoot.setVin("1C4AJWAG6EL295921");
         vehicleRoot.setOptions("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System");

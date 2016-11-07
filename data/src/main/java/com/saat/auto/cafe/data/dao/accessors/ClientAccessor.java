@@ -18,4 +18,7 @@ public interface ClientAccessor {
 
     @Query("select * from clients where name = ?")
     Result<Client> qryByName(String name);
+
+    @Query("select * from clients")
+    Result<Client> qryForAll();
 }

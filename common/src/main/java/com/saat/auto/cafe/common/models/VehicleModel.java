@@ -55,6 +55,7 @@ public class VehicleModel {
             value = "Vehicle Price"
     )
     private double price;
+    private String priceFormatted;
     @ApiModelProperty(
             position = 6,
             required = true,

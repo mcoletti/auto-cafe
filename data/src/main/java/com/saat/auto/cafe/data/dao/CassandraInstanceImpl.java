@@ -10,9 +10,9 @@ import com.datastax.driver.mapping.MappingManager;
 import com.saat.auto.cafe.common.entitys.Address;
 import com.saat.auto.cafe.common.entitys.AddressCodec;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
-import com.saat.auto.cafe.data.DbProperties;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,11 +24,11 @@ public class CassandraInstanceImpl implements CassandraInstance {
 
     private final Cluster cluster;
     private final Session session;
-    private final DbProperties config;
+    private final CassandraProperties config;
     private final MappingManager mappingManager;
 
     @Autowired
-    public CassandraInstanceImpl(DbProperties config) {
+    public CassandraInstanceImpl(CassandraProperties config) {
         this.config = config;
         // Setup the Cluster
         String[] contactPoints = config.getContactPoints().split(",");
@@ -42,16 +42,21 @@ public class CassandraInstanceImpl implements CassandraInstance {
                 .withCodecRegistry(codecRegistry)
                 .build();
 
-//        // Add the Address custom codec for the address user type
-        UserType addressType = cluster.getMetadata().getKeyspace(config.getKeySpace()).getUserType("address");
+        // Add the Address & MakeVehicle custom codecs
+        UserType addressType = cluster.getMetadata().getKeyspace(config.getKeyspaceName()).getUserType("address");
         TypeCodec<UDTValue> addressTypeCodec = codecRegistry.codecFor(addressType);
         AddressCodec addressCodec = new AddressCodec(addressTypeCodec, Address.class);
         codecRegistry.register(addressCodec);
 
+        // UserType makeVehicleTotal = cluster.getMetadata().getKeyspace(config.getKeySpace()).getUserType("make_vehicle_total");
+        // TypeCodec<UDTValue> makeVehicleTypeTotalCodec = codecRegistry.codecFor(makeVehicleTotal);
+        // MakeVehicleTotalCodec makeVehicleTotalCodec = new MakeVehicleTotalCodec(makeVehicleTypeTotalCodec, MakeVehicleTotal.class);
+        // codecRegistry.register(makeVehicleTotalCodec);
+
 
         // Setup the Session
 
-        session = cluster.connect(config.getKeySpace());
+        session = cluster.connect(config.getKeyspaceName());
         mappingManager = new MappingManager(session);
 
 
@@ -75,7 +80,7 @@ public class CassandraInstanceImpl implements CassandraInstance {
 
     @Override
     public UDTValue getUdtValue(String udtType) {
-        return cluster.getMetadata().getKeyspace(config.getKeySpace()).getUserType(udtType).newValue();
+        return cluster.getMetadata().getKeyspace(config.getKeyspaceName()).getUserType(udtType).newValue();
     }
 
     @Override

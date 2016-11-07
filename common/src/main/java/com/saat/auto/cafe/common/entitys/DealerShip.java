@@ -1,12 +1,6 @@
 package com.saat.auto.cafe.common.entitys;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Statement;
-import com.datastax.driver.core.querybuilder.Insert;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.annotations.Column;
-import com.datastax.driver.mapping.annotations.Frozen;
 import com.datastax.driver.mapping.annotations.PartitionKey;
 import com.datastax.driver.mapping.annotations.Table;
 import com.saat.auto.cafe.common.AutoCafeConstants;
@@ -22,19 +16,15 @@ import org.joda.time.DateTime;
 //import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 //
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.set;
 
 /**
  * Created by mcoletti on 5/17/16.
@@ -52,16 +42,21 @@ public class DealerShip {
     @PartitionKey
     @Column(name = "client_id")
     private UUID clientId;
+    @PartitionKey(value = 1)
     @Column
     private UUID id;
     @Column
     private String name;
     @Column
     private List<Contact> contacts;
-    @Column(name = "page_title_header")
-    private String pageTitleHeader;
-    @Column(name = "img_header_logos")
-    private List<String> imgHeaderLogos;
+    @Column(name = "header_title")
+    private String headerTitle;
+    @Column(name = "header_img_url")
+    private String headerImgUrl;
+    @Column(name = "home_welcome_message")
+    private String homeWelcomeMessage;
+    @Column(name = "make_vehicle_totals")
+    private Map<String,Integer> makeVehicleTotals;
     @Column(name = "location_detail")
     private LocationDetail locationDetail;
     @Column(name = "created_user")
@@ -87,19 +82,20 @@ public class DealerShip {
         long timestampModified = modified != null ? UUIDGen.getAdjustedTimestamp(modified) : 0L;
         DateTime modifiedDtm = new DateTime(timestampModified);
 
-        DealerShipModel model = new DealerShipModel();
-        model.setId(id.toString());
-        model.setClientId(clientId.toString());
-        model.setName(name);
-        model.setContacts(contactList);
-        model.setPageTitleHeader(pageTitleHeader);
-        model.setImgHeaderLogos(imgHeaderLogos);
-        model.setLocationDetail(locationDetail.toModel());
-        model.setCreatedUser(createdUser);
-        model.setCreatedDtm(createDtm.toString());
-        model.setModifiedBy(modifiedUser);
-        model.setModifiedDtm(modifiedDtm.toString());
+        DealerShipModel dealerShipModel = new DealerShipModel();
+        dealerShipModel.setId(id.toString());
+        dealerShipModel.setClientId(clientId.toString());
+        dealerShipModel.setName(name);
+        dealerShipModel.setContacts(contactList);
+        dealerShipModel.setHeaderTitle(headerTitle);
+        dealerShipModel.setHeaderImgUrl(headerImgUrl);
+        dealerShipModel.setHomeWelcomeMessage(homeWelcomeMessage);
+        dealerShipModel.setLocationDetail(locationDetail.toModel());
+        dealerShipModel.setCreatedUser(createdUser);
+        dealerShipModel.setCreatedDtm(createDtm.toString());
+        dealerShipModel.setModifiedBy(modifiedUser);
+        dealerShipModel.setModifiedDtm(modifiedDtm.toString());
 
-        return model;
+        return dealerShipModel;
     }
 }

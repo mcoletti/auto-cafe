@@ -7,7 +7,5 @@ cassandra:
     password: admin
     consistencyLevel: quorum
 
-hazelcast:
-  maxIdleSecs: 3600
-  ttl: 28800
-  cacheName: autoCafeCache
+server:
+  port: 80

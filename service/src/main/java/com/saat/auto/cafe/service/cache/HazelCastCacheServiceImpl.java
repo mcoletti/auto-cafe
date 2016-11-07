@@ -14,7 +14,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -26,7 +25,6 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by micahcoletti on 7/22/16.
  */
-@Service
 public class HazelCastCacheServiceImpl implements CacheService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -40,23 +38,13 @@ public class HazelCastCacheServiceImpl implements CacheService {
      * Default Constructor
      */
     @Autowired
-    public HazelCastCacheServiceImpl(HazelCastService hazelCastService, HazelCastProperties config) {
+    protected HazelCastCacheServiceImpl(HazelCastService hazelCastService) {
         this.hazelCastService = hazelCastService;
         this.gson = new Gson();
-        this.CACHE_MAP = config.getCacheName();
     }
 
-    /**
-     * Full Constructor
-     */
-
-    public HazelCastCacheServiceImpl(String cacheMap, Gson gson) {
-
-        log.debug("Initializing the Cache Service for CacheMap: {}", cacheMap);
-        this.gson = gson;
-        this.CACHE_MAP = cacheMap;
-
-
+    public void setCACHE_MAP(String CACHE_MAP) {
+        this.CACHE_MAP = CACHE_MAP;
     }
 
     /**

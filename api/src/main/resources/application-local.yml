@@ -1,0 +1,21 @@
+#cassandra:
+#  db:
+#    contactPoints: 192.168.56.11,192.168.56.12
+#    keySpace: autocafe
+#    port: 9042
+#    userName: admin
+#    password: admin
+#    consistencyLevel: quorum
+
+server:
+  port: 8081
+
+spring:
+  data:
+    cassandra:
+      keyspace-name: autocafe
+      port: 9042
+      username: admin
+      password: admin
+      consistency-level: quorum
+      contact-points: 192.168.56.11,192.168.56.12
