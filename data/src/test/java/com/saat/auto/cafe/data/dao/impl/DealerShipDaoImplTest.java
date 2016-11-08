@@ -53,7 +53,7 @@ public class DealerShipDaoImplTest extends TestBase {
 
         String user = "testUser";
         String dealerName = "ACC Logan";
-        UUID clientId = UUID.fromString("de4e3638-7ab5-4b82-9200-178b7cd91148");
+        UUID clientId = UUID.fromString("f9ec7552-6380-4d0c-ae5f-9492a7d9ffb4");
         dealerId = UUID.randomUUID();
         UUID timeUuid = UUIDGen.getTimeUUID();
 
@@ -148,6 +148,15 @@ public class DealerShipDaoImplTest extends TestBase {
         dealerShip = dealerShipDao.get(dealerShip.getId());
         assertThat(dealerShip).isNotNull();
         assertThat(dealerShip.getModifiedUser()).isEqualTo(user);
+    }
+
+    @Test
+    public void updateDealerShip() throws Exception{
+
+
+
+
+
     }
 
 

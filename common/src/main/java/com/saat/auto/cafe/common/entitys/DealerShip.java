@@ -90,6 +90,7 @@ public class DealerShip {
         dealerShipModel.setHeaderTitle(headerTitle);
         dealerShipModel.setHeaderImgUrl(headerImgUrl);
         dealerShipModel.setHomeWelcomeMessage(homeWelcomeMessage);
+        dealerShipModel.setMakeVehicleTotals(makeVehicleTotals);
         dealerShipModel.setLocationDetail(locationDetail.toModel());
         dealerShipModel.setCreatedUser(createdUser);
         dealerShipModel.setCreatedDtm(createDtm.toString());

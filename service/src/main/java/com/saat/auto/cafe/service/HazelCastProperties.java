@@ -9,6 +9,8 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -19,6 +21,7 @@ import lombok.Data;
 @Data
 public class HazelCastProperties {
 //    @Value("${maxIdleSecs}")
+    private List<CacheProperties> caches;
     private int maxIdleSecs;
 //    @Value("${ttl}")
     private int ttl;

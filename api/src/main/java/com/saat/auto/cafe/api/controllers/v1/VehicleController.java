@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,12 +41,39 @@ public class VehicleController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 
-    private VehicleService vehicleService;
-    private VehicleServiceUtility vehicleServiceUtility;
+    private  final VehicleService vehicleService;
+    private final VehicleServiceUtility vehicleServiceUtility;
 
     @Autowired
-    public VehicleController(VehicleService vehicleService) {
+    public VehicleController(VehicleService vehicleService, VehicleServiceUtility vehicleServiceUtility) {
         this.vehicleService = vehicleService;
+        this.vehicleServiceUtility = vehicleServiceUtility;
+    }
+
+    /**
+     * Endpoint for Adding or Updating a Vehicle in the System
+     * @param vehicleModel
+     * @return
+     */
+    @RequestMapping(
+            method = RequestMethod.POST,
+            produces = MediaType.TEXT_PLAIN_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+
+    )
+    @ApiOperation(value = "Get a Vehicle Model Object based of Stok Number and DealerId",
+            response = String.class,
+            responseContainer = "String")
+    public ResponseEntity upsertVehicle(@RequestBody VehicleModel vehicleModel) {
+
+        try {
+
+            vehicleService.upsertDealerShipVehicle(vehicleModel);
+            return ResponseEntity.ok("Success");
+        } catch (VehicleServiceException e) {
+            log.error("Error Adding or Updating the Vehicle for StockNum {} for dealershipId {}", vehicleModel.getStockNum(), vehicleModel.getDealerId());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     /**
@@ -55,7 +83,6 @@ public class VehicleController {
      * @param dealerShipId the client Id
      * @return a JSON object representing the Vehicle Model Object
      */
-
     @RequestMapping(
             // value = "/vehicle",
             method = RequestMethod.GET,
@@ -65,13 +92,13 @@ public class VehicleController {
     @ApiOperation(value = "Get a Vehicle Model Object based of Stok Number and DealerId",
             response = VehicleModel.class,
             responseContainer = "VehicleModel")
-    public ResponseEntity getVehicle(@RequestParam(value = "stockNum") String stockNum, @RequestParam(value = "dealershipId") String dealerShipId) {
+    public ResponseEntity getVehicle(@RequestParam(value = "stockNum") String stockNum, @RequestParam(value = "dealershipId") String dealerShipId,@RequestParam(value = "resetCache", required = false) boolean resetCache) {
 
         try {
 
             if (stockNum != null) {
                 log.debug("Getting Vehicle Model StockNum {} and DealerShip Id {}", stockNum, dealerShipId);
-                VehicleModel model = vehicleService.get(dealerShipId, stockNum);
+                VehicleModel model = vehicleService.get(dealerShipId, stockNum,resetCache);
 
                 if (model != null) {
                     return ResponseEntity.ok(model);
@@ -98,11 +125,11 @@ public class VehicleController {
     @ApiOperation(value = "Get an Array of the DealerShip Vehicles",
             response = VehicleModel.class,
             responseContainer = "VehicleModel")
-    public ResponseEntity getDealerShipVehicles(@RequestParam(value = "dealerId") String dealerId) {
+    public ResponseEntity getDealerShipVehicles(@RequestParam(value = "dealerId") String dealerId,@RequestParam(value = "resetCache", required = false) boolean resetCache) {
         log.debug("Getting the Vehicle Collection for DealerShip Id: {}", dealerId);
         try {
             if (dealerId != null) {
-                List<VehicleModel> vehicles = vehicleService.get(dealerId);
+                List<VehicleModel> vehicles = vehicleService.get(dealerId,resetCache);
 
                 if (vehicles != null) {
                     return ResponseEntity.ok(vehicles);
@@ -121,13 +148,13 @@ public class VehicleController {
 
     /**
      * Endpoint that reset the vehicle make totals for a given dealership
+     *
      * @param dealerId the dealership to process
-     * @return
      */
     @RequestMapping(
             value = "/reset/vehicleMakeTotals",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE
+            produces = MediaType.TEXT_PLAIN_VALUE
     )
     @ApiOperation(value = "Resets the Vehicle Make Totals for a given dealerShip",
             response = String.class,

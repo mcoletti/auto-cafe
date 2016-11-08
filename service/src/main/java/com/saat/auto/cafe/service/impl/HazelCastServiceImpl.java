@@ -1,5 +1,6 @@
 package com.saat.auto.cafe.service.impl;
 
+import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Cluster;
 import com.hazelcast.core.Hazelcast;
@@ -12,7 +13,6 @@ import com.saat.auto.cafe.common.models.HzCluster;
 import com.saat.auto.cafe.common.models.HzMember;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -33,12 +33,17 @@ public class HazelCastServiceImpl implements HazelCastService {
     public HazelCastServiceImpl(HazelCastProperties config) {
 
         this.hazelcastInstance = Hazelcast.newHazelcastInstance();
-        MapConfig mapConfig = new MapConfig();
-        mapConfig.setMaxIdleSeconds(config.getMaxIdleSecs());
-        mapConfig.setTimeToLiveSeconds(config.getTtl());
-        mapConfig.setName(config.getCacheName());
-//        mapConfig.setInMemoryFormat(InMemoryFormat.OBJECT);
-        hazelcastInstance.getConfig().addMapConfig(mapConfig);
+
+        // Load up Cache Map Config settings
+        final MapConfig[] mapConfig = new MapConfig[1];
+        config.getCaches().forEach(cache -> {
+            mapConfig[0] = new MapConfig();
+            mapConfig[0].setName(cache.getName());
+            mapConfig[0].setTimeToLiveSeconds(cache.getTtl());
+            mapConfig[0].setMaxIdleSeconds(cache.getMaxIdleSecs());
+            this.hazelcastInstance.getConfig().addMapConfig(mapConfig[0]);
+        });
+
     }
 
     @Override

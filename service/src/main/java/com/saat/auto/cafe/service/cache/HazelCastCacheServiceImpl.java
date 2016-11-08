@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 
 import com.hazelcast.core.Member;
 import com.hazelcast.monitor.LocalMapStats;
-import com.saat.auto.cafe.service.HazelCastProperties;
 import com.saat.auto.cafe.common.interfaces.services.CacheService;
 import com.saat.auto.cafe.common.interfaces.services.HazelCastService;
 import com.saat.auto.cafe.common.models.CacheNode;
@@ -14,7 +13,6 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

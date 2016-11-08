@@ -55,11 +55,10 @@ CREATE TABLE IF NOT EXISTS autocafe.dealerships (
     created timeuuid,
     modified_user text,
     modified timeuuid,
-    PRIMARY KEY ((client_id,id),created)
+    PRIMARY KEY (client_id,id,name)
 );
 
 CREATE INDEX dealership_id ON autocafe.dealerships (id);
-CREATE INDEX client_id ON autocafe.dealerships (client_id);
 
 -- dealership lots
 CREATE TABLE IF NOT EXISTS autocafe.dealership_lots (

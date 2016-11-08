@@ -26,8 +26,8 @@ public class VehicleServiceUtilityTest extends TestBase {
     public void testUpdateVehicleMakeTotals() throws Exception {
 
 
-        vehicleServiceUtility.updateVehicleMakeTotals("216b8863-8247-4e5c-a0ab-7bea34fae324");
-        DealerShipModel dealerShip = dealerShipService.get("216b8863-8247-4e5c-a0ab-7bea34fae324");
+        vehicleServiceUtility.updateVehicleMakeTotals("445c245c-a886-4a9b-b49e-ad6455a69c84");
+        DealerShipModel dealerShip = dealerShipService.get("445c245c-a886-4a9b-b49e-ad6455a69c84");
         assertThat(dealerShip).isNotNull();
 
 

@@ -44,7 +44,7 @@ public class ClientServiceImpl implements ClientService {
             clientDao.upsert(clientModel.toEntity());
 
             // Get and insert the new Client into Cache
-            clientModel = getClient(clientModel.getId());
+            clientModel = getClient(clientModel.getId(),false);
 
             // Clear out the client list from cache
             String cacheKey = "client_list";
@@ -56,7 +56,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientModel getClient(String uuid) throws ClientServiceException {
+    public ClientModel getClient(String uuid, boolean resetCache) throws ClientServiceException {
 
         ClientModel clientModel = null;
         try {
@@ -64,7 +64,7 @@ public class ClientServiceImpl implements ClientService {
             String cacheKey = String.format("%s", uuid);
 
             clientModel = clientCacheService.getCacheEntry(cacheKey, ClientModel.class);
-            if (clientModel == null) {
+            if (clientModel == null || resetCache) {
                 clientModel = clientDao.get(UUID.fromString(uuid)).toModel();
                 clientCacheService.insertCacheEntry(cacheKey, clientModel, ClientModel.class);
             }
@@ -79,19 +79,20 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientModel> getClientList() throws ClientServiceException {
+        return getClientList(false);
+    }
 
-        ClientModel[] clients = new ClientModel[0];
+    @Override
+    public List<ClientModel> getClientList(boolean resetCache) throws ClientServiceException {
+        ClientModel[] clients;
         try {
             String cacheKey = "client_list";
-
             clients = clientCacheService.getCacheEntry(cacheKey, ClientModel[].class);
-            if (clients == null) {
+            if (clients == null || resetCache) {
                 List<Client> clientList = clientDao.getClientList();
 
                 List<ClientModel> clientModels = new ArrayList<>();
-                clientList.forEach(client -> {
-                    clientModels.add(client.toModel());
-                });
+                clientList.forEach(client -> clientModels.add(client.toModel()));
 
                 clients = new ClientModel[clientModels.size()];
                 clients = clientModels.toArray(clients);

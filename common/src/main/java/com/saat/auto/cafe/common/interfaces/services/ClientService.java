@@ -13,9 +13,10 @@ public interface ClientService {
 
     void upsertClient(ClientModel clientModel) throws ClientServiceException;
 
-    ClientModel getClient(String uuid) throws ClientServiceException;
+    ClientModel getClient(String uuid, boolean resetCache) throws ClientServiceException;
 
     List<ClientModel> getClientList() throws ClientServiceException;
+    List<ClientModel> getClientList(boolean resetCache) throws ClientServiceException;
 
 
 }
