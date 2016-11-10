@@ -69,7 +69,7 @@ public class VehicleController {
         try {
 
             vehicleService.upsertDealerShipVehicle(vehicleModel);
-            return ResponseEntity.ok("Success");
+            return ResponseEntity.ok(String.format("Vehicle for Stock Number: %s has been Change i the system",vehicleModel.getStockNum()));
         } catch (VehicleServiceException e) {
             log.error("Error Adding or Updating the Vehicle for StockNum {} for dealershipId {}", vehicleModel.getStockNum(), vehicleModel.getDealerId());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

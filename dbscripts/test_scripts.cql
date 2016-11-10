@@ -10,9 +10,11 @@ set short_description = 'cool car'
 where dealership_id = ef3395f0-4bfe-4fe6-953f-866735b60474 and stock_num = 'P1000' and created = d7ac83e0-8982-11e6-9ccf-599b436bc329;
 
 select * from vehicles;
+
+delete from dealerships where id = afba859d-d1c6-463e-bc7e-4b211c813da7 and client_id = 1daa3920-c111-43bc-9dc3-a412e133688f;
 select * from dealerships;
 select * from dealership_lots;
-update dealerships set header_title = 'ACC Ogden' where client_id = 1daa3920-c111-43bc-9dc3-a412e133688f and created = b9d37410-a105-11e6-8a86-2d11b24b31a7;
+update dealerships set make_vehicle_totals = {'Acura': 0, 'BMW': 0, 'Honda': 0} where client_id = f9ec7552-6380-4d0c-ae5f-9492a7d9ffb4 and created = 7e0dc620-a5be-11e6-b584-0999e3fa498b and id = 69a2ba78-a3fd-4919-b098-fbfe59cc4c07;
 delete from dealerships where client_id = 0a944635-f6dc-47e6-b570-8b59af2917b4;
 
 select * from dealerships where id =ef3395f0-4bfe-4fe6-953f-866735b60474;

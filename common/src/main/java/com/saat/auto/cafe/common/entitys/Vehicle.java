@@ -110,6 +110,7 @@ public class Vehicle {
         vm.setTrim(trim);
         vm.setLotId(lotId);
         vm.setLotLocation(lotLocation);
+        vm.setImgUrl(imgUrl);
         vm.setCreatedUser(createdUser);
         vm.setCreatedDtm(new DateTime(UUIDGen.unixTimestamp(created)).toString());
         vm.setModifiedUser(modifiedUser);
