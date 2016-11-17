@@ -7,6 +7,7 @@ import com.saat.auto.cafe.common.interfaces.services.VehicleService;
 import com.saat.auto.cafe.common.models.VehicleModel;
 import com.saat.auto.cafe.service.impl.VehicleServiceUtility;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,20 +42,21 @@ public class VehicleController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-
-    private  final VehicleService vehicleService;
-    private final VehicleServiceUtility vehicleServiceUtility;
-
     @Autowired
-    public VehicleController(VehicleService vehicleService, VehicleServiceUtility vehicleServiceUtility) {
-        this.vehicleService = vehicleService;
-        this.vehicleServiceUtility = vehicleServiceUtility;
-    }
+    private VehicleService vehicleService;
+    @Autowired
+    private VehicleServiceUtility vehicleServiceUtility;
+
+    // @Autowired
+    // public VehicleController(VehicleService vehicleService, VehicleServiceUtility vehicleServiceUtility) {
+    //
+    //     log.info("BootStrapping the Vehicle Controller");
+    //     this.vehicleService = vehicleService;
+    //     this.vehicleServiceUtility = vehicleServiceUtility;
+    // }
 
     /**
      * Endpoint for Adding or Updating a Vehicle in the System
-     * @param vehicleModel
-     * @return
      */
     @RequestMapping(
             method = RequestMethod.POST,
@@ -64,14 +67,63 @@ public class VehicleController {
     @ApiOperation(value = "Get a Vehicle Model Object based of Stok Number and DealerId",
             response = String.class,
             responseContainer = "String")
-    public ResponseEntity upsertVehicle(@RequestBody VehicleModel vehicleModel) {
+    public ResponseEntity addNewVehicle(@RequestBody VehicleModel vehicleModel) {
 
         try {
+            log.debug("Attempting to add new Vehicle into the System for StockNum {} and DealerShipId {}", vehicleModel.getStockNum(), vehicleModel.getDealerId());
 
+            // Check to make sure the Vehicle does not exist
+            VehicleModel vehicleCHeck = vehicleService.get(vehicleModel.getDealerId(), vehicleModel.getStockNum());
+            if (vehicleCHeck != null) {
+                log.error("The Vehicle with StockNum {} that is attempting to be Added already exists in the system", vehicleModel.getStockNum());
+                return ResponseEntity.badRequest().body(String.format("The Vehicle with StockNum %s that is attempting to be Added already exists in the system", vehicleModel.getStockNum()));
+            }
+            // Set the dates
+            vehicleModel.setCreatedDtm(DateTime.now().toString());
+            vehicleModel.setModifiedDtm(DateTime.now().toString());
             vehicleService.upsertDealerShipVehicle(vehicleModel);
-            return ResponseEntity.ok(String.format("Vehicle for Stock Number: %s has been Change i the system",vehicleModel.getStockNum()));
+            log.debug("Vehicle with StockNum {} has been added in the system", vehicleModel.getStockNum());
+            return ResponseEntity.ok(String.format("Vehicle for Stock Number: %s has been Added in the system", vehicleModel.getStockNum()));
         } catch (VehicleServiceException e) {
-            log.error("Error Adding or Updating the Vehicle for StockNum {} for dealershipId {}", vehicleModel.getStockNum(), vehicleModel.getDealerId());
+            log.error("Error Adding the Vehicle for StockNum {} for dealershipId {}", vehicleModel.getStockNum(), vehicleModel.getDealerId());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    /**
+     * Endpoint to update a Vehicle object in the system
+     *
+     * @param vehicleModel the vehicle to update
+     * @return HttpStatus Response
+     */
+    @RequestMapping(
+            method = RequestMethod.PUT,
+            produces = MediaType.TEXT_PLAIN_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+
+    )
+    @ApiOperation(value = "Get a Vehicle Model Object based of Stok Number and DealerId",
+            response = String.class,
+            responseContainer = "String")
+    public ResponseEntity updateVehicle(@RequestBody VehicleModel vehicleModel) {
+
+        try {
+            log.debug("Attempting to update the Vehicle in the System for StockNum {} and DealerShipId {}", vehicleModel.getStockNum(), vehicleModel.getDealerId());
+
+            // Check to make sure the Vehicle exists in the system
+            VehicleModel vehicleCHeck = vehicleService.get(vehicleModel.getDealerId(), vehicleModel.getStockNum());
+            if (vehicleCHeck == null) {
+                log.error("The Vehicle that is attempting to be updated does not exist in the system");
+                return ResponseEntity.badRequest().body("The vehicle does not exist in the system");
+            }
+
+            // Update the Vehicle
+            vehicleModel.setModifiedDtm(DateTime.now().toString());
+            vehicleService.upsertDealerShipVehicle(vehicleModel);
+            log.debug("Vehicle with StockNum {} has been updated in the system", vehicleModel.getStockNum());
+            return ResponseEntity.ok(String.format("Vehicle for Stock Number: %s has been Updated in the system", vehicleModel.getStockNum()));
+        } catch (VehicleServiceException e) {
+            log.error("Error Updating the Vehicle for StockNum {} for dealershipId {}", vehicleModel.getStockNum(), vehicleModel.getDealerId());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -92,13 +144,13 @@ public class VehicleController {
     @ApiOperation(value = "Get a Vehicle Model Object based of Stok Number and DealerId",
             response = VehicleModel.class,
             responseContainer = "VehicleModel")
-    public ResponseEntity getVehicle(@RequestParam(value = "stockNum") String stockNum, @RequestParam(value = "dealershipId") String dealerShipId,@RequestParam(value = "resetCache", required = false) boolean resetCache) {
+    public ResponseEntity getVehicle(@RequestParam(value = "stockNum") String stockNum, @RequestParam(value = "dealershipId") String dealerShipId, @RequestParam(value = "resetCache", required = false) boolean resetCache) {
 
         try {
 
             if (stockNum != null) {
                 log.debug("Getting Vehicle Model StockNum {} and DealerShip Id {}", stockNum, dealerShipId);
-                VehicleModel model = vehicleService.get(dealerShipId, stockNum,resetCache);
+                VehicleModel model = vehicleService.get(dealerShipId, stockNum, resetCache);
 
                 if (model != null) {
                     return ResponseEntity.ok(model);
@@ -114,6 +166,41 @@ public class VehicleController {
     }
 
     /**
+     * Endpoint to get Vehicle Model by VIN
+     *
+     * @param vin        the VIN number to use
+     * @param resetCache set to true if you want to reset the cache
+     */
+    @RequestMapping(
+            value = "/{vin}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+
+    )
+    @ApiOperation(value = "Get a Vehicle Model Object based of Stok Number and DealerId",
+            response = VehicleModel.class,
+            responseContainer = "VehicleModel")
+    public ResponseEntity getVehicle(@PathVariable("vin") String vin, @RequestParam(value = "resetCache", required = false) boolean resetCache) {
+
+        try {
+
+            if (vin != null) {
+                log.debug("Getting Vehicle Model By VIN {}", vin);
+                VehicleModel model = vehicleService.getByVin(vin, resetCache);
+
+                if (model != null) {
+                    return ResponseEntity.ok(model);
+                }
+            }
+            return ResponseEntity.badRequest().body("No VIN Was provided");
+        } catch (VehicleServiceException e) {
+            log.error("Error Getting the Vehicle for VIN {} - {}", vin, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+
+    }
+
+    /**
      * Endpoint that returns a Vehicle Collection based off DealerShip Id
      */
 
@@ -125,11 +212,11 @@ public class VehicleController {
     @ApiOperation(value = "Get an Array of the DealerShip Vehicles",
             response = VehicleModel.class,
             responseContainer = "VehicleModel")
-    public ResponseEntity getDealerShipVehicles(@RequestParam(value = "dealerId") String dealerId,@RequestParam(value = "resetCache", required = false) boolean resetCache) {
+    public ResponseEntity getDealerShipVehicles(@RequestParam(value = "dealerId") String dealerId, @RequestParam(value = "resetCache", required = false) boolean resetCache) {
         log.debug("Getting the Vehicle Collection for DealerShip Id: {}", dealerId);
         try {
             if (dealerId != null) {
-                List<VehicleModel> vehicles = vehicleService.get(dealerId,resetCache);
+                List<VehicleModel> vehicles = vehicleService.get(dealerId, resetCache);
 
                 if (vehicles != null) {
                     return ResponseEntity.ok(vehicles);

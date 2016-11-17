@@ -2,26 +2,16 @@ package com.saat.auto.cafe.data.dao.impl;
 
 import com.saat.auto.cafe.common.ImmType;
 import com.saat.auto.cafe.common.entitys.Vehicle;
-import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.entitys.VehicleImage;
-import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
-import com.saat.auto.cafe.common.interfaces.CassandraInstance;
+import com.saat.auto.cafe.common.exceptions.VehicleDaoException;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.data.DataConfiguration;
-import com.saat.auto.cafe.data.TestBase;
-import com.saat.auto.cafe.data.dao.CassandraInstanceImpl;
 
 import org.apache.cassandra.utils.UUIDGen;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cassandra.CassandraProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.SpringApplicationContextLoader;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -37,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration(classes = DataConfiguration.class, loader = SpringApplicationContextLoader.class)
 @ActiveProfiles("dev")
 public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
+
 
 
     private Vehicle vehicleRoot;
@@ -125,7 +116,7 @@ public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
                     vehicleDao.upsert(v);
                 }
 
-            } catch (ClientVehicleException e) {
+            } catch (VehicleDaoException e) {
                 e.printStackTrace();
             }
         });
@@ -139,6 +130,15 @@ public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
         assertThat(vi.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
         assertThat(vi.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
 
+
+    }
+
+    @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
+    public void testGetByVin() throws Exception {
+
+        Vehicle vehicle = vehicleDao.getByVin(vehicleRoot.getVin());
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getVin()).isEqualTo(vehicleRoot.getVin());
 
     }
 

@@ -1,6 +1,6 @@
 // package com.saat.auto.cafe.data.dao.impl;
 //
-// import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
+// import com.saat.auto.cafe.common.exceptions.VehicleDaoException;
 // import com.saat.auto.cafe.common.interfaces.VehicleDao;
 // import com.saat.auto.cafe.common.models.CatalogImage;
 // import com.saat.auto.cafe.common.models.VehicleDetailModel;
@@ -39,7 +39,7 @@
 //
 //
 //     @BeforeClass
-//     public void init() throws ClientVehicleException {
+//     public void init() throws VehicleDaoException {
 //         Reporter.log("#### Setting up Vehicle Unit Test ####",true);
 //         initMocks(this);
 //

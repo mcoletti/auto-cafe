@@ -16,7 +16,7 @@ public interface ClientAccessor {
     @Query("select * from clients where id = ?")
     Result<Client> qryById(UUID clientId);
 
-    @Query("select * from clients where name = ?")
+    @Query("select * from clients where name = ? ALLOW FILTERING")
     Result<Client> qryByName(String name);
 
     @Query("select * from clients")

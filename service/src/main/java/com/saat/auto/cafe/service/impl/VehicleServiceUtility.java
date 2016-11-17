@@ -1,7 +1,7 @@
 package com.saat.auto.cafe.service.impl;
 
 import com.saat.auto.cafe.common.entitys.Vehicle;
-import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
+import com.saat.auto.cafe.common.exceptions.VehicleDaoException;
 import com.saat.auto.cafe.common.exceptions.DaoException;
 import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
 import com.saat.auto.cafe.common.interfaces.daos.DealerShipDao;
@@ -61,7 +61,7 @@ public class VehicleServiceUtility {
 
             dealerShipDao.upsert(dealerShip.toEntity());
 
-        } catch (ClientVehicleException e) {
+        } catch (VehicleDaoException e) {
             e.printStackTrace();
             throw new VehicleServiceException(e);
         } catch (DaoException e) {

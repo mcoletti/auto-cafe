@@ -1,11 +1,10 @@
 package com.saat.auto.cafe.service.impl;
 
 import com.saat.auto.cafe.common.entitys.Vehicle;
-import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
+import com.saat.auto.cafe.common.exceptions.VehicleDaoException;
 import com.saat.auto.cafe.common.exceptions.DaoException;
 import com.saat.auto.cafe.common.exceptions.VehicleServiceException;
 import com.saat.auto.cafe.common.interfaces.daos.DealerShipDao;
-import com.saat.auto.cafe.common.interfaces.services.CacheService;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.common.interfaces.services.VehicleService;
 import com.saat.auto.cafe.common.models.DealerShipModel;
@@ -79,7 +78,7 @@ public class VehicleServiceImpl implements VehicleService {
             } else {
                 makeTotal++;
             }
-            vehicleMakeTotals.put(vehicle.getMake(),makeTotal);
+            vehicleMakeTotals.put(vehicle.getMake(), makeTotal);
             dealerShip.setMakeVehicleTotals(vehicleMakeTotals);
 
             // Update DealerShip
@@ -88,7 +87,7 @@ public class VehicleServiceImpl implements VehicleService {
             // Update DealerShip in cache
             cacheService.insertCacheEntry(dealerShip.getId(), dealerShip, DealerShipModel.class);
 
-        } catch (ClientVehicleException e) {
+        } catch (VehicleDaoException e) {
             e.printStackTrace();
             log.error("Error on Add/Update of Vehicle - {}", e.getMessage());
             vehicleModel = null;
@@ -127,7 +126,7 @@ public class VehicleServiceImpl implements VehicleService {
 
                 cacheService.insertCacheEntry(cacheKey, vehicleModels, VehicleModel[].class);
             }
-        } catch (ClientVehicleException e) {
+        } catch (VehicleDaoException e) {
             e.printStackTrace();
             throw new VehicleServiceException(e);
         }
@@ -142,24 +141,62 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public VehicleModel get(String dealerId, String stockNum, boolean resetCache) throws VehicleServiceException {
-        VehicleModel cvm = null;
+        VehicleModel vehicle = null;
         String cacheKey = String.format("%s-%s", dealerId, stockNum);
         try {
 
             if (resetCache) {
                 cacheService.removeEntry(cacheKey);
             } else {
-                cvm = cacheService.getCacheEntry(cacheKey, VehicleModel.class);
+                vehicle = cacheService.getCacheEntry(cacheKey, VehicleModel.class);
             }
-            if (cvm == null) {
+            if (vehicle == null) {
                 Vehicle cv = vehicleDao.get(UUID.fromString(dealerId), stockNum);
-                cvm = cv.toModel();
-                cacheService.insertCacheEntry(cacheKey, cvm, VehicleModel.class);
+                if (cv != null) {
+                    vehicle = cv.toModel();
+                    cacheService.insertCacheEntry(cacheKey, vehicle, VehicleModel.class);
+                }
+
             }
-        } catch (ClientVehicleException e) {
+        } catch (VehicleDaoException e) {
             e.printStackTrace();
             throw new VehicleServiceException(e);
         }
-        return cvm;
+        return vehicle;
+    }
+
+    @Override
+    public VehicleModel getByVin(String vin) throws VehicleServiceException {
+        return getByVin(vin, false);
+    }
+
+    @Override
+    public VehicleModel getByVin(String vin, boolean resetCache) throws VehicleServiceException {
+
+        log.debug("Getting Vehicle by VIN {}", vin);
+        VehicleModel vehicle = null;
+        try {
+            String cacheKey = String.format("%s", vin);
+
+            if (resetCache) {
+                cacheService.removeEntry(cacheKey);
+            } else {
+                vehicle = cacheService.getCacheEntry(cacheKey, VehicleModel.class);
+            }
+
+            if (vehicle == null) {
+
+                Vehicle vehicleEntity = vehicleDao.getByVin(vin);
+                if (vehicleEntity != null) {
+                    vehicle = vehicleEntity.toModel();
+                    cacheService.insertCacheEntry(cacheKey, vehicle, VehicleModel.class);
+                }
+            }
+        } catch (VehicleDaoException e) {
+            log.error("Error getting Vehicle by VIN {} - {}", vin, e.getMessage());
+        }
+
+
+        return vehicle;
     }
 }

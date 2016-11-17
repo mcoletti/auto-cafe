@@ -52,6 +52,8 @@ public interface VehicleService {
 
     VehicleModel get(String dealerId, String stockNum) throws VehicleServiceException;
     VehicleModel get(String dealerId, String stockNum, boolean resetCache) throws VehicleServiceException;
+    VehicleModel getByVin(String vin) throws VehicleServiceException;
+    VehicleModel getByVin(String vin, boolean resetCache) throws VehicleServiceException;
 
 
 }

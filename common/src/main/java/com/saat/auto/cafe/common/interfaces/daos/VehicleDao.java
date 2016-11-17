@@ -1,9 +1,8 @@
 package com.saat.auto.cafe.common.interfaces.daos;
 
 import com.saat.auto.cafe.common.entitys.Vehicle;
-import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.entitys.VehicleImage;
-import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
+import com.saat.auto.cafe.common.exceptions.VehicleDaoException;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +19,7 @@ public interface VehicleDao{
      * @param vi the VehicleImage object to add
      * @return the newly create Vehicle image Object
      */
-    VehicleImage insertVehicleImage(VehicleImage vi) throws ClientVehicleException;
+    VehicleImage insertVehicleImage(VehicleImage vi) throws VehicleDaoException;
 
     /**
      * Method to get a list of the Vehicle Images
@@ -28,24 +27,24 @@ public interface VehicleDao{
      * @param stockNum the stock number
      * @return an array of VehicleImage for the given Vehicle Id
      */
-    VehicleImage getVehicleImage(UUID dealershipId,String stockNum) throws ClientVehicleException;
+    VehicleImage getVehicleImage(UUID dealershipId,String stockNum) throws VehicleDaoException;
 
     /**
      * Method that adds or updates a DealerShip Vehicle into the DB
      * @param cv the DealerShip Vehicle Object to Add/Update
      * @return the newly added or updated DealerShip Vehicle oject
-     * @throws ClientVehicleException is anything goes wrong
+     * @throws VehicleDaoException is anything goes wrong
      */
-    Vehicle upsert(Vehicle cv) throws ClientVehicleException;
+    Vehicle upsert(Vehicle cv) throws VehicleDaoException;
 
     /**
      * Method to get a list of DealerShip Vehicle by DealerShip Id
      * @param dealerId the DealerShip Id
      * @return and Array of Vehicle
-     * @throws ClientVehicleException if anything goes wrong
+     * @throws VehicleDaoException if anything goes wrong
      */
-    List<Vehicle> get(UUID dealerId) throws ClientVehicleException;
-//    List<Vehicle> get(UUID dealerId) throws ClientVehicleException;
+    List<Vehicle> get(UUID dealerId) throws VehicleDaoException;
+//    List<Vehicle> get(UUID dealerId) throws VehicleDaoException;
 
 
 
@@ -54,11 +53,10 @@ public interface VehicleDao{
      * @param dealerId the client UUID
      * @param stockNum the vehicle StockNum
      * @return an instance of the Vehicle object
-     * @throws ClientVehicleException if anything goes wrong
+     * @throws VehicleDaoException if anything goes wrong
      */
-    Vehicle get(UUID dealerId, String stockNum) throws ClientVehicleException;
+    Vehicle get(UUID dealerId, String stockNum) throws VehicleDaoException;
 
 
-
-
+    Vehicle getByVin(String vin) throws VehicleDaoException;
 }

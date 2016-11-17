@@ -33,12 +33,8 @@ CREATE TABLE IF NOT EXISTS autocafe.clients (
     created_user text,
     modified timeuuid,
     modified_user text,
-    PRIMARY KEY (id,created)
+    PRIMARY KEY (id,name)
 );
-
-CREATE INDEX client_name ON autocafe.clients (name);
-
--- Make Vehicle Total data type
 
 -- Dealership Table
 CREATE TABLE IF NOT EXISTS autocafe.dealerships (
@@ -66,7 +62,7 @@ CREATE TABLE IF NOT EXISTS autocafe.dealership_lots (
     lot_id bigint,
     lot_location text,
     created timeuuid,
-    PRIMARY KEY (dealership_id,created)
+    PRIMARY KEY (dealership_id,lot_id)
 );
 
 CREATE INDEX dealership_lots_id ON autocafe.dealership_lots (lot_id);
@@ -95,7 +91,7 @@ CREATE TABLE IF NOT EXISTS autocafe.vehicles (
     created timeuuid,
     modified_user text,
     modified timeuuid,
-    PRIMARY KEY (dealership_id,stock_num,created)
+    PRIMARY KEY (dealership_id,stock_num)
 );
 
 CREATE INDEX vehicle_vin ON autocafe.vehicles (vin);
@@ -108,7 +104,7 @@ CREATE TABLE IF NOT EXISTS autocafe.vehicle_images (
     img_type text,
     img_order int,
     created timeuuid,
-    PRIMARY KEY ((dealership_id,stock_num),created)
+    PRIMARY KEY (dealership_id,stock_num)
 );
 
 

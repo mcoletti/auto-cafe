@@ -1,15 +1,11 @@
 package com.saat.auto.cafe.data.dao.impl;
 
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import com.datastax.driver.mapping.Result;
-import com.saat.auto.cafe.common.AutoCafeConstants.Schema.VehicleImagesTbl;
 import com.saat.auto.cafe.common.entitys.Vehicle;
-import com.saat.auto.cafe.common.entitys.VehicleCollection;
 import com.saat.auto.cafe.common.entitys.VehicleImage;
-import com.saat.auto.cafe.common.exceptions.ClientVehicleException;
+import com.saat.auto.cafe.common.exceptions.VehicleDaoException;
 import com.saat.auto.cafe.common.interfaces.CassandraInstance;
 import com.saat.auto.cafe.data.dao.accessors.VehicleAccessor;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
@@ -53,14 +49,14 @@ public class VehicleDaoImpl implements VehicleDao {
      * {@inheritDoc}
      */
     @Override
-    public VehicleImage insertVehicleImage(VehicleImage vi) throws ClientVehicleException {
+    public VehicleImage insertVehicleImage(VehicleImage vi) throws VehicleDaoException {
 
         try {
             Mapper<VehicleImage> viMapper = ci.mappingManager().mapper(VehicleImage.class);
             viMapper.save(vi);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ClientVehicleException(e);
+            throw new VehicleDaoException(e);
         }
         return vi;
     }
@@ -69,7 +65,7 @@ public class VehicleDaoImpl implements VehicleDao {
      * {@inheritDoc}
      */
     @Override
-    public VehicleImage getVehicleImage(UUID dealershipId,String stockNum) throws ClientVehicleException {
+    public VehicleImage getVehicleImage(UUID dealershipId,String stockNum) throws VehicleDaoException {
 
        VehicleImage vi;
         try {
@@ -78,13 +74,13 @@ public class VehicleDaoImpl implements VehicleDao {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Error Getting the image List for dealershipId: {} - {}", dealershipId, e.getMessage());
-            throw new ClientVehicleException(e);
+            throw new VehicleDaoException(e);
         }
         return vi;
     }
 
     @Override
-    public Vehicle upsert(Vehicle cv) throws ClientVehicleException {
+    public Vehicle upsert(Vehicle cv) throws VehicleDaoException {
 
 
         try {
@@ -92,7 +88,7 @@ public class VehicleDaoImpl implements VehicleDao {
             vehicleMapper.save(cv);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ClientVehicleException(e);
+            throw new VehicleDaoException(e);
         }
 
 
@@ -100,7 +96,7 @@ public class VehicleDaoImpl implements VehicleDao {
     }
 
     @Override
-    public List<Vehicle> get(UUID dealerId) throws ClientVehicleException {
+    public List<Vehicle> get(UUID dealerId) throws VehicleDaoException {
 
         List<Vehicle> vehicleList;
         try {
@@ -110,7 +106,7 @@ public class VehicleDaoImpl implements VehicleDao {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("Error getting the list of Vehicles for dealershipId: {} - {}", dealerId, e.getMessage());
-            throw new ClientVehicleException(e);
+            throw new VehicleDaoException(e);
         }
 
 
@@ -118,22 +114,38 @@ public class VehicleDaoImpl implements VehicleDao {
     }
 
     @Override
-    public Vehicle get(UUID dealerId, String stockNum) throws ClientVehicleException {
+    public Vehicle get(UUID dealerId, String stockNum) throws VehicleDaoException {
 
-        Vehicle cv;
+        Vehicle vehicle;
 
         try {
             Result<Vehicle> clientVehicles = vehicleAccessor.qryByDealerShipIdAndVehicleId(dealerId, stockNum);
-            cv = clientVehicles.one();
+            vehicle = clientVehicles.one();
         } catch (Exception e) {
             if (e.getMessage().contains("0 rows")) {
-                cv = null;
+                vehicle = null;
             } else {
                 e.printStackTrace();
                 log.error("Error getting the DealerShip Vehicle for dealershipId: {} and StockNum: {} - {}", dealerId, stockNum, e.getMessage());
-                throw new ClientVehicleException(e);
+                throw new VehicleDaoException(e);
             }
         }
-        return cv;
+        return vehicle;
+    }
+
+    @Override
+    public Vehicle getByVin(String vin) throws VehicleDaoException {
+
+        Vehicle vehicle;
+
+        try {
+            Result<Vehicle> vehicles = vehicleAccessor.qryByVin(vin);
+            vehicle = vehicles.one();
+        } catch (Exception e) {
+            log.error("Error getting vehicle by VIN {} - {}",vin,e.getMessage());
+            throw new VehicleDaoException(e);
+        }
+
+        return vehicle;
     }
 }

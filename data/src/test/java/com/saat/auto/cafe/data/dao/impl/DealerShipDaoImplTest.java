@@ -53,7 +53,7 @@ public class DealerShipDaoImplTest extends TestBase {
 
         String user = "testUser";
         String dealerName = "ACC Logan";
-        UUID clientId = UUID.fromString("f9ec7552-6380-4d0c-ae5f-9492a7d9ffb4");
+        UUID clientId = UUID.fromString("66f5edef-db30-4416-b543-a46e516a982e");
         dealerId = UUID.randomUUID();
         UUID timeUuid = UUIDGen.getTimeUUID();
 
@@ -84,7 +84,7 @@ public class DealerShipDaoImplTest extends TestBase {
         dealerShip.setModified(timeUuid);
         dealerShip.setContacts(contacts);
         dealerShip.setHeaderTitle("Automatic Care Credit of Logan");
-        dealerShip.setHomeWelcomeMessage("Auto Car Credit of Ogden is dedicated to providing the ultimate automobile buying experience. Auto Car Credit of Ogden is your #1 source for buying " +
+        dealerShip.setHomeWelcomeMessage("Auto Car Credit of Logan is dedicated to providing the ultimate automobile buying experience. Auto Car Credit of Ogden is your #1 source for buying " +
                 "a quality pre-owned vehicle at wholesale price. We have extensive relationships in the dealer community allowing us to purchase a wide variety of " +
                 "lease returns and new car trades at exceptional values. This enables Auto Car Credit of Ogden to pass along huge savings on the highest quality vehicles of your choice\n" +
                 "In Addition , we offer a full array of financing options to meet your needs. At our website, you can take advantage of several Internet technologies in the comfort of your home. " +
