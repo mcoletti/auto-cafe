@@ -6,6 +6,7 @@ import com.saat.auto.cafe.common.entitys.VehicleImage;
 import com.saat.auto.cafe.common.exceptions.VehicleDaoException;
 import com.saat.auto.cafe.common.interfaces.daos.VehicleDao;
 import com.saat.auto.cafe.data.DataConfiguration;
+import com.saat.auto.cafe.data.dao.DaoFactory;
 
 import org.apache.cassandra.utils.UUIDGen;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,9 @@ public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
     // @Autowired
     // CassandraInstance cassandraInstance;
     @Autowired
-    VehicleDao vehicleDao;
+    DaoFactory daoFactory;
+
+    private VehicleDao vehicleDao;
 
     @BeforeClass
     public void init() {
@@ -47,7 +50,8 @@ public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
         // cassandraInstance = new CassandraInstanceImpl(cassandraProperties);
         // vehicleDao = new VehicleDaoImpl(cassandraInstance);
         //
-        dealerId = UUID.fromString("1dbcec8a-4dcd-49ce-af21-b4ed904ee416");
+        vehicleDao = daoFactory.getVehicleDao();
+        dealerId = UUID.fromString("0cc60b64-01d7-4efa-a0c4-88737e4ef301");
     }
 
 
@@ -75,7 +79,14 @@ public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
 
     @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
     public void testGetByDealerIdAndVehicleId() throws Exception {
-        vehicle = vehicleDao.get(vehicleRoot.getDealershipId(), vehicleRoot.getStockNum());
+        vehicle = vehicleDao.get(vehicleRoot.getDealershipId(), vehicleRoot.getId());
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
+        assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
+    }
+    @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
+    public void testGetByDealerIdAndVin() throws Exception {
+        vehicle = vehicleDao.getByVin(vehicleRoot.getVin());
         assertThat(vehicle).isNotNull();
         assertThat(vehicle.getDealershipId()).isEqualTo(vehicleRoot.getDealershipId());
         assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
@@ -142,6 +153,15 @@ public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
 
     }
 
+    @Test(dependsOnMethods = {"testUpsetClientVehicleNew"})
+    public void testGetByStock() throws Exception {
+
+        Vehicle vehicle = vehicleDao.getByStockNum(vehicleRoot.getStockNum());
+        assertThat(vehicle).isNotNull();
+        assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
+
+    }
+
 
     private Vehicle setRootCV() {
 
@@ -149,6 +169,7 @@ public class VehicleDaoImplTest extends AbstractTestNGSpringContextTests {
 
         vehicleRoot = new Vehicle();
         vehicleRoot.setDealershipId(dealerId);
+        vehicleRoot.setId(UUID.randomUUID());
         vehicleRoot.setStockNum(UUID.randomUUID().toString().replace("-", "").substring(0, 5).toUpperCase());
         vehicleRoot.setShortDescription("2001 Acura TL");
         vehicleRoot.setVin("1C4AJWAG6EL295921");

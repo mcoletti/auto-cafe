@@ -38,6 +38,7 @@ public class Vehicle {
     @PartitionKey
     @Column(name = "dealership_id")
     private UUID dealershipId;
+    private UUID id;
     @Column(name = "stock_num")
     private String stockNum;
     @Column(name = "short_description")
@@ -88,6 +89,7 @@ public class Vehicle {
 
         VehicleModel vm = new VehicleModel();
         vm.setDealerId(dealershipId.toString());
+        vm.setId(id.toString());
         vm.setStockNum(stockNum);
         vm.setShortDescription(shortDescription);
         vm.setVin(vin);

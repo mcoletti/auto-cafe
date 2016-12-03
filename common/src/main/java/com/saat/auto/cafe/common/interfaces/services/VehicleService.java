@@ -50,10 +50,11 @@ public interface VehicleService {
     List<VehicleModel> get(String dealerId) throws VehicleServiceException;
     List<VehicleModel> get(String dealerId, boolean resetCache) throws VehicleServiceException;
 
-    VehicleModel get(String dealerId, String stockNum) throws VehicleServiceException;
-    VehicleModel get(String dealerId, String stockNum, boolean resetCache) throws VehicleServiceException;
+    VehicleModel get(String dealerId, String vehicleId, boolean resetCache) throws VehicleServiceException;
     VehicleModel getByVin(String vin) throws VehicleServiceException;
     VehicleModel getByVin(String vin, boolean resetCache) throws VehicleServiceException;
+    VehicleModel getByStockNum(String stockNum) throws VehicleServiceException;
+    VehicleModel getByStockNum(String stockNum, boolean resetCache) throws VehicleServiceException;
 
 
 }

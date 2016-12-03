@@ -65,11 +65,11 @@ public class VehicleDaoImpl implements VehicleDao {
      * {@inheritDoc}
      */
     @Override
-    public VehicleImage getVehicleImage(UUID dealershipId,String stockNum) throws VehicleDaoException {
+    public VehicleImage getVehicleImage(UUID dealershipId, String stockNum) throws VehicleDaoException {
 
-       VehicleImage vi;
+        VehicleImage vi;
         try {
-            Result<VehicleImage> imageResult = vehicleAccessor.qryForImageList(dealershipId,stockNum);
+            Result<VehicleImage> imageResult = vehicleAccessor.qryForImageList(dealershipId, stockNum);
             vi = imageResult.one();
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +101,7 @@ public class VehicleDaoImpl implements VehicleDao {
         List<Vehicle> vehicleList;
         try {
 
-            Result<Vehicle> vehicles = vehicleAccessor.qryByDealerShipId(dealerId);
+            Result<Vehicle> vehicles = vehicleAccessor.qryVehicleByDealerShipId(dealerId);
             vehicleList = vehicles.all();
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,19 +114,19 @@ public class VehicleDaoImpl implements VehicleDao {
     }
 
     @Override
-    public Vehicle get(UUID dealerId, String stockNum) throws VehicleDaoException {
+    public Vehicle get(UUID dealerId, UUID vehicleId) throws VehicleDaoException {
 
         Vehicle vehicle;
 
         try {
-            Result<Vehicle> clientVehicles = vehicleAccessor.qryByDealerShipIdAndVehicleId(dealerId, stockNum);
+            Result<Vehicle> clientVehicles = vehicleAccessor.qryVehicleByDealerShipIdAndVehicleId(dealerId, vehicleId);
             vehicle = clientVehicles.one();
         } catch (Exception e) {
             if (e.getMessage().contains("0 rows")) {
                 vehicle = null;
             } else {
                 e.printStackTrace();
-                log.error("Error getting the DealerShip Vehicle for dealershipId: {} and StockNum: {} - {}", dealerId, stockNum, e.getMessage());
+                log.error("Error getting the DealerShip Vehicle for dealershipId: {} and StockNum: {} - {}", dealerId, vehicleId, e.getMessage());
                 throw new VehicleDaoException(e);
             }
         }
@@ -137,12 +137,27 @@ public class VehicleDaoImpl implements VehicleDao {
     public Vehicle getByVin(String vin) throws VehicleDaoException {
 
         Vehicle vehicle;
-
+        log.debug("Getting Vehicle based off  VIN {}", vin);
         try {
             Result<Vehicle> vehicles = vehicleAccessor.qryByVin(vin);
             vehicle = vehicles.one();
         } catch (Exception e) {
-            log.error("Error getting vehicle by VIN {} - {}",vin,e.getMessage());
+            log.error("Error getting vehicle by VIN {} - {}", vin, e.getMessage());
+            throw new VehicleDaoException(e);
+        }
+
+        return vehicle;
+    }
+
+    @Override
+    public Vehicle getByStockNum(String stockNum) throws VehicleDaoException {
+        Vehicle vehicle;
+        log.debug("Getting Vehicle based off  StockNum {}", stockNum);
+        try {
+            Result<Vehicle> vehicles = vehicleAccessor.qryByStockNum(stockNum);
+            vehicle = vehicles.one();
+        } catch (Exception e) {
+            log.error("Error getting vehicle by StockNum {} - {}", stockNum, e.getMessage());
             throw new VehicleDaoException(e);
         }
 

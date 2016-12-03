@@ -10,6 +10,7 @@ import com.saat.auto.cafe.common.interfaces.services.VehicleService;
 import com.saat.auto.cafe.common.models.DealerShipModel;
 import com.saat.auto.cafe.common.models.VehicleModelCollection;
 import com.saat.auto.cafe.common.models.VehicleModel;
+import com.saat.auto.cafe.data.dao.DaoFactory;
 import com.saat.auto.cafe.service.cache.VehicleCacheService;
 
 import org.slf4j.Logger;
@@ -31,20 +32,19 @@ import java.util.UUID;
 public class VehicleServiceImpl implements VehicleService {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-    private final VehicleCacheService cacheService;
     private final VehicleDao vehicleDao;
     private final DealerShipDao dealerShipDao;
-
+    private final VehicleCacheService cacheService;
 
     /**
      * Main COnstructor
      */
-    @Autowired
-    public VehicleServiceImpl(VehicleCacheService cacheService, VehicleDao vehicleDao, DealerShipDao dealerShipDao) {
 
+    @Autowired
+    public VehicleServiceImpl(DaoFactory daoFactory, VehicleCacheService cacheService) {
+        this.vehicleDao = daoFactory.getVehicleDao();
+        this.dealerShipDao = daoFactory.getDealerShipDao();
         this.cacheService = cacheService;
-        this.vehicleDao = vehicleDao;
-        this.dealerShipDao = dealerShipDao;
     }
 
     @Override
@@ -120,10 +120,11 @@ public class VehicleServiceImpl implements VehicleService {
             if (vehicleModels == null) {
                 List<Vehicle> vehicles = vehicleDao.get(UUID.fromString(dealerId));
                 List<VehicleModel> modelList = new ArrayList<>();
+                // Clear out all Vehicle Cache
+                vehicles.forEach(vehicle -> resetAllVehicleCache(vehicle.toModel()));
                 vehicles.forEach(vehicle -> modelList.add(vehicle.toModel()));
                 vehicleModels = new VehicleModel[modelList.size()];
                 vehicleModels = modelList.toArray(vehicleModels);
-
                 cacheService.insertCacheEntry(cacheKey, vehicleModels, VehicleModel[].class);
             }
         } catch (VehicleDaoException e) {
@@ -133,16 +134,11 @@ public class VehicleServiceImpl implements VehicleService {
         return Arrays.asList(vehicleModels);
     }
 
-    @Override
-    public VehicleModel get(String dealerId, String stockNum) throws VehicleServiceException {
-
-        return get(dealerId, stockNum, false);
-    }
 
     @Override
-    public VehicleModel get(String dealerId, String stockNum, boolean resetCache) throws VehicleServiceException {
+    public VehicleModel get(String dealerId, String vehicleId, boolean resetCache) throws VehicleServiceException {
         VehicleModel vehicle = null;
-        String cacheKey = String.format("%s-%s", dealerId, stockNum);
+        String cacheKey = String.format("%s-%s", dealerId, vehicleId);
         try {
 
             if (resetCache) {
@@ -151,9 +147,10 @@ public class VehicleServiceImpl implements VehicleService {
                 vehicle = cacheService.getCacheEntry(cacheKey, VehicleModel.class);
             }
             if (vehicle == null) {
-                Vehicle cv = vehicleDao.get(UUID.fromString(dealerId), stockNum);
+                Vehicle cv = vehicleDao.get(UUID.fromString(dealerId), UUID.fromString(vehicleId));
                 if (cv != null) {
                     vehicle = cv.toModel();
+                    resetAllVehicleCache(vehicle);
                     cacheService.insertCacheEntry(cacheKey, vehicle, VehicleModel.class);
                 }
 
@@ -189,6 +186,7 @@ public class VehicleServiceImpl implements VehicleService {
                 Vehicle vehicleEntity = vehicleDao.getByVin(vin);
                 if (vehicleEntity != null) {
                     vehicle = vehicleEntity.toModel();
+                    resetAllVehicleCache(vehicle);
                     cacheService.insertCacheEntry(cacheKey, vehicle, VehicleModel.class);
                 }
             }
@@ -199,4 +197,59 @@ public class VehicleServiceImpl implements VehicleService {
 
         return vehicle;
     }
+
+    @Override
+    public VehicleModel getByStockNum(String stockNum) throws VehicleServiceException {
+        return getByStockNum(stockNum,false);
+    }
+
+    @Override
+    public VehicleModel getByStockNum(String stockNum, boolean resetCache) throws VehicleServiceException {
+        log.debug("Getting Vehicle by StockNum {}", stockNum);
+        VehicleModel vehicle = null;
+        try {
+            String cacheKey = String.format("%s", stockNum);
+
+            if (resetCache) {
+                cacheService.removeEntry(cacheKey);
+            } else {
+                vehicle = cacheService.getCacheEntry(cacheKey, VehicleModel.class);
+            }
+
+            if (vehicle == null) {
+
+                Vehicle vehicleEntity = vehicleDao.getByStockNum(stockNum);
+                if (vehicleEntity != null) {
+                    vehicle = vehicleEntity.toModel();
+                    resetAllVehicleCache(vehicle);
+                    cacheService.insertCacheEntry(cacheKey, vehicle, VehicleModel.class);
+                }
+            }
+        } catch (VehicleDaoException e) {
+            log.error("Error getting Vehicle by Stock Num {} - {}", stockNum, e.getMessage());
+        }
+
+
+        return vehicle;
+    }
+
+
+    private void resetAllVehicleCache(VehicleModel vehicleModel){
+
+
+        String baseCacheKey = String.format("%s-%s", vehicleModel.getDealerId(), vehicleModel.getStockNum());
+        cacheService.removeEntry(baseCacheKey);
+
+        String vinCacheKey = String.format("%s", vehicleModel.getVin());
+        cacheService.removeEntry(vinCacheKey);
+
+        String stocNumCacheKey = String.format("%s", vehicleModel.getStockNum());
+        cacheService.removeEntry(stocNumCacheKey);
+
+        String dealerShipcacheKey = String.format("vehicle-list-%s", vehicleModel.getDealerId());
+        cacheService.removeEntry(dealerShipcacheKey);
+
+    }
+
+
 }

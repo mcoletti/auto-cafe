@@ -32,7 +32,7 @@ public class VehicleServiceImplTest extends TestBase {
 
         createVehicleRoot();
         vehicleService.upsertDealerShipVehicle(vehicleRoot);
-        VehicleModel vehicle = vehicleService.get(vehicleRoot.getDealerId(),vehicleRoot.getStockNum(),true);
+        VehicleModel vehicle = vehicleService.get(vehicleRoot.getDealerId(),vehicleRoot.getId(),true);
         assertThat(vehicle).isNotNull();
         assertThat(vehicle.getDealerId()).isEqualTo(vehicleRoot.getDealerId());
         assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
@@ -45,7 +45,7 @@ public class VehicleServiceImplTest extends TestBase {
         vehicle.setPrice(24500);
 
         vehicleService.upsertDealerShipVehicle(vehicle);
-        vehicle = vehicleService.get(vehicle.getDealerId(),vehicle.getStockNum());
+        vehicle = vehicleService.get(vehicle.getDealerId(),vehicle.getId(),true);
         assertThat(vehicle).isNotNull();
         assertThat(vehicle.getModifiedUser()).isEqualTo("micah");
         assertThat(vehicle.getDealerId()).isEqualTo(vehicleRoot.getDealerId());
@@ -65,15 +65,16 @@ public class VehicleServiceImplTest extends TestBase {
     }
 
     @Test(dependsOnMethods = {"testUpsertDealerVehicle"})
-    public void testGetByDealerIdAndStockNum() throws Exception {
-        VehicleModel vehicle = vehicleService.get(vehicleRoot.getDealerId(), vehicleRoot.getStockNum());
+    public void testGetByDealerIdAndVehicleId() throws Exception {
+        VehicleModel vehicle = vehicleService.get(vehicleRoot.getDealerId(), vehicleRoot.getId(),false);
         assertThat(vehicle).isNotNull();
         assertThat(vehicle.getDealerId()).isEqualTo(vehicleRoot.getDealerId());
         assertThat(vehicle.getStockNum()).isEqualTo(vehicleRoot.getStockNum());
     }
     public void createVehicleRoot() {
         vehicleRoot = new VehicleModel();
-        vehicleRoot.setDealerId("216b8863-8247-4e5c-a0ab-7bea34fae324");
+        vehicleRoot.setDealerId("0cc60b64-01d7-4efa-a0c4-88737e4ef301");
+        vehicleRoot.setId(UUID.randomUUID().toString());
         vehicleRoot.setStockNum(UUID.randomUUID().toString().replace("-","").substring(0,5).toUpperCase());
         vehicleRoot.setVin("1C4AJWAG6EL295921");
         vehicleRoot.setOptions("4WD/AWD,ABS Brakes,Cargo Area Tiedowns,CD Player,Cruise Control,Driver Airbag,Electronic Brake Assistance,Fog Lights,Full Size Spare Tire,Locking Pickup Truck Tailgate,Passenger Airbag,Removable Top,Second Row Folding Seat,Second Row Removable Seat,Skid Plate,Steel Wheels,Steering Wheel Mounted Controls,Tachometer,Tilt Steering,Tilt Steering Column,Tire Pressure Monitor,Traction Control,Trip Computer,Vehicle Anti-Theft,Vehicle Stability Control System");

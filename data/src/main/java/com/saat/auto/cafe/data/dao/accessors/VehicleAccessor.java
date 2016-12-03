@@ -15,10 +15,13 @@ import java.util.UUID;
 public interface VehicleAccessor {
 
     @Query("select * from vehicles where dealership_id = ?")
-    Result<Vehicle> qryByDealerShipId(UUID dealerShipId);
+    Result<Vehicle> qryVehicleByDealerShipId(UUID dealerShipId);
 
-    @Query("select * from vehicles where dealership_id = ? and stock_num = ?")
-    Result<Vehicle> qryByDealerShipIdAndVehicleId(UUID clientId, String stockNum);
+    @Query("select * from vehicles where dealership_id = ? and id = ?")
+    Result<Vehicle> qryVehicleByDealerShipIdAndVehicleId(UUID dealerShipId, UUID vehicleId);
+
+    @Query("select * from vehicles where stock_num = ?")
+    Result<Vehicle> qryByStockNum(String stockNum);
 
     @Query("select * from vehicle_images where dealership_id = ? and stock_num = ?")
     Result<VehicleImage> qryForImageList(UUID dealershipId, String stockNum);

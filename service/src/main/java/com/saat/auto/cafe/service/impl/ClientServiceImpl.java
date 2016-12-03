@@ -65,8 +65,11 @@ public class ClientServiceImpl implements ClientService {
 
             clientModel = clientCacheService.getCacheEntry(cacheKey, ClientModel.class);
             if (clientModel == null || resetCache) {
-                clientModel = clientDao.get(UUID.fromString(uuid)).toModel();
-                clientCacheService.insertCacheEntry(cacheKey, clientModel, ClientModel.class);
+                Client client = clientDao.get(UUID.fromString(uuid));
+                if(client != null){
+                    clientModel = client.toModel();
+                    clientCacheService.insertCacheEntry(cacheKey, clientModel, ClientModel.class);
+                }
             }
         } catch (DaoException e) {
             log.error("Add getting client for Id: {} - {}", uuid, e.getMessage());

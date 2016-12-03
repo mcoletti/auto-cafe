@@ -26,6 +26,12 @@ public class VehicleModel {
     )
     private String dealerId;
     @ApiModelProperty(
+            position = 1,
+            required = true,
+            value = "The Vehicle Unique Id"
+    )
+    private String id;
+    @ApiModelProperty(
             position = 3,
             required = true,
             value = "The stock number"
@@ -122,6 +128,7 @@ public class VehicleModel {
 
         Vehicle vehicle = new Vehicle();
         vehicle.setDealershipId(UUID.fromString(dealerId));
+        vehicle.setId(UUID.fromString(id));
         vehicle.setStockNum(stockNum);
         vehicle.setShortDescription(shortDescription);
         vehicle.setOptions(options);

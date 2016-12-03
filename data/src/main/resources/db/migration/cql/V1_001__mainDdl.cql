@@ -70,6 +70,7 @@ CREATE INDEX dealership_lots_id ON autocafe.dealership_lots (lot_id);
 -- Client Vehicles
 CREATE TABLE IF NOT EXISTS autocafe.vehicles (
     dealership_id uuid,
+    id uuid,
     stock_num text,
     vin text,
     short_description text,
@@ -91,7 +92,7 @@ CREATE TABLE IF NOT EXISTS autocafe.vehicles (
     created timeuuid,
     modified_user text,
     modified timeuuid,
-    PRIMARY KEY (dealership_id,stock_num)
+    PRIMARY KEY (dealership_id,id,stock_num)
 );
 
 CREATE INDEX vehicle_vin ON autocafe.vehicles (vin);

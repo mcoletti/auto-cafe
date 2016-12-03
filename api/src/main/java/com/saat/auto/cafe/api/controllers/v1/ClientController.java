@@ -6,6 +6,7 @@ import com.saat.auto.cafe.common.entitys.Client;
 import com.saat.auto.cafe.common.exceptions.ClientServiceException;
 import com.saat.auto.cafe.common.interfaces.services.ClientService;
 import com.saat.auto.cafe.common.models.ClientModel;
+import com.saat.auto.cafe.common.models.ErrorResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,11 +100,12 @@ public class ClientController {
                 if (model != null) {
                     return ResponseEntity.ok(model);
                 }
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(String.format("Client was not found for Id",clientId));
             }
             return ResponseEntity.badRequest().build();
         } catch (ClientServiceException e) {
             log.error("Error Getting Client for Id {} - {}", clientId, e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("");
         }
     }
 
